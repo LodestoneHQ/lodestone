@@ -1,0 +1,116 @@
+<!-- Header Container
+================================================== -->
+<header id="header-container" class="fullwidth">
+
+  <!-- Header -->
+  <div id="header">
+    <div class="container">
+
+      <!-- Left Side Content -->
+      <div class="left-side">
+
+        <!-- Logo -->
+        <div id="logo">
+          <a routerLink="/dashboard"><img src="/assets/images/logo.png" alt=""></a>
+        </div>
+
+        <!-- Main Navigation -->
+        <div *ngIf="showSearchBar()" id="navigation">
+          <nav class="w-50 mx-auto">
+            <div class="input-with-icon-left">
+              <i class="icon-feather-search"></i>
+              <input
+                [popover]="popTemplate"
+                popoverTitle="Template ref content inside"
+                placement="bottom"
+                triggers="focus"
+                ngModel
+                (ngModelChange)="filterQuery($event)"
+
+                type="text" class="input-text with-border"
+                placeholder="Type a query, then hit 'Enter'">
+            </div>
+          </nav>
+        </div>
+
+
+        <div class="clearfix"></div>
+        <!-- Main Navigation / End -->
+
+      </div>
+      <!-- Left Side Content / End -->
+
+
+      <!-- Right Side Content / End -->
+      <div class="right-side">
+
+        <!--  Status Notifications -->
+        <div class="header-widget">
+
+          <!-- Notifications -->
+          <div class="header-notifications">
+
+            <!-- Trigger -->
+            <div class="header-notifications-trigger">
+              <a routerLink="/status"><i class="icon-feather-activity"></i><span>4</span></a>
+            </div>
+
+          </div>
+        </div>
+        <!--  Status Notifications / End -->
+
+      </div>
+      <!-- Right Side Content / End -->
+
+    </div>
+  </div>
+  <!-- Header / End -->
+
+</header>
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+
+<ng-template #popTemplate>
+  <p>
+    Just type your query in search input above and hit "Enter"
+
+    Try these tips to refine your search
+  </p>
+
+  <table class="basic-table">
+
+    <tbody><tr> <th style="text-align: left">Special character</th> <th style="text-align: left">Behavior</th> </tr>
+
+
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">+</code></td>
+      <td style="text-align: left">Acts as the <code class="highlighter-rouge">and</code> operator.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">|</code></td>
+      <td style="text-align: left">Acts as the <code class="highlighter-rouge">or</code> operator.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">*</code></td>
+      <td style="text-align: left">Acts as a wildcard.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">""</code></td>
+      <td style="text-align: left">Wraps several terms into a phrase.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">()</code></td>
+      <td style="text-align: left">Wraps a clause for precedence.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">~n</code></td>
+      <td style="text-align: left">When used after a term (e.g. <code class="highlighter-rouge">wnid~3</code>), sets <code class="highlighter-rouge">fuzziness</code>. When used after a phrase, sets <code class="highlighter-rouge">slop</code>. See <a href="#options">Options</a>.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">-</code></td>
+      <td style="text-align: left">Negates the term.</td>
+    </tr>
+
+    </tbody></table>
+
+</ng-template>

@@ -1,0 +1,173 @@
+
+/* ---------------------------------- */
+/* Pricing Plans
+------------------------------------- */
+
+.billing-cycle-radios {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  &.text-align-left {
+    text-align: left;
+  }
+  .radio {
+    margin-right: 20px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+/* Pricing Plans Container */
+
+.pricing-plans-container {
+  border-radius: $global-border-radius;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+}
+
+.pricing-plan {
+  flex: 1;
+  padding: 35px 17px;
+  position: relative;
+  &:first-of-type {
+    padding-left: 35px;
+  }
+  &:last-of-type {
+    padding-right: 35px;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  p {
+    margin: 0;
+  }
+}
+
+/* Label Switcher */
+
+.billed-yearly-label {
+  display: none;
+}
+
+.billed-yearly {
+  .billed-yearly-label {
+    display: block;
+  }
+  .billed-monthly-label {
+    display: none;
+  }
+}
+
+/* Pricing Plan Label */
+
+.pricing-plan-label {
+  background: #f6f6f6;
+  border-radius: $global-border-radius;
+  font-size: 18px;
+  color: #888;
+  text-align: center;
+  line-height: 24px;
+  padding: 15px;
+  margin: 22px 0;
+  strong {
+    font-size: 32px;
+    font-weight: 700;
+    color: $body-heading-color;
+    margin-right: 5px;
+    line-height: 30px;
+  }
+}
+
+.recommended .pricing-plan-label {
+  background-color: rgba($primary-color, 0.06);
+  color: $primary-color;
+  strong {
+    color: $primary-color;
+  }
+}
+
+/* Pricing Plan Features */
+
+.pricing-plan-features {
+  strong {
+    color: $body-heading-color;
+    font-weight: 600;
+    margin-bottom: 5px;
+    line-height: 24px;
+    display: inline-block;
+  }
+  ul {
+    padding: 0;
+    margin: 0;
+    li {
+      display: block;
+      margin: 0;
+      padding: 3px 0;
+      line-height: 24px;
+    }
+  }
+}
+
+/* Pricing Plan Button */
+
+.pricing-plan {
+  .button:hover, &.recommended .button {
+    color: #fff;
+    background-color: $primary-color;
+    box-shadow: 0 4px 12px rgba($primary-color, 0.15);
+  }
+  .button {
+    color: $primary-color;
+    background-color: #fff;
+    border: 1px solid $primary-color;
+    box-shadow: 0 4px 12px rgba($primary-color, 0.1);
+    &:hover {
+      box-shadow: 0 4px 12px rgba($primary-color, 0.15);
+    }
+  }
+  &.recommended {
+    box-shadow: 0 0px 45px rgba(0, 0, 0, 0.09);
+    padding: 35px;
+    margin: 0 15px;
+  }
+  .recommended-badge {
+    background-color: $primary-color;
+    color: #fff;
+    position: absolute;
+    width: 100%;
+    height: 45px;
+    top: -45px;
+    left: 0;
+    text-align: center;
+    border-radius: $global-border-radius $global-border-radius 0 0;
+    font-weight: 600;
+    line-height: 45px;
+  }
+}
+
+/* Recommended Plan */
+
+/* Media Queries for Pricing Plans */
+@media (max-width: 992px) {
+  .pricing-plans-container {
+    box-shadow: none;
+    display: block;
+    margin-top: -40px;
+  }
+  .pricing-plan {
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    flex: auto;
+    width: 100%;
+    border-radius: $global-border-radius;
+    padding: 35px;
+    &.recommended {
+      padding: 35px;
+      margin: 0 0 40px 0;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+      margin-top: 80px;
+    }
+  }
+}

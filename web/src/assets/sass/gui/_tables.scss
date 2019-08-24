@@ -1,0 +1,60 @@
+
+/* ---------------------------------- */
+/* Tables
+------------------------------------- */
+
+table.basic-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: none;
+  margin-bottom: 15px;
+  th {
+    background-color: $primary-color;
+    text-align: left;
+    color: #fff;
+    vertical-align: top;
+    font-weight: 500;
+    &:first-child {
+      border-radius: $global-border-radius 0 0 $global-border-radius;;
+    }
+    &:last-child {
+      border-radius: 0 $global-border-radius $global-border-radius 0;
+    }
+    padding: 15px 28px;
+  }
+  td {
+    padding: 15px 28px;
+  }
+  tr:nth-child(odd) {
+    background-color: #f4f4f4;
+  }
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+    th {
+      display: none;
+    }
+    tr {
+      display: block;
+      margin-bottom: 0;
+    }
+    td {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: 14px;
+      text-align: right;
+      &:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 600;
+      }
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+
+/* ---------------------------------- */
+/* Countdown
+------------------------------------- */
+
+.countdown {
+  border-radius: $global-border-radius;
+  width: 100%;
+  display: block;
+  text-align: center;
+  font-size: 18px;
+  line-height: 28px;
+  padding: 14px;
+  &.green {
+    background-color: #e7f8ec;
+    color: #289c41;
+  }
+  &.yellow {
+    background-color: #fbf6dd;
+    color: #a18d29;
+  }
+}

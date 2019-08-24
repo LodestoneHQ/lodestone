@@ -1,0 +1,31 @@
+/* -------------------------------------------------------------- */
+/* Default Colors
+----------------------------------------------------------------- */
+$primary-color: 							#2a41e8;
+$body-font-color:							#666;
+$body-heading-color:						#333;
+
+
+/* -------------------------------------------------------------- */
+/* Typography
+----------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800&subset=latin-ext');
+
+$primary-font: 								"Nunito", sans-serif;
+$body-font-size: 							16px;
+$body-line-height: 							27px;
+$body-sub-line-height: 						26px;
+
+$homepage-heading-font-size: 				26px;
+$single-page-heading-font-size: 			20px;
+$listing-heading-font-size: 				18px;
+
+$global-border-radius:						4px;
+
+
+/* -------------------------------------------------------------- */
+/* Header Settings for Desktop Devices
+----------------------------------------------------------------- */
+$header-height: 							82px;
+$navigation-top-offset: 					22px;
+$logo-height: 								42px;

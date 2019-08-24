@@ -1,0 +1,226 @@
+<app-header></app-header>
+<!-- Spacer -->
+<div class="margin-top-90"></div>
+<!-- Spacer / End-->
+
+<!-- Page Content
+================================================== -->
+<div class="container">
+  <div class="row">
+    <div class="col-xl-3 col-lg-4">
+      <div class="sidebar-container">
+
+
+        <!-- Time -->
+        <div class="sidebar-widget">
+          <h3>Time Range</h3>
+          <div class="input-with-icon no-border">
+            <input type="text"
+                   placeholder="Date Range"
+                   class="form-control"
+                   [maxDate]="globalLimits.maxDate"
+                   [minDate]="globalLimits.minDate"
+                   bsDaterangepicker
+                   [bsConfig]="{ adaptivePosition: true }"
+                   (bsValueChange)="filterTimeRange($event)">
+            <i class="icon-line-awesome-calendar"></i>
+          </div>
+
+        </div>
+
+        <!-- File Types -->
+        <div class="sidebar-widget">
+          <h3>File Type</h3>
+
+          <div class="switches-list">
+
+
+            <div *ngFor="let fileType of fileTypeBuckets" class="switch-container">
+              <label class="switch">
+                <input type="checkbox" [ngModel]="filter.fileTypes.includes(fileType.key)" (ngModelChange)="filterFileType(fileType.key, $event)">
+                <span class="switch-button"></span>{{fileType.key}}
+                <span *ngIf="!filter.fileTypes.includes(fileType.key)" class="badge badge-primary">{{fileType.doc_count}}</span>
+              </label>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- File Size -->
+        <div class="sidebar-widget">
+          <h3>File Size</h3>
+          <div class="margin-top-55"></div>
+
+          <!-- Range Slider -->
+          <mv-slider
+            [min]="globalLimits.minFileSize"
+            [max]="globalLimits.maxFileSize"
+            [range]="true"
+            [tooltip]="'always'"
+            [enabled]="true" (change)="filterFileSize($event)"></mv-slider>
+
+        </div>
+
+        <!-- Tags -->
+        <div class="sidebar-widget">
+          <h3>Tags</h3>
+
+          <div class="tags-container">
+            <div class="tag">
+              <input type="checkbox" id="tag1"/>
+              <label for="tag1">front-end dev</label>
+            </div>
+            <div class="tag">
+              <input type="checkbox" id="tag2"/>
+              <label for="tag2">angular</label>
+            </div>
+            <div class="tag">
+              <input type="checkbox" id="tag3"/>
+              <label for="tag3">react</label>
+            </div>
+            <div class="tag">
+              <input type="checkbox" id="tag4"/>
+              <label for="tag4">vue js</label>
+            </div>
+            <div class="tag">
+              <input type="checkbox" id="tag5"/>
+              <label for="tag5">web apps</label>
+            </div>
+            <div class="tag">
+              <input type="checkbox" id="tag6"/>
+              <label for="tag6">design</label>
+            </div>
+            <div class="tag">
+              <input type="checkbox" id="tag7"/>
+              <label for="tag7">wordpress</label>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-xl-9 col-lg-8 content-left-offset">
+
+      <h3 class="page-title">Search Results</h3>
+
+      <div class="notify-box margin-top-15">
+        <div class="switch-container">
+          <label class="switch"><input type="checkbox" [ngModel]="filter.bookmark" (ngModelChange)="filterBookmark($event)"><span class="switch-button"></span><span class="switch-text">Only bookmarked</span></label>
+        </div>
+
+        <div class="sort-by">
+          <span>Sort by:</span>
+
+
+          <div class="btn-group bootstrap-select hide-tick" dropdown>
+            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle btn-default" aria-controls="dropdown-basic">{{filter.sortBy ? globalLimits.sortBy[filter.sortBy] : 'Relevance' }}</button>
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                role="menu" aria-labelledby="button-basic">
+              <li *ngFor="let sortByOpt of globalLimits.sortBy | keyvalue" role="menuitem"><a class="dropdown-item" (click)="filterSortBy(sortByOpt.key)">{{sortByOpt.value}}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!filter.query" class="listings-container grid-layout margin-top-35">
+        <!-- Simple Card Listing -->
+        <div *ngFor="let result of searchResults" class="job-listing">
+
+          <!-- Simple Card Listing -->
+          <div [routerLink]="'/details/' + result._id" class="job-listing-details cursor_pointer">
+            <!-- Logo -->
+            <div class="job-listing-company-logo">
+              <img src="/assets/images/company-logo-01.png" alt="">
+            </div>
+
+            <!-- Details -->
+            <div class="job-listing-description">
+              <h3 class="job-listing-title">{{result._source.file.filename}}</h3>
+
+            </div>
+          </div>
+
+          <!-- Job Listing Footer -->
+          <div class="job-listing-footer">
+            <span (click)="bookmarkDocument(result, result._source.lodestone ? !!result._source.lodestone.bookmark : false )" class="bookmark-icon" [ngClass]="{'bookmarked': result._source.lodestone ? !!result._source.lodestone.bookmark : false }"></span>
+            <ul>
+              <li><i class="icon-material-outline-location-on"></i>{{result._source.file.extension}}  </li>
+              <li><i class="icon-material-outline-business-center"></i> {{result._source.file.filesize | filesize}} </li>
+              <li><i class="icon-material-outline-account-balance-wallet"></i> {{result._source.path.virtual}} </li>
+              <li><i class="icon-material-outline-access-time"></i> {{result._source.file.created | amTimeAgo}} </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="filter.query" class="tasks-list-container margin-top-35">
+        <!-- Search Context Listing -->
+        <div *ngFor="let result of searchResults" class="task-listing">
+
+          <!-- Job Listing Details -->
+          <div class="task-listing-details cursor_pointer" [routerLink]="'/details/' + result._id">
+
+            <!-- Details -->
+            <div class="task-listing-description">
+              <h3 class="task-listing-title">{{result._source.file.filename}}</h3>
+              <ul class="task-icons">
+                <li><i class="icon-material-outline-access-time"></i> {{result._source.file.created | amTimeAgo}}</li>
+              </ul>
+              <p *ngFor="let highlight of result.highlight.content" class="task-listing-text" [innerHTML]="highlight"></p>
+              <div class="task-tags">
+                <span>iOS</span>
+                <span>Android</span>
+                <span>mobile apps</span>
+                <span>design</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="task-listing-bid">
+            <div class="task-listing-bid-inner">
+              <div class="task-offers">
+                <strong>{{result._source.file.extension}}</strong>
+                <span> {{result._source.file.filesize | filesize}} </span>
+              </div>
+
+              <span [routerLink]="'/details'+ result._id" class="button button-sliding-icon ripple-effect">View <i class="icon-material-outline-arrow-right-alt"></i></span>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+      <!-- Pagination -->
+      <div class="clearfix"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <!-- Pagination -->
+          <div class="pagination-container margin-top-30 margin-bottom-60">
+
+
+            <nav class="pagination">
+              <pagination
+                class="mx-auto"
+                [(ngModel)]="currentPage"
+                (ngModelChange)="filterPage($event)"
+                previousText="&lsaquo;" nextText="&rsaquo;"
+                [itemsPerPage]="10"
+                [maxSize]="10"
+                [totalItems]="totalPages"></pagination>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <!-- Pagination / End -->
+
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,125 @@
+
+/* ---------------------------------- */
+/* List Styles
+------------------------------------- */
+
+.list-3, .list-2, .list-1 {
+  padding: 3px 0 0 0;
+  font-size: $body-font-size;
+}
+
+.list-3 li, .list-2 li, .list-1 li {
+  list-style: none;
+  margin: 10px 0;
+  line-height: $body-line-height;
+  margin-left: 20px;
+  position: relative;
+}
+
+.list-3 li:first-child, .list-2 li:first-child, .list-1 li:first-child {
+  margin-top: 0;
+}
+
+.list-4 li:before, .list-3 li:before, .list-2 li:before {
+  margin: 0;
+  position: relative;
+  color: $primary-color;
+  float: left;
+  margin-left: -20px;
+  display: block;
+}
+
+.list-1 {
+  li:before {
+    margin: 0;
+    position: relative;
+    color: $primary-color;
+    float: left;
+    margin-left: -20px;
+    display: block;
+  }
+  &.gray li:before {
+    color: #777;
+  }
+}
+
+.list-2 li {
+  margin-left: 28px;
+}
+
+.list-3 li:before, .list-2 li:before {
+  font-family: "Material-Icons";
+  content: "\e928";
+  font-size: 18px;
+  font-weight: 600;
+  position: relative;
+  top: -2px;
+  margin-left: -28px;
+}
+
+.list-3 li:before {
+  content: "\e912";
+  font-family: "Feather-Icons";
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.list-1 li:before {
+  content: "";
+  height: 6px;
+  width: 6px;
+  background-color: $primary-color;
+  border-radius: 2px;
+  position: relative;
+  top: 9px;
+}
+
+/* Numbered Style */
+
+.numbered {
+  ol {
+    counter-reset: li;
+    list-style: none;
+    padding: 0;
+    margin-left: 18px;
+    display: inline-block;
+    font-size: $body-font-size;
+    li {
+      display: inline-block;
+      padding: 6px 0;
+      width: 100%;
+    }
+    > li::before {
+      content: counter(li);
+      counter-increment: li;
+      font-size: $body-font-size;
+      line-height: 35px;
+      width: 36px;
+      height: 36px;
+      display: inline-block;
+      border: 1px solid #333;
+      border-radius: 50%;
+      text-align: center;
+      margin: 0;
+      margin-left: 0;
+      font-weight: 500;
+      color: $body-heading-color;
+      position: relative;
+      float: left;
+      left: -18px;
+      font-size: 15px;
+      transform: translateY(-10%);
+    }
+  }
+  &.color {
+    ol > li::before {
+      border: 1px solid $primary-color;
+      color: $primary-color;
+    }
+    &.filled ol > li::before {
+      border: 1px solid $primary-color;
+      color: #fff;
+      background-color: $primary-color;
+    }
+  }
+}

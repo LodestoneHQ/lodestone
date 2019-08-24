@@ -1,0 +1,92 @@
+
+/* ---------------------------------- */
+/* Share Buttons
+------------------------------------- */
+
+.share-buttons {
+  display: block;
+}
+
+.share-buttons-trigger {
+  display: inline-block;
+  height: 44px;
+  width: 44px;
+  line-height: 44px;
+  text-align: center;
+  color: #a0a0a0;
+  font-size: 18px;
+  background-color: #f0f0f0;
+  border-radius: $global-border-radius;
+  transition: 0.4s;
+  cursor: default;
+  i {
+    position: relative;
+    top: 1px;
+  }
+}
+
+.share-buttons-content {
+  display: inline-block;
+  position: relative;
+  width: calc(100% - 60px);
+  span {
+    margin-left: 10px;
+    color: #888;
+    cursor: default;
+    padding: 10px 0;
+    display: inline-block;
+    transition: 0.4s;
+    strong {
+      color: $primary-color;
+      font-weight: 600;
+    }
+  }
+}
+
+.share-buttons:hover .share-buttons-content span {
+  opacity: 0;
+  transition: 0.2s;
+}
+
+/* Icons */
+
+.share-buttons-icons {
+  position: absolute;
+  left: 5px;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.4s cubic-bezier(0.5, -0.41, 0.19, 2);
+}
+
+.share-buttons:hover .share-buttons-icons {
+  opacity: 1;
+  transform: translate(0);
+}
+
+.share-buttons-icons li {
+  display: inline-block;
+  float: left;
+  &:first-child a {
+    border-radius: $global-border-radius 0 0 $global-border-radius;;
+  }
+  &:last-child a {
+    border-radius: 0 $global-border-radius $global-border-radius 0;
+  }
+  a {
+    height: 44px;
+    width: 44px;
+    display: inline-block;
+    line-height: 44px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+    i {
+      position: relative;
+      top: 1px;
+    }
+  }
+}

@@ -1,0 +1,75 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'assets/sass/variables';
+
+/* ---------------------------------- */
+/* Utility
+------------------------------------- */
+
+.cursor_pointer {
+  cursor: pointer;
+}
+
+
+/* ---------------------------------- */
+/* Header - Search
+------------------------------------- */
+header#header-container div#navigation {
+  width: calc(100% - 550px);
+}
+
+/* ---------------------------------- */
+/* Dashboard - Pagination
+------------------------------------- */
+
+.pagination .page-item .page-link {
+  border:none;
+  box-shadow: none;
+}
+
+.pagination .page-item.active a {
+  background-color: $primary-color;
+}
+
+.pagination .pagination-prev a, .pagination .pagination-next a {
+  background-color: #f0f0f0;
+}
+
+/* ---------------------------------- */
+/* Dashboard - File Type Filter
+------------------------------------- */
+.badge.badge-primary {
+  color: #fff;
+  background-color: $primary-color;
+}
+
+/* ---------------------------------- */
+/* Dashboard - Time Range Filter
+------------------------------------- */
+.bs-datepicker-body table td.week span
+{
+  color: $primary-color !important;
+}
+
+.bs-datepicker-body table td span.selected,
+.bs-datepicker-head,
+.bs-datepicker-head, .bs-datepicker button:active,
+.bs-datepicker-body table td.selected span,
+.bs-datepicker-body table td span[class*="select-"]:after,
+.bs-datepicker-body table td[class*="select-"] span:after,
+.bs-datepicker-body table td.active-week span:hover
+{
+  background-color: $primary-color !important;
+}
+
+
+/* ---------------------------------- */
+/* Dashboard - File Size Filter
+------------------------------------- */
+mv-slider .slider .tooltip.tooltip-main {
+  opacity: 100;
+}
+
+mv-slider .slider .slider-track .slider-selection {
+  background-image: none;
+}

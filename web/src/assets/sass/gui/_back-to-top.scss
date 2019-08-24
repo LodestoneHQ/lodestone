@@ -1,0 +1,48 @@
+/* ---------------------------------- */
+/* Back to top
+------------------------------------- */
+#backtotop {
+  position: fixed;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+  bottom: 25px;
+  margin: 0 25px 0 0;
+  z-index: 999;
+  transition: 0.35s;
+  transform: translateY(10px);
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  a {
+    text-decoration: none;
+    border: 0 none;
+    display: block;
+    width: 46px;
+    height: 46px;
+    background-color: $primary-color;
+    opacity: 1;
+    transition: all 0.3s;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 26px;
+  }
+}
+
+body #backtotop a {
+  color: #fff;
+}
+
+#backtotop a:after {
+  content: "\e931";
+  font-family: "Feather-Icons";
+  position: relative;
+  display: block;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+  @media (max-width: 768px) { #backtotop { display: none; } }

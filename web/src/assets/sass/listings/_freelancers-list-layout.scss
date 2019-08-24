@@ -1,0 +1,170 @@
+
+/* ---------------------------------- */
+/* Freelancers - List Layout
+------------------------------------- */
+
+.freelancers-container.freelancers-list-layout {
+  width: 100%;
+}
+
+.freelancers-list-layout {
+  .freelancer {
+    margin: 0 0 30px 0;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+  }
+  .freelancer-overview {
+    text-align: left;
+    padding: 45px 40px;
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .freelancer-overview-inner {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .freelancer-details {
+    padding: 45px 40px 45px 0;
+    background-color: transparent;
+    flex: 0 0 360px;
+  }
+  .freelancer-overview {
+    .freelancer-avatar {
+      width: 100px;
+      margin: 0;
+    }
+    .freelancer-name {
+      text-align: left;
+      margin: 0 0 0 30px;
+    }
+  }
+  .freelancer-details a.button {
+    display: block;
+    text-align: center;
+    min-width: 50%;
+    max-width: 100%;
+    width: auto !important;
+    transition: 0.3s;
+    float: right;
+    box-shadow: 0 4px 12px rgba($primary-color, 0.15);
+    &:hover {
+      box-shadow: 0 4px 12px rgba($primary-color, 0.25);
+    }
+  }
+  .bookmark-icon {
+    display: none;
+  }
+  .freelancer-details-list ul {
+    float: right;
+    display: block;
+    li {
+      margin-left: 25px;
+      margin-right: 0;
+      float: right;
+    }
+  }
+}
+
+/* Freelancers Compact List */
+
+.compact-list.freelancers-list-layout {
+  .freelancer {
+    border-radius: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+    &:hover {
+      transform: translateY(0);
+    }
+    &:nth-child(2n) {
+      background-color: #fafafa;
+    }
+    &:hover:before {
+      opacity: 1;
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      display: block;
+      background: $primary-color;
+      transition: 0.3s;
+      opacity: 0;
+    }
+    &:last-of-type {
+      border-radius: 0 0 3px 3px;
+      overflow: hidden;
+    }
+    &:first-of-type {
+      border-radius: 3px 3px 0 0;
+      overflow: hidden;
+    }
+  }
+  background-color: #fff;
+  border-radius: $global-border-radius;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Media Queiers for Freelancers List Layout */
+@media (max-width: 1366px) {
+  .freelancers-list-layout .freelancer-overview .freelancer-avatar {
+    width: 100px;
+  }
+}
+
+@media (max-width: 1240px) {
+  .freelancers-list-layout {
+    .freelancer {
+      flex-direction: column;
+    }
+    .freelancer-details {
+      flex: 1;
+      padding: 35px 40px;
+      background-color: #fafafa;
+    }
+    .freelancer-details-list ul {
+      float: left;
+      li {
+        margin-left: 0;
+        margin-right: 25px;
+        float: left;
+      }
+    }
+    .freelancer-details a.button {
+      float: none;
+      width: 100% !important;
+    }
+    .freelancer-overview .freelancer-avatar {
+      width: 90px;
+    }
+  }
+  /* Compact Layout */
+  .compact-list.freelancers-list-layout .freelancer-details {
+    background-color: transparent;
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .freelancers-list-layout {
+    .freelancer-overview, .freelancer-details {
+      padding: 30px;
+    }
+    .freelancer-overview .freelancer-avatar {
+      width: 80px;
+    }
+    .star-rating:before {
+      display: block;
+      float: none;
+      text-align: center;
+      max-width: 40px;
+      margin-bottom: 4px;
+    }
+  }
+}

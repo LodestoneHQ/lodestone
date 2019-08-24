@@ -1,0 +1,15 @@
+
+/* ---------------------------------- */
+/* Marks
+------------------------------------- */
+
+mark {
+  background-color: #fcf8e3;
+  color: #8a803e;
+  padding: 1px 5px;
+  &.color {
+    background-color: $primary-color;
+    border-radius: $global-border-radius;
+    color: #fff;
+  }
+}

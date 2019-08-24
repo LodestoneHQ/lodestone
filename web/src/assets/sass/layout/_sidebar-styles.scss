@@ -1,0 +1,23 @@
+/* ---------------------------------- */
+/* Sidebar Styles
+------------------------------------- */
+
+.sidebar-container {
+  margin-bottom: 40px;
+}
+
+.full-page-container .sidebar-container {
+  margin-bottom: 0px;
+}
+
+.sidebar-widget {
+  input {
+    margin-bottom: 0;
+  }
+  margin-bottom: 50px;
+  display: block;
+  h3 {
+    font-size: $single-page-heading-font-size;
+    margin-bottom: 20px;
+  }
+}

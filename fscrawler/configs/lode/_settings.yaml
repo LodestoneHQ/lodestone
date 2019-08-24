@@ -1,0 +1,30 @@
+---
+name: lode
+fs:
+  url: "/usr/share/fscrawler/data"
+  update_rate: 1m
+  json_support: false
+  filename_as_id: false
+  add_filesize: true
+  remove_deleted: true
+  add_as_inner_object: false
+  store_source: false
+  index_content: true
+  attributes_support: false
+  raw_metadata: true
+  xml_support: false
+  index_folders: true
+  lang_detect: false
+  continue_on_error: false
+  pdf_ocr: true
+  ocr:
+    language: eng
+elasticsearch:
+  nodes:
+    - url: "http://elasticsearch:9200"
+  bulk_size: 100
+  flush_interval: 5s
+  byte_size: 10mb
+rest:
+  url: "http://0.0.0.0:8080/fscrawler"
+  enable_cors: true

@@ -1,0 +1,120 @@
+
+/* ---------------------------------- */
+/* Tasks - Grid Layout
+------------------------------------- */
+
+.tasks-list-container.tasks-grid-layout {
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(100% + 30px);
+  .task-listing {
+    display: flex;
+    justify-content: center;
+    margin: 0 30px 30px 0;
+    width: calc(100% * (1/2) - 30px);
+    flex-direction: column;
+  }
+  .task-listing-bid {
+    flex: 1;
+    padding: 0px 0;
+    display: block;
+  }
+  .task-listing {
+    flex-direction: column;
+  }
+  .task-listing-bid-inner {
+    display: flex;
+    align-items: center;
+    padding: 18px 32px;
+    .task-offers {
+      flex: 1;
+      position: relative;
+      top: 5px;
+    }
+    .button {
+      height: 100%;
+      width: 45%;
+    }
+  }
+  .task-listing .task-listing-details {
+    display: flex;
+    align-items: center;
+    padding: 28px 32px;
+  }
+}
+
+/* Media Queries for Tasks List */
+@media (max-width: 1240px) {
+  .tasks-list-container.tasks-grid-layout {
+    .task-listing-bid-inner {
+      display: block;
+    }
+    .task-listing-bid {
+      padding: 20px 35px;
+      padding-bottom: 30px;
+    }
+    .task-listing-bid-inner {
+      padding: 0;
+    }
+    .task-listing {
+      flex-direction: column;
+    }
+    .task-listing-bid-inner {
+      .task-offers {
+        flex: 1;
+      }
+      .button {
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .tasks-list-container {
+    &.tasks-grid-layout {
+      width: 100%;
+      .task-listing {
+        margin: 0 0 30px 0;
+        width: 100%;
+      }
+    }
+    &.compact-list {
+      .task-listing-bid, .task-listing-details {
+        width: 100%;
+      }
+    }
+  }
+}
+
+/* Full Page Media Queries */
+@media (max-width: 3860px) {
+  .full-page-content-inner .tasks-grid-layout .task-listing {
+    width: calc(100% * (1/4) - 30px);
+  }
+}
+
+@media (max-width: 2560px) {
+  .full-page-content-inner .tasks-grid-layout .task-listing {
+    width: calc(100% * (1/3) - 30px);
+  }
+}
+
+@media (max-width: 1600px) {
+  .full-page-content-inner .tasks-grid-layout .task-listing {
+    width: calc(100% * (1/2) - 30px);
+  }
+}
+
+@media (max-width: 1099px) {
+  .full-page-content-inner .tasks-grid-layout .task-listing {
+    width: calc(100% - 30px);
+  }
+}
+
+@media (max-width: 992px) {
+  .full-page-content-inner .tasks-grid-layout .task-listing {
+    width: calc(100%);
+  }
+}

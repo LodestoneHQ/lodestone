@@ -1,0 +1,76 @@
+
+/* ---------------------------------- */
+/* Photo Section
+------------------------------------- */
+
+.photo-section {
+  background-size: cover;
+  background-position: 50%;
+  display: block;
+  position: relative;
+  &:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    opacity: 0.65;
+    display: block;
+    position: absolute;
+    top: 0;
+  }
+}
+
+/* Styles for info banner with parallax */
+
+.text-content {
+  background: transparent;
+  padding: 110px 0px;
+  font-weight: 500;
+  z-index: 99;
+  position: relative;
+  &.white-font, h1, h2, h3, h4, h5 {
+    color: #fff;
+  }
+  &.white-font {
+    h1, h2, h3, h4, h5 {
+      color: #fff;
+    }
+  }
+  a.button {
+    font-size: $body-font-size;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+  p {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 31px;
+    opacity: 0.85;
+  }
+  h2 {
+    margin-bottom: 23px;
+    line-height: 46px;
+    font-size: 34px;
+    font-weight: 500;
+  }
+}
+
+.top-1 {
+  position: relative;
+  top: -1px;
+}
+
+.top-0 {
+  position: relative;
+}
+
+@media (max-width: 992px) {
+  .text-content {
+    padding: 80px 0;
+    h2 {
+      margin-bottom: 20px;
+      line-height: 40px;
+      font-size: 30px;
+      font-weight: 500;
+    }
+  }
+}

@@ -1,0 +1,105 @@
+
+/* ---------------------------------- */
+/* Icon Boxes
+------------------------------------- */
+
+.icon-box {
+  text-align: center;
+  margin-top: 45px;
+  position: relative;
+}
+
+.icon-box-circle {
+  background-color: #fff;
+  width: 50%;
+  height: 60px;
+  z-index: 100;
+  margin: 0 auto;
+  display: inline-block;
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.icon-box-circle-inner {
+  font-size: 72px;
+  color: #ccc;
+  position: relative;
+  width: 60px;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.icon-box-check {
+  background-color: $primary-color;
+  width: 30px;
+  height: 30px;
+  line-height: 32px;
+  font-size: 18px;
+  border-radius: 50%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 100;
+  animation: circle-box-anim 2s infinite;
+  transition: 0.4s;
+  color: #fff;
+  font-weight: 500;
+  position: absolute;
+  bottom: -3px;
+  right: -10px;
+  animation: checkAnim 2s infinite;
+  box-shadow: 0 0 0 5px rgba($primary-color, 0.1);
+}
+
+@keyframes checkAnim {
+  0%,100% {
+    box-shadow: 0 0 0 5px rgba($primary-color, 0.15);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba($primary-color, 0.15);
+  }
+}
+
+
+.icon-box {
+  span {
+    color: $body-font-color;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  h4 {
+    margin: 4px 0;
+    line-height: $body-sub-line-height;
+  }
+  h3 {
+    margin: 4px 0;
+    line-height: $body-sub-line-height;
+    font-size: 22px;
+    font-weight: 500;
+  }
+  p {
+    margin: 0;
+    margin-top: 25px;
+    font-style: 16px;
+    padding: 0 10px;
+    color: #808080;
+  }
+  &.with-line:before {
+    content: "";
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    background: #e9e9e9;
+    display: block;
+    z-index: 9;
+  }
+}
+
+@media (max-width: 992px) {
+  .icon-box.with-line:before {
+    display: none;
+  }
+}

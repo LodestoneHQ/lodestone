@@ -1,0 +1,18 @@
+
+/* ---------------------------------- */
+/* Copy to clipboard
+------------------------------------- */
+
+.copy-url {
+  display: flex;
+  input {
+    border-radius: $global-border-radius 0 0 $global-border-radius;;
+    border-right: 0;
+  }
+  .copy-url-button {
+    min-width: 48px;
+    background-color: $primary-color;
+    color: #fff;
+    border-radius: 0 $global-border-radius $global-border-radius 0;
+  }
+}

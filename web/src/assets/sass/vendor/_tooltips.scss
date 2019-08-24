@@ -1,0 +1,62 @@
+
+/* ---------------------------------- */
+/* Tippy.js Tooltips
+------------------------------------- */
+
+/* Dark */
+
+.tippy-tooltip.dark-theme {
+  color: #fff;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 12px;
+  .tippy-backdrop {
+    background-color: #333;
+  }
+}
+
+.tippy-popper {
+  &[x-placement^=top] .tippy-tooltip.dark-theme .tippy-arrow {
+    border-top-color: $body-heading-color;
+  }
+  &[x-placement^=bottom] .tippy-tooltip.dark-theme .tippy-arrow {
+    border-bottom-color: $body-heading-color;
+  }
+  &[x-placement^=right] .tippy-tooltip.dark-theme .tippy-arrow {
+    border-right-color: $body-heading-color;
+  }
+  &[x-placement^=left] .tippy-tooltip.dark-theme .tippy-arrow {
+    border-left-color: $body-heading-color;
+  }
+}
+
+.tippy-tooltip {
+  &.dark-theme .tippy-arrow {
+    transform: scale(0.7);
+  }
+  &.light-theme {
+    color: $body-heading-color;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    padding: 6px 12px;
+    background-color: #fff;
+  }
+}
+
+/* Light */
+
+.tippy-popper {
+  &[x-placement^=top] .tippy-tooltip.light-theme .tippy-arrow {
+    border-top-color: #fff;
+  }
+  &[x-placement^=bottom] .tippy-tooltip.light-theme .tippy-arrow {
+    border-bottom-color: #fff;
+  }
+  &[x-placement^=right] .tippy-tooltip.light-theme .tippy-arrow {
+    border-right-color: #fff;
+  }
+  &[x-placement^=left] .tippy-tooltip.light-theme .tippy-arrow {
+    border-left-color: #fff;
+  }
+}

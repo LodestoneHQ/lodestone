@@ -1,0 +1,54 @@
+
+/* ---------------------------------- */
+/* Ripple Effect
+------------------------------------- */
+
+.ripple-effect-dark {
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.ripple-effect {
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  span.ripple-overlay {
+    animation: ripple 0.9s;
+    border-radius: 100%;
+    background: #fff;
+    height: 12px;
+    position: absolute;
+    width: 12px;
+    line-height: 12px;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+}
+
+.ripple-effect-dark span.ripple-overlay {
+  animation: ripple 0.9s;
+  border-radius: 100%;
+  background: #fff;
+  height: 12px;
+  position: absolute;
+  width: 12px;
+  line-height: 12px;
+  opacity: 0.1;
+  pointer-events: none;
+  background: #000;
+  opacity: 0.07;
+}
+
+@keyframes ripple {
+  0% {
+    -webkit-transform: scale(4);
+    transform: scale(4);
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-transform: scale(40);
+    transform: scale(40);
+  }
+}
