@@ -21,6 +21,7 @@
     "@angular/router": "~8.0.0",
     "bootstrap": "^4.0.0",
     "elasticsearch-browser": "^15.1.1",
+    "mammoth": "^1.4.8",
     "moment": "^2.24.0",
     "ng2-pdfjs-viewer": "^5.0.1",
     "ngx-bootstrap": "^4.2.0",

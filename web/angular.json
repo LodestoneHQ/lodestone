@@ -39,7 +39,8 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/bootstrap-slider/dist/bootstrap-slider.js"
+              "./node_modules/bootstrap-slider/dist/bootstrap-slider.js",
+              "./node_modules/mammoth/browser.js"
             ]
           },
           "configurations": {
