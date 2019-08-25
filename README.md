@@ -87,7 +87,7 @@ repository.
 
 
 # Future Development
-Here's some of the feature's that we have targeted for future development:
+Here's some of the feature's that we have targeted for future development. Check the [Lodestone Project](https://github.com/AnalogJ/lodestone/projects/1) for in-progress development status.
 
 - **(In-Progress)** Thumbnail Generation
 - Additional file types
