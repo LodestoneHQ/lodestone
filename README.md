@@ -40,11 +40,11 @@ Lodestone is a very opinionated solution for personal document management. As su
 
 - Currently there's no user management. Lodestone is designed to run at home, on your trusted network. This may be reconsidered at a future date.
 - Limited support for file types
-    - `doc`,`docx`,`xls`,`xlsx` - Microsoft Office Document types
+    - `doc`,`docx`,`xls`,`xlsx`, `ppt`, `pptx` - Microsoft Office Documents
+    - `pages`, `numbers`, `key` - Apple iWork Documents
     - `pdf`
-    - `jpg`, `jpeg`
-    - `png`
--
+    - `rtf`
+    - `jpg`, `jpeg`, `png`, `tiff`, `tif`
 
 
 # What about..
