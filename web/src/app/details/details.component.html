@@ -42,8 +42,17 @@
 
       <div class="single-page-section">
         <h3 class="margin-bottom-25">Document Preview</h3>
-        <div style="height: 900px">
+        <div style="height: 900px; outline: auto">
+
+
+
+          <img *ngIf="documentData._source.file.extension == 'jpg' || documentData._source.file.extension == 'jpeg' || documentData._source.file.extension == 'png'"
+            [src]="'/static' + documentData._source.path.virtual">
+
+
+
           <ng2-pdfjs-viewer
+            *ngIf="documentData._source.file.extension == 'pdf'"
             [pdfSrc]="'/static' + documentData._source.path.virtual"></ng2-pdfjs-viewer>
         </div>
 
