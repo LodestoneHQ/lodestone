@@ -46,6 +46,9 @@ Lodestone is a very opinionated solution for personal document management. As su
     - `rtf`
     - `jpg`, `jpeg`, `png`, `tiff`, `tif`
 
+    If you think there are additional document types that may be useful to support, please open an issue.
+
+
 
 # What about..
 
