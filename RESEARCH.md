@@ -27,3 +27,10 @@
 - https://thenounproject.com/term/crystal/570596
 - https://thenounproject.com/term/crystal/570601
 - https://thenounproject.com/term/quartz-crystal/570585
+
+Rock
+Mineral
+Geode
+Crystal
+Mine
+Gem

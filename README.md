@@ -13,6 +13,8 @@ Lodestone is designed around a handful of core features:
 - **Rich tagging** - Unlike a physical file cabinet where a document can only exist in one place, digital documents support tags, allowing you to create a flexible organizational structure that works for you.
 - **Automated** - Document collection & OCR processing should be automatic. Just saving a file to your network drive should be enough to start document processing.
 - **Non-destructive** - When Lodestone processes a document, the original file will be left untouched, exactly where you left it.
+- **Web Accessible** - Lodestone is designed to run on a trusted home server and be accessible 24x7.
+
 
 # Screenshot
 
@@ -28,6 +30,21 @@ Lodestone is made up of a handful of open-source components, and as such its eas
 docker-compose up
 ```
 
+# Notes:
+If your documents already exist, you may need to touch the files in the watchfolder directory to trigger parsing by fscrawler.
+
+
+
+# Considerations
+Lodestone is a very opinionated solution for personal document management. As such, there's a couple things you should know before even considering it.
+
+- Currently there's no user management. Lodestone is designed to run at home, on your trusted network. This may be reconsidered at a future date.
+- Limited support for file types
+    - `doc`,`docx`,`xls`,`xlsx` - Microsoft Office Document types
+    - `pdf`
+    - `jpg`, `jpeg`
+    - `png`
+-
 
 
 # What about..
@@ -57,19 +74,19 @@ cd web && ng build --output-path ./dist --base-href "/" --prod --watch
 
 
 
-# Notes:
-If your documents already exist, you may need to touch the files in the watchfolder directory to trigger parsing by fascrawler.
+
+# Future Development
+Here's some of the feature's that we have targeted for future development:
+
+- **(In-Progress)** Thumbnail Generation
+- Additional file types
+- Optional tag synchronization to cloud storage providers (Dropbox, Google Drive, etc)
+- Metadata Backup/Export system
+- Email Collector (send emails to a customizable email address, and automatically parse into lodestone).
+- Full API platform
+- User management system
 
 
 
 # Logo
 - [rock by Dobs from the Noun Project](https://thenounproject.com/term/rock/481051)
-
-
-
-Rock
-Mineral
-Geode
-Crystal
-Mine
-Gem
