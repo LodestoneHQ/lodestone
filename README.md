@@ -30,8 +30,13 @@ Lodestone is made up of a handful of open-source components, and as such its eas
 docker-compose up
 ```
 
-# Notes:
+If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
+repository.
+
+### Notes:
 If your documents already exist, you may need to touch the files in the watchfolder directory to trigger parsing by fscrawler.
+
+`find . -exec touch {} \;`
 
 
 
@@ -72,9 +77,12 @@ docker-compose up -f docker-compose.dev.yml --force-recreate --build
 
 # and the following in a different terminal
 cd web && ng build --output-path ./dist --base-href "/" --prod --watch
-
 ```
 
+If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
+repository.
+
+`find . -exec touch {} \;`
 
 
 

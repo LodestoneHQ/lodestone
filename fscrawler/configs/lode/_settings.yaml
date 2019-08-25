@@ -2,6 +2,36 @@
 name: lode
 fs:
   url: "/usr/share/fscrawler/data"
+  includes:
+    - "*/*.doc"
+    - "*/*.docx"
+    - "*/*.xls"
+    - "*/*.xlsx"
+    - "*/*.ppt"
+    - "*/*.pptx"
+    - "*/*.pages"
+    - "*/*.numbers"
+    - "*/*.key"
+    - "*/*.pdf"
+    - "*/*.rtf"
+    - "*/*.jpg"
+    - "*/*.jpeg"
+    - "*/*.png"
+    - "*/*.tiff"
+    - "*/*.tif"
+  excludes:
+    # mostly taken from https://github.com/github/gitignore/tree/master/Global
+    - "*/.gitignore"
+    - "*/.DS_Store"
+    - "*/._*"
+    - "*/.Spotlight-V100"
+    - "*/.TemporaryItems"
+    - "*/.Trashes"
+    - "*/Thumbs.db"
+    - "*/Thumbs.db:encryptable"
+    - "*/$RECYCLE.BIN"
+    - "*/*.lnk"
+
   update_rate: 1m
   json_support: false
   filename_as_id: false
