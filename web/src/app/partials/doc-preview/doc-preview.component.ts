@@ -1,6 +1,10 @@
+// tslint:disable
+
 import {Component, Input, OnInit} from '@angular/core';
 import * as mammoth from '../../../../node_modules/mammoth/mammoth.browser.js';
 import {ApiService} from "../../services/api.service";
+import {RTFJS} from 'rtf.js';
+import * as $ from "jquery";
 
 @Component({
   selector: 'app-doc-preview',
@@ -12,6 +16,10 @@ export class DocPreviewComponent implements OnInit {
   @Input() extension: string;
   @Input() path: string;
 
+  renderers = {
+    'docx': this.renderDocx,
+    'rtf': this.renderRtf
+  }
   constructor(private api: ApiService) { }
 
   ngOnInit() {
@@ -21,11 +29,7 @@ export class DocPreviewComponent implements OnInit {
         .subscribe(
           arrBuffResp => {
             console.log("SUCCESSFUL ARRYBUFFER")
-            if(this.extension == 'docx'){
-              this.renderDocx(arrBuffResp.body)
-            }
-
-
+            this.renderers[this.extension](arrBuffResp.body)
           },
           err => console.error(err),
           () => {
@@ -43,7 +47,7 @@ export class DocPreviewComponent implements OnInit {
     else if(extension == 'pdf'){
       return 'pdf' //uses viewer.js through ng2-pdfjs-viewer
     }
-    else if(extension == 'docx'){
+    else if(this.renderers[extension]){
       return 'third-party'
     } else {
       return 'unsupported'
@@ -64,6 +68,16 @@ export class DocPreviewComponent implements OnInit {
         // document.getElementById("messages").innerHTML = "<ul>" + messageHtml + "</ul>";
       })
       .done();
+  }
+
+  private renderRtf(data: ArrayBuffer){
+    const doc = new RTFJS.Document(data,{});
+
+    const meta = doc.metadata();
+    doc.render().then(function(htmlElements) {
+      console.log(meta);
+      $("#thirdPartyRender").append(htmlElements)
+    }).catch(error => console.error(error))
   }
 
 }
