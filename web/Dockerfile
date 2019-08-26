@@ -17,7 +17,8 @@ RUN npm install -g @angular/cli@latest
 COPY . /app
 
 # start app
-RUN npm run-script ng --  build --output-path /www/dist --base-href "/" --prod
+RUN mkdir -p /www/ && \
+    npm run-script ng --  build --output-path /www/dist --base-href "/" --prod
 
 # serve image
 FROM nginx AS runtime
