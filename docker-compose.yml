@@ -20,6 +20,9 @@ services:
       - ./elasticsearch/configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./elasticsearch/configs/enterprise-search.yml:/usr/share/elasticsearch/config/enterprise-search.yml
       - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 19200:9200
+      - 19300:9300
     networks:
       - esnet
 
