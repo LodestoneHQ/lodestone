@@ -21,7 +21,9 @@
               <i class="icon-feather-search"></i>
               <input
                 [popover]="popTemplate"
-                popoverTitle="Template ref content inside"
+                containerClass="search-popover"
+                popoverTitle="Search - Advanced Options"
+                container="body"
                 placement="bottom"
                 triggers="focus"
                 ngModel
@@ -71,46 +73,49 @@
 <!-- Header Container / End -->
 
 <ng-template #popTemplate>
-  <p>
-    Just type your query in search input above and hit "Enter"
+  <div class="search-popover">
+    <p>
+      Just type your query in search input above and hit "Enter"
 
-    Try these tips to refine your search
-  </p>
+      Try these tips to refine your search
+    </p>
 
-  <table class="basic-table">
+    <table class="basic-table">
 
-    <tbody><tr> <th style="text-align: left">Special character</th> <th style="text-align: left">Behavior</th> </tr>
+      <tbody><tr> <th style="text-align: left">Special character</th> <th style="text-align: left">Behavior</th> </tr>
 
 
-    <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">+</code></td>
-      <td style="text-align: left">Acts as the <code class="highlighter-rouge">and</code> operator.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">|</code></td>
-      <td style="text-align: left">Acts as the <code class="highlighter-rouge">or</code> operator.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">*</code></td>
-      <td style="text-align: left">Acts as a wildcard.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">""</code></td>
-      <td style="text-align: left">Wraps several terms into a phrase.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">()</code></td>
-      <td style="text-align: left">Wraps a clause for precedence.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">~n</code></td>
-      <td style="text-align: left">When used after a term (e.g. <code class="highlighter-rouge">wnid~3</code>), sets <code class="highlighter-rouge">fuzziness</code>. When used after a phrase, sets <code class="highlighter-rouge">slop</code>. See <a href="#options">Options</a>.</td>
-    </tr>
-    <tr>
-      <td style="text-align: left"><code class="highlighter-rouge">-</code></td>
-      <td style="text-align: left">Negates the term.</td>
-    </tr>
+      <tr>
+        <td style="text-align: left"><code class="highlighter-rouge">+</code></td>
+        <td style="text-align: left">Force an exact-match search on a single word or phrase.</td>
+      </tr>
+      <tr>
+        <td style="text-align: left"><code class="highlighter-rouge">|</code></td>
+        <td style="text-align: left">Put between each search query to combine searches</td>
+      </tr>
+      <tr>
+        <td style="text-align: left"><code class="highlighter-rouge">*</code></td>
+        <td style="text-align: left">Acts as a wild-card and will match on any word.</td>
+      </tr>
+      <tr>
+        <td style="text-align: left"><code class="highlighter-rouge">""</code></td>
+        <td style="text-align: left">Wraps several terms into a phrase and search for an exact match</td>
+      </tr>
+      <tr>
+        <td style="text-align: left"><code class="highlighter-rouge">()</code></td>
+        <td style="text-align: left">Group multiple terms or search operators to control how the search is executed.</td>
+      </tr>
+      <tr>
+        <td style="text-align: left"><code class="highlighter-rouge">~n</code></td>
+        <td style="text-align: left">Include synonyms.</td>
+      </tr>
+      <tr>
+        <td style="text-align: left"><code class="highlighter-rouge">-</code></td>
+        <td style="text-align: left">Put in front of a word you want to leave out.</td>
+      </tr>
 
-    </tbody></table>
+      </tbody></table>
+  </div>
+
 
 </ng-template>
