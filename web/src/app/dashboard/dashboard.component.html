@@ -186,7 +186,7 @@
                 <span> {{result._source.file.filesize | filesize}} </span>
               </div>
 
-              <span [routerLink]="'/details'+ result._id" class="button button-sliding-icon ripple-effect">View <i class="icon-material-outline-arrow-right-alt"></i></span>
+              <a [routerLink]="'/details/'+ result._id" class="button button-sliding-icon ripple-effect">View <i class="icon-material-outline-arrow-right-alt"></i></a>
 
             </div>
           </div>
