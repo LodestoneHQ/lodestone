@@ -20,21 +20,16 @@ services:
       - ./elasticsearch/configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./elasticsearch/configs/enterprise-search.yml:/usr/share/elasticsearch/config/enterprise-search.yml
       - esdata:/usr/share/elasticsearch/data
-    ports:
-      - 19200:9200
-      - 19300:9300
     networks:
       - esnet
 
   fscrawler:
-    build: fscrawler
+    image: analogj/lodestone:fscrawler
     depends_on:
       elasticsearch:
         condition: service_healthy
     environment:
       - JOB_NAME=lode
-    ports:
-      - 18080:8080
     volumes:
       - ./fscrawler/configs/lode:/usr/share/fscrawler/config/lode
       - ./fscrawler/configs/_default/7/_settings.json:/usr/share/fscrawler/config/_default/7/_settings.json
@@ -43,7 +38,7 @@ services:
       - esnet
 
   webapp:
-    build: web
+    image: analogj/lodestone:web
     ports:
       - "4000:80"
     depends_on:
@@ -55,23 +50,23 @@ services:
       # enable when doing local development
       # run the following command locally:
       #   ng build --output-path ./dist --base-href "/" --prod --watch
-      - ./web/dist:/www/web
+#      - ./web/dist:/www/web
 
     networks:
       - esnet
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.2.1
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    ports:
-      - "5601:5601"
-    environment:
-      - ELASTICSEARCH_URL=http://elasticsearch:9200
-      - XPACK_MONITORING_ENABLED=false
-    networks:
-      - esnet
+#  kibana:
+#    image: docker.elastic.co/kibana/kibana:7.2.1
+#    depends_on:
+#      elasticsearch:
+#        condition: service_healthy
+#    ports:
+#      - "5601:5601"
+#    environment:
+#      - ELASTICSEARCH_URL=http://elasticsearch:9200
+#      - XPACK_MONITORING_ENABLED=false
+#    networks:
+#      - esnet
 
 volumes:
   esdata:

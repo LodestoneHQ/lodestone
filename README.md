@@ -28,6 +28,11 @@ Lodestone is made up of a handful of open-source components, and as such its eas
 
 ```bash
 docker-compose up
+
+# then open the following url in your browser
+
+http://localhost:4000/
+
 ```
 
 If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
