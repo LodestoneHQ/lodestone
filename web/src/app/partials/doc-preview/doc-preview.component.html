@@ -1,0 +1,20 @@
+<div class="doc-preview-wrapper">
+
+
+  <!-- Render Browser Native file types: -->
+  <img *ngIf="previewType(extension) == 'native'" [src]="path">
+
+
+  <!-- Render PDF's -->
+  <ng2-pdfjs-viewer *ngIf="previewType(extension) == 'pdf'" [pdfSrc]="path"></ng2-pdfjs-viewer>
+
+  <!-- Render files that have a thirdparty library for processing  -->
+  <div *ngIf="previewType(extension) == 'third-party'" id="thirdPartyRender" class="well"></div>
+
+  <div *ngIf="previewType(extension) == 'unsupported'">
+    <div class="notification error ">
+      <p>Sorry, could not render preview for this item. <br/> Use the download button to open the document in a native viewer.</p>
+    </div>
+  </div>
+
+</div>

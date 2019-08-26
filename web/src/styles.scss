@@ -73,3 +73,13 @@ mv-slider .slider .tooltip.tooltip-main {
 mv-slider .slider .slider-track .slider-selection {
   background-image: none;
 }
+
+
+/* ---------------------------------- */
+/* Details Page - Document Preview
+------------------------------------- */
+.doc-preview-wrapper{
+  height: 900px;
+  outline: auto;
+  overflow: scroll;
+}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 import {Observable, throwError} from 'rxjs';
@@ -30,5 +30,18 @@ export class ApiService {
   }
   // Unauthenticated functions
 
+  fetchDocumentData(path: string): Observable<HttpResponse<ArrayBuffer>> {
+
+    return this.http.get(path, {
+      responseType: 'arraybuffer',
+      observe: 'response'
+    })
+      .pipe(catchError(this.handleError));
+
+    // var cacheKey = this.cacheKey('GET', url, params);
+    // return this.cacheService.get(cacheKey) || this.cacheService.put(cacheKey, this.authHttp.get(url,{ search: params })
+    //         .map(this.extractData)
+    //         .catch(this.handleError))
+  }
 
 }

@@ -42,23 +42,8 @@
 
       <div class="single-page-section">
         <h3 class="margin-bottom-25">Document Preview</h3>
-        <div style="height: 900px; outline: auto; overflow: scroll;">
 
-
-          <div *ngIf="documentData._source.file.extension == 'docx' || documentData._source.file.extension == 'doc'"
-               id="output" class="well"></div>
-
-
-          <img *ngIf="documentData._source.file.extension == 'jpg' || documentData._source.file.extension == 'jpeg' || documentData._source.file.extension == 'png'"
-            [src]="'/static' + documentData._source.path.virtual">
-
-
-
-          <ng2-pdfjs-viewer
-            *ngIf="documentData._source.file.extension == 'pdf'"
-            [pdfSrc]="'/static' + documentData._source.path.virtual"></ng2-pdfjs-viewer>
-        </div>
-
+        <app-doc-preview *ngIf="documentData" [extension]="documentData._source.file.extension" [path]="'/static' + documentData._source.path.virtual"></app-doc-preview>
       </div>
 
 

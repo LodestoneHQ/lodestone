@@ -19,6 +19,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import {NgxBootstrapSliderModule} from "ngx-bootstrap-slider";
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { DocPreviewComponent } from './partials/doc-preview/doc-preview.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     DashboardComponent,
     DetailsComponent,
     StatusComponent,
+    DocPreviewComponent,
   ],
   imports: [
     BrowserModule,
