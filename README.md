@@ -14,7 +14,7 @@ Lodestone is designed around a handful of core features:
 - **Automated** - Document collection & OCR processing should be automatic. Just saving a file to your network drive should be enough to start document processing.
 - **Non-destructive** - When Lodestone processes a document, the original file will be left untouched, exactly where you left it.
 - **Web Accessible** - Lodestone is designed to run on a trusted home server and be accessible 24x7.
-
+- **Filesystem/Cloud Sync** - Optionally synchronize your tagged documents via a cloud storage provider of your choice (Dropbox, GDrive, etc) or access via a FUSE filesystem mount.
 
 # Screenshot
 
