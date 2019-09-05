@@ -78,6 +78,11 @@ Here's some of my research, but you should take a look at them yourselves.
 
 # Contributing
 
+If you're interested in contributing, please fill out the following Google Form:
+
+https://forms.gle/u1RXnbocbFWqfxGb9
+
+
 ```bash
 # run the following command in 1 terminal
 docker-compose up -f docker-compose.dev.yml --force-recreate --build
