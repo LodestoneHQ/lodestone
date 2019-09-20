@@ -34,3 +34,62 @@ Geode
 Crystal
 Mine
 Gem
+
+
+# Keywords
+- Electronic Document Management System (EDMS)
+- Document Management System (DMS)
+- Personal Archival
+- Enterprise Search
+
+
+## Alternatives
+- Mayan EDMS
+- Paperless
+- OpenDocMan
+- Alfresco
+- LogicalDOC
+- OpenKM
+- SeedDMS
+- Nuxeo
+- Casebox
+- EcoDMS
+- Paperport
+- Ambar.cloud
+- sismicsdocs (Teedy)
+- Perkeep
+- Krystal DMS
+- DevonThink Pro /Server
+- Neat Desk
+- EagleFiler
+- Paperless 3
+- DocMoto
+- OpenKM
+- Nuxeo
+- laserfiche
+- Docuware
+- Opentext
+- treegonizer
+- Open Semantic Search Server 
+- https://www.softwaretestinghelp.com/best-document-management-systems/
+- https://github.com/fileago/fileago
+- https://www.tagspaces.org/
+- https://www.bitrix24.com/self-hosted/
+- https://www.documize.com/
+- FileCenter
+- Odoo
+- resourcespace
+- Ademero Content Central
+- The Brain
+- Docuware
+- Dokmee
+- EfileCabinet
+- Freemind
+- XMind
+- Zoho Docs
+- Sharepoint
+- Datamagine
+- PandaDoc
+- DocStar
+- Elastic Search Enterprise Search
+- Wuha

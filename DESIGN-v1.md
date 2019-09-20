@@ -12,7 +12,7 @@ At runtime each component is started by docker-compose, and glued together into 
 - **ElasticSearch cluster** - acts as data storage for all document content.
 - **Collector - Filesystem Watcher** - filesystem watcher that continuously watches directories for new files to process
 - **Collector - Email Watcher** - email watcher that continuously watches an inbox for new emails
-- **Storage** - S3 compatible blob storage api that can be used to serve files via the UI
+- **Storage** - S3 compatible blob storage api that can be used to serve files (and thumbnails) via the UI
 - **Queue** - used to coordinate and schedule Collectors
 - **Web** - Static frontend for user to interact with
 - **API** - extendable API layer used by Web component. Used to control all other components
@@ -28,5 +28,9 @@ Components that support HTTP are available at the following routes.
 - `/storage`
 - `/web`
 - `/api/v1`
+
+## Api
+
+
 
 
