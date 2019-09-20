@@ -66,6 +66,9 @@ This can be done a couple of different ways:
 1. Nginx container serving static content
 2. Minio container with an S3 compatible API + content server.
 
+Minio supports [WORM (Write-Once-Read-Multiple)](https://docs.min.io/docs/minio-server-configuration-guide.html#Worm) which
+means that we can ensure that files written by the UI/Email are not modified.
+However this would require the docker filesystem mount is `read-write` not `read-only`.
 
 ## Collector - Filesystem
 
