@@ -3,6 +3,7 @@
 [![GitHub license](https://img.shields.io/github/license/AnalogJ/lodestone.svg?style=flat-square)](https://github.com/AnalogJ/lodestone/blob/master/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/analogj/lodestone.svg?style=flat-square)](https://hub.docker.com/r/analogj/lodestone)
 [![Gitter chat](https://img.shields.io/badge/chat-on%20gitter-brightgreen?style=flat-square)](https://gitter.im/lodestone-chat/devs)
+[![Get Notified](https://img.shields.io/badge/Form-Get%20Notified-critical?style=flat-square)](https://forms.gle/u1RXnbocbFWqfxGb9)
 
 
 
