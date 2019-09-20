@@ -50,6 +50,24 @@ We could just have the webapp interact with each component directly. No API nece
 - `/storage`
 - `/web`
 
+## Storage
+
+Lodestone pledges to keep your files safe and leave them untouched. However file storage needs to take into account
+multiple file types and sources:
+
+- `read-only` - raw documents & files
+- `write-once` - files added via email or manually via the Web UI
+- `read-write` - thumbnails (re)created via collector for display in Web UI.
+
+In addition, the files need to be accessible via the Web UI, so they need to be served via web server.
+
+This can be done a couple of different ways:
+
+1. Nginx container serving static content
+2. Minio container with an S3 compatible API + content server.
+
+
+## Collector - Filesystem
 
 
 
