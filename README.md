@@ -1,5 +1,9 @@
 # Lodestone - Personal Document Search & Archive
 
+[![GitHub license](https://img.shields.io/github/license/AnalogJ/lodestone.svg?style=flat-square)](https://github.com/AnalogJ/lodestone/blob/master/LICENSE)
+[![Docker Pulls](https://img.shields.io/docker/pulls/analogj/lodestone.svg?style=flat-square)](https://hub.docker.com/r/analogj/lodestone)
+
+
 > NOTE: Lodestone is a Work-in-Progress and is not production ready.
 >
 > If you want to be a tester/developer, please fill out this Google Form with your contact information: https://forms.gle/u1RXnbocbFWqfxGb9
