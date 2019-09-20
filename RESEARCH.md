@@ -98,4 +98,6 @@ Gem
 - addsearch
 - https://indicaplatform.com/content/esearch-demo
 - ContraxSuite
--
+- https://docs.coveo.com/en/1997/cloud-v2-administrators/available-coveo-cloud-v2-connectors
+- https://www.funnelback.com/product/enterprise-search
+- https://qsensei.com

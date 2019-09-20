@@ -96,5 +96,6 @@ However this would require the docker filesystem mount is `read-write` not `read
 
     - **References**
         - https://docs.filerun.com/docker-tika
-
+        - https://github.com/radovskyb/watcher/issues/66
+        - https://github.com/paulmillr/chokidar
 
