@@ -94,3 +94,8 @@ Gem
 - Elastic Search Enterprise Search
 - Wuha
 - fess
+- https://hesbox.com/en/overview/screenshots
+- addsearch
+- https://indicaplatform.com/content/esearch-demo
+- ContraxSuite
+-

@@ -72,7 +72,29 @@ However this would require the docker filesystem mount is `read-write` not `read
 
 ## Collector - Filesystem
 
+1. `fscrawler`
+    - **Pros**
+        - implemented and working
+        - automatically creates ES schema
+        - automatic OCR using Tika
+    - **Cons**
+        - does not have a good status API
+        - ignores files that already exist in filestore before process starts
+        - unsure how to scale horizontally
+2. custom using `Tika`
+    - **Pros**
+        - flexible, we can build it to our needs
+        - Status API
+        - Queue integration to scale FS watcher seperate from document OCR worker
+        - file system watcher would automatically processes any documents already existing in FS when started
+    - **Cons**
+        - does not exist, requires development
+        - more complex
+        - potentially more processor intensive
+        - requires a Queuing system
+        - need to create an ES schema ourselves, write ES integration code ourselves.
 
-
+    - **References**
+        - https://docs.filerun.com/docker-tika
 
 
