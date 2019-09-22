@@ -20,7 +20,7 @@ At runtime each component is started by docker-compose, and glued together into 
 
 ## API
 
-We have a two options for our API design, a Unified API or a direct-to-component API
+We have a couple of different options for our API design, `Unified`, `Direct/Component` or `Framework` API
 
 ### Unified
 
@@ -49,6 +49,15 @@ We could just have the webapp interact with each component directly. No API nece
 - `/collector/fs`
 - `/storage`
 - `/web`
+
+### Framework
+We can also use a Framework API layer, something like [Kuzzle](https://kuzzle.io/products/by-features/database-and-search-api/)
+Kuzzle will wrap Elasticsearch, provide a user management system, a pluggable API layer and notification/event system.
+
+https://loopback.io/doc/en/community/Elasticsearch-connector.html
+https://github.com/nodefony/nodefony
+https://moleculer.services
+
 
 ## Storage
 
@@ -98,4 +107,19 @@ However this would require the docker filesystem mount is `read-write` not `read
         - https://docs.filerun.com/docker-tika
         - https://github.com/radovskyb/watcher/issues/66
         - https://github.com/paulmillr/chokidar
+
+
+## Web
+- https://github.com/elastic/search-ui
+- https://swiftype.com/search-ui
+
+## Dev Components
+
+There are a handful of components that are necessary during development.
+
+- **ElasticSearch Admin**
+    - Kibana
+    - [ElasticSearch Head](http://mobz.github.io/elasticsearch-head/)
+    - [DejaVu](https://github.com/appbaseio/dejavu)
+
 

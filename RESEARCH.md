@@ -101,3 +101,7 @@ Gem
 - https://docs.coveo.com/en/1997/cloud-v2-administrators/available-coveo-cloud-v2-connectors
 - https://www.funnelback.com/product/enterprise-search
 - https://qsensei.com
+- https://developer.searchblox.com/docs/license-key
+- https://www.datafari.com/en/fonctionnalities.html#crawling
+- https://www.predictiveanalyticstoday.com/top-open-source-big-data-enterprise-search-software/
+
