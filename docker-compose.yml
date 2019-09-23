@@ -58,18 +58,6 @@ services:
     networks:
       - esnet
 
-#  kibana:
-#    image: docker.elastic.co/kibana/kibana:7.2.1
-#    depends_on:
-#      elasticsearch:
-#        condition: service_healthy
-#    ports:
-#      - "5601:5601"
-#    environment:
-#      - ELASTICSEARCH_URL=http://elasticsearch:9200
-#      - XPACK_MONITORING_ENABLED=false
-#    networks:
-#      - esnet
 
 volumes:
   esdata:
