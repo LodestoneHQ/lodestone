@@ -95,7 +95,7 @@ https://forms.gle/u1RXnbocbFWqfxGb9
 
 ```bash
 # run the following command in 1 terminal
-docker-compose up -f docker-compose.dev.yml --force-recreate --build
+docker-compose --file ./docker-compose.dev.yml up --force-recreate --build
 
 # and the following in a different terminal
 cd web && npm install && ng serve
