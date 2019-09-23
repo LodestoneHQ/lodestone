@@ -98,7 +98,7 @@ https://forms.gle/u1RXnbocbFWqfxGb9
 docker-compose up -f docker-compose.dev.yml --force-recreate --build
 
 # and the following in a different terminal
-cd web && ng build --output-path ./dist --base-href "/" --prod --watch
+cd web && npm install && ng serve
 ```
 
 Place your documents in the `/watchfolder` directory, and the Filesystem Collector should automatically start processing them.
