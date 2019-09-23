@@ -42,24 +42,6 @@ services:
     networks:
       - esnet
 
-  webapp:
-    build: web
-    ports:
-      - "4000:80"
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    volumes:
-      - ./watchfolder:/www/static
-
-      # enable when doing local development
-      # run the following command locally:
-      #   ng build --output-path ./dist --base-href "/" --prod --watch
-      - ./web/dist:/www/web
-
-    networks:
-      - esnet
-
 #  kibana:
 #    image: docker.elastic.co/kibana/kibana:7.2.1
 #    depends_on:
