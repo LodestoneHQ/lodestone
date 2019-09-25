@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+
+cd /lodestone/frontend
+rm -rf node_modules
+npm install
+npm run-script ng --  build --watch=true --progress=true --deleteOutputPath=false --output-path=/lodestone/backend/public --base-href="/" --prod
