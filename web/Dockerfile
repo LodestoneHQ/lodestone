@@ -1,33 +1,43 @@
 # build image
-FROM node:12.3.1 AS builder
+FROM node:12 AS builder
 
 # set working directory
-WORKDIR /app
+WORKDIR /lodestone
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+# add `/lodestone/node_modules/.bin` to $PATH
+ENV PATH /lodestone/backend/node_modules/.bin:/lodestone/frontend/node_modules/.bin:$PATH
 
-# install and cache app dependencies
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
-RUN npm install
-RUN npm install -g @angular/cli@latest
+# add frontend/backend
+COPY ./frontend /lodestone/frontend
+COPY ./backend /lodestone/backend
 
-# add app
-COPY . /app
+# install global dependencies
+RUN npm install -g @angular/cli@latest \
+    && npm install -g nodemon
 
-# start app
-RUN mkdir -p /www/ && \
-    npm run-script ng --  build --output-path /www/dist --base-href "/" --prod
+# install frontend and backend dependencies
+RUN cd /lodestone/frontend \
 
-# serve image
-FROM nginx AS runtime
+    && npm install \
+    && cd /lodestone/backend \
+    && npm install
 
-WORKDIR /www
+# build frontend app (and copy into backend public directory)
+RUN mkdir -p /lodestone/backend/public \
+    && cd /lodestone/frontend \
+    && npm run-script ng --  build --output-path /lodestone/backend/public --base-href "/" --prod
 
-RUN mkdir -p /www/static && \
-    rm -f /etc/nginx/conf.d/default.conf
-COPY --from=builder /www/dist /www/web
+FROM node:12-alpine
 
-COPY rootfs/ /
+# set working directory
+WORKDIR /lodestone
+
+COPY --from=builder /lodestone/backend /lodestone
+
+CMD ["npm", "start"]
+
+
+
+
+
 

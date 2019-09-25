@@ -1,5 +1,5 @@
 # build image
-FROM node:12.3.1 AS builder
+FROM node:12 AS builder
 
 # Install S6 service manager (needed for live reloading of Express & Angular apps in the same container)
 # Not used in production.

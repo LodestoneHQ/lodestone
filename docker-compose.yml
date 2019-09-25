@@ -43,18 +43,10 @@ services:
   webapp:
     image: analogj/lodestone:web
     ports:
-      - "4000:80"
+      - "4000:3000"
     depends_on:
       elasticsearch:
         condition: service_healthy
-    volumes:
-      - ./watchfolder:/www/static
-
-      # enable when doing local development
-      # run the following command locally:
-      #   ng build --output-path ./dist --base-href "/" --prod --watch
-#      - ./web/dist:/www/web
-
     networks:
       - esnet
 
