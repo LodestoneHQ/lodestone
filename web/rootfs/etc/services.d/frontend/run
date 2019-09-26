@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv bash
+
+cd /lodestone/frontend
+rm -rf node_modules
+npm install
+
+# in dev mode we need to make sure we dont accidentally commit files in the public directory
+echo "*" > /lodestone/backend/public/.gitignore
+npm run-script dev-lodestone
+
+

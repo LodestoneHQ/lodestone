@@ -1,5 +1,5 @@
 {
-  "name": "lodestone",
+  "name": "lodestone-frontend",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng frontend/e2e",
+    "build-lodestone": "ng build --output-path=/lodestone/backend/public --deploy-url=\"/web/\" --base-href=\"/web/\" --prod",
+    "dev-lodestone": "ng build --output-path=/lodestone/backend/public --deploy-url=\"/web/\" --base-href=\"/web/\" --prod --watch=true --progress=true --deleteOutputPath=false"
   },
   "private": true,
   "dependencies": {
