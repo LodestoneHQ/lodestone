@@ -40,7 +40,7 @@ docker-compose up
 
 # then open the following url in your browser
 
-http://localhost:4000/
+http://localhost/web
 
 ```
 
