@@ -55,17 +55,6 @@ If your documents already exist, you may need to touch the files in the `/watchf
 
 `find . -exec touch {} \;`
 
-# Components
-
-| Name  | Software Version | Docker Image |
-| --- | :---: |  :---: |
-| Elasticsearch | Elasticsearch v7.2.1 | |
-| Filesystem Collector | Fscrawler v2.7 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:fscrawler.svg)](https://microbadger.com/images/analogj/lodestone:fscrawler "Get your own image badge on microbadger.com") |
-| Web / Api | Angular v8.x / ExpressJS v4.16 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:web.svg)](https://microbadger.com/images/analogj/lodestone:web "Get your own image badge on microbadger.com") |
-| Storage | minio 2019 | [![](https://images.microbadger.com/badges/image/minio/minio.svg)](https://microbadger.com/images/minio/minio "Get your own image badge on microbadger.com") |
-| Storageconfig | master | [![](https://images.microbadger.com/badges/image/analogj/lodestone:storageconfig.svg)](https://microbadger.com/images/analogj/lodestone:storageconfig "Get your own image badge on microbadger.com") |
-| Reverse Proxy | Traefik v2 | [![](https://images.microbadger.com/badges/image/traefik:v2.0.svg)](https://microbadger.com/images/traefik:v2.0 "Get your own image badge on microbadger.com") |
-
 
 # Considerations
 Lodestone is a very opinionated solution for personal document management. As such, there's a couple things you should know before even considering it.
@@ -117,6 +106,18 @@ If you would like some test documents to play with safely, you can take a look a
 repository.
 
 `find . -exec touch {} \;`
+
+
+## Components
+
+| Name  | Software Version | Docker Image |
+| --- | :---: |  :---: |
+| Elasticsearch | Elasticsearch v7.2.1 | |
+| Filesystem Collector | Fscrawler v2.7 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:fscrawler.svg)](https://microbadger.com/images/analogj/lodestone:fscrawler "Get your own image badge on microbadger.com") |
+| Web / Api | Angular v8.x / ExpressJS v4.16 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:web.svg)](https://microbadger.com/images/analogj/lodestone:web "Get your own image badge on microbadger.com") |
+| Storage | minio 2019 | [![](https://images.microbadger.com/badges/image/minio/minio.svg)](https://microbadger.com/images/minio/minio "Get your own image badge on microbadger.com") |
+| Storageconfig | master | [![](https://images.microbadger.com/badges/image/analogj/lodestone:storageconfig.svg)](https://microbadger.com/images/analogj/lodestone:storageconfig "Get your own image badge on microbadger.com") |
+| Reverse Proxy | Traefik v2 | [![](https://images.microbadger.com/badges/image/traefik:v2.0.svg)](https://microbadger.com/images/traefik:v2.0 "Get your own image badge on microbadger.com") |
 
 
 
