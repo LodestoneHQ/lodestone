@@ -8,7 +8,7 @@
       <div class="col-md-12">
         <div class="single-page-header-inner">
           <div class="left-side">
-            <div class="header-image"><a href="single-company-profile.html"><img src="/assets/images/company-logo-03a.png" alt=""></a></div>
+            <div class="header-image"><a href="single-company-profile.html"><img src="assets/images/company-logo-03a.png" alt=""></a></div>
             <div class="header-details">
               <h3>{{documentData._source.file.filename}}</h3>
               <ul>
@@ -43,7 +43,7 @@
       <div class="single-page-section">
         <h3 class="margin-bottom-25">Document Preview</h3>
 
-        <app-doc-preview *ngIf="documentData" [extension]="documentData._source.file.extension" [path]="'/static' + documentData._source.path.virtual"></app-doc-preview>
+        <app-doc-preview *ngIf="documentData" [extension]="documentData._source.file.extension" [path]="'/storage/documents' + documentData._source.path.virtual"></app-doc-preview>
       </div>
 
 
@@ -72,7 +72,7 @@
             <div class="job-listing-details">
               <!-- Logo -->
               <div class="job-listing-company-logo">
-                <img src="/assets/images/company-logo-02.png" alt="">
+                <img src="assets/images/company-logo-02.png" alt="">
               </div>
 
               <!-- Details -->
@@ -100,7 +100,7 @@
             <div class="job-listing-details">
               <!-- Logo -->
               <div class="job-listing-company-logo">
-                <img src="/assets/images/company-logo-03.png" alt="">
+                <img src="assets/images/company-logo-03.png" alt="">
               </div>
 
               <!-- Details -->
@@ -131,7 +131,7 @@
     <div class="col-xl-4 col-lg-4">
       <div class="sidebar-container">
 
-        <a download [href]="'/static' + documentData._source.path.virtual" class="apply-now-button popup-with-zoom-anim">Download <i class="icon-material-outline-arrow-right-alt"></i></a>
+        <a download [href]="'/storage/documents' + documentData._source.path.virtual" class="apply-now-button popup-with-zoom-anim">Download <i class="icon-material-outline-arrow-right-alt"></i></a>
 
         <!-- Sidebar Widget -->
         <div class="sidebar-widget">

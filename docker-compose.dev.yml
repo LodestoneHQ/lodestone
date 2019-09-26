@@ -19,12 +19,12 @@ services:
     volumes:
       - ./elasticsearch/configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./elasticsearch/configs/enterprise-search.yml:/usr/share/elasticsearch/config/enterprise-search.yml
-      - esdata:/usr/share/elasticsearch/data
+      - lodedata:/usr/share/elasticsearch/data
     ports:
       - 19200:9200
       - 19300:9300
     networks:
-      - esnet
+      - lodenet
 
   fscrawler:
     build: fscrawler
@@ -40,23 +40,24 @@ services:
       - ./fscrawler/configs/_default/7/_settings.json:/usr/share/fscrawler/config/_default/7/_settings.json
       - ./watchfolder:/usr/share/fscrawler/data/:ro
     networks:
-      - esnet
+      - lodenet
 
   webapp:
     build:
       context: ./web
       dockerfile: Dockerfile.dev
-    ports:
-      - "4000:3000"
     depends_on:
       elasticsearch:
         condition: service_healthy
     volumes:
       - ./web/frontend:/lodestone/frontend
       - ./web/backend:/lodestone/backend
-
     networks:
-      - esnet
+      - lodenet
+    labels:
+      - "traefik.http.services.webapp.loadbalancer.server.port=3000"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
 
   storage:
     image: minio/minio
@@ -77,10 +78,11 @@ services:
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
     command: gateway nas /data
+    networks:
+      - lodenet
     labels:
-      - "traefik.http.routers.storage.rule=PathPrefix(`/storage`)"
       - "traefik.http.services.storage.loadbalancer.server.port=9000"
-
+      - "traefik.http.routers.storage.rule=PathPrefix(`/storage`)"
       - "traefik.http.routers.storage.middlewares=storage01"
       - "traefik.http.middlewares.storage01.stripprefix.prefixes=/storage"
 
@@ -90,6 +92,8 @@ services:
     environment:
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
+    networks:
+      - lodenet
     depends_on:
       storage:
         condition: service_healthy
@@ -105,11 +109,12 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     command: --api.insecure=true --providers.docker --entrypoints.web.address=:80
-
+    networks:
+      - lodenet
 
 volumes:
-  esdata:
+  lodedata:
     driver: local
 
 networks:
-  esnet:
+  lodenet:

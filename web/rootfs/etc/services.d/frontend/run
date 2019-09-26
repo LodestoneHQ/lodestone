@@ -3,4 +3,9 @@
 cd /lodestone/frontend
 rm -rf node_modules
 npm install
-npm run-script ng --  build --watch=true --progress=true --deleteOutputPath=false --output-path=/lodestone/backend/public --base-href="/" --prod
+
+# in dev mode we need to make sure we dont accidentally commit files in the public directory
+echo "*" > /lodestone/backend/public/.gitignore
+npm run-script dev-lodestone
+
+

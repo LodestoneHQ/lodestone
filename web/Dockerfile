@@ -25,7 +25,7 @@ RUN cd /lodestone/frontend \
 # build frontend app (and copy into backend public directory)
 RUN mkdir -p /lodestone/backend/public \
     && cd /lodestone/frontend \
-    && npm run-script ng --  build --output-path /lodestone/backend/public --base-href "/" --prod
+    && npm run-script build-lodestone
 
 FROM node:12-alpine
 
