@@ -19,7 +19,7 @@ services:
     volumes:
       - ./elasticsearch/configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./elasticsearch/configs/enterprise-search.yml:/usr/share/elasticsearch/config/enterprise-search.yml
-      - lodedata:/usr/share/elasticsearch/data
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
     ports:
       - 19200:9200
       - 19300:9300
@@ -38,7 +38,7 @@ services:
     volumes:
       - ./fscrawler/configs/lode:/usr/share/fscrawler/config/lode
       - ./fscrawler/configs/_default/7/_settings.json:/usr/share/fscrawler/config/_default/7/_settings.json
-      - ./watchfolder:/usr/share/fscrawler/data/:ro
+      - ./data/storage/documents:/usr/share/fscrawler/data/:ro
     networks:
       - lodenet
 
@@ -70,11 +70,11 @@ services:
       # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
       - 9000:9000
     volumes:
-      - ./watchfolder:/data/documents
-      - ./thumbnails:/data/thumbnails
+      - ./data/storage:/data
+      - ./storage/config.json:/data/.minio.sys/config/config.json
     environment:
 #      - MINIO_BROWSER=off
-      - MINIO_WORM=on
+#      - MINIO_WORM=on
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
     command: gateway nas /data
@@ -98,6 +98,15 @@ services:
       storage:
         condition: service_healthy
 
+  queue:
+    image: redis
+    container_name: queue
+    hostname: queue
+    volumes:
+      - ./data/queue:/data
+    command: redis-server --appendonly yes
+    networks:
+      - lodenet
 
   reverse-proxy:
     image: traefik:v2.0
@@ -112,9 +121,22 @@ services:
     networks:
       - lodenet
 
-volumes:
-  lodedata:
-    driver: local
+
+#######################################################################################################################
+# Optional Admin Containers for Development
+#
+
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=local:queue:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - lodenet
+
 
 networks:
   lodenet:
