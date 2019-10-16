@@ -1,3 +1,5 @@
+# docker-compose up --force-recreate --build
+
 version: '2.2'
 services:
   elasticsearch:
@@ -60,7 +62,9 @@ services:
       - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
 
   storage:
-    image: minio/minio
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9000/minio/health/ready || exit 1"]
       interval: 30s
@@ -77,7 +81,6 @@ services:
 #      - MINIO_WORM=on
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-    command: gateway nas /data
     networks:
       - lodenet
     labels:

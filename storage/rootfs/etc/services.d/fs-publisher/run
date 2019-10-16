@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv bash
+
+ls -alt /usr/bin/lodestone-fs-publisher
+/usr/bin/lodestone-fs-publisher start --dir=/data/documents --bucket=documents --redis-hostname=queue
