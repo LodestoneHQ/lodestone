@@ -10,7 +10,7 @@ Lodestone is made up of a handful of components, each isolated to its own Docker
 At runtime each component is started by docker-compose, and glued together into a single application via a [reverse proxy](https://github.com/AnalogJ/lodestone/issues/31).
 
 - :ballot_box_with_check: **ElasticSearch cluster** - acts as data storage for all document content.
-- **Collector - Filesystem Watcher** - filesystem watcher that continuously watches directories for new files to process
+- :ballot_box_with_check: **Collector - Filesystem Watcher** - filesystem watcher that continuously watches directories for new files to process
 - **Collector - Email Watcher** - email watcher that continuously watches an inbox for new emails
 - :ballot_box_with_check: **Storage** - S3 compatible blob storage api that can be used to serve files (and thumbnails) via the UI
 - **Queue** - used to coordinate and schedule Collectors
