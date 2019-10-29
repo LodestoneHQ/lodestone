@@ -10,8 +10,8 @@ Lodestone is made up of a handful of components, each isolated to its own Docker
 At runtime each component is started by docker-compose, and glued together into a single application via a [reverse proxy](https://github.com/AnalogJ/lodestone/issues/31).
 
 - :ballot_box_with_check: **ElasticSearch cluster** - acts as data storage for all document content.
-- :ballot_box_with_check: **Collector - Filesystem Watcher** - filesystem watcher that continuously watches directories for new files to process
-- **Collector - Email Watcher** - email watcher that continuously watches an inbox for new emails
+- :ballot_box_with_check: **Publisher - Filesystem Watcher** - filesystem watcher that continuously watches directories for new files to process
+- **Publisher - Email Watcher** - email watcher that continuously watches an inbox for new emails
 - :ballot_box_with_check: **Storage** - S3 compatible blob storage api that can be used to serve files (and thumbnails) via the UI
 - **Queue** - used to coordinate and schedule Collectors
 - :ballot_box_with_check: **Web** - Static frontend for user to interact with
@@ -79,7 +79,7 @@ Minio supports [WORM (Write-Once-Read-Multiple)](https://docs.min.io/docs/minio-
 means that we can ensure that files written by the UI/Email are not modified.
 However this would require the docker filesystem mount is `read-write` not `read-only`.
 
-## Collector - Filesystem
+## Processor - Filesystem
 
 1. `fscrawler`
     - **Pros**
@@ -90,7 +90,7 @@ However this would require the docker filesystem mount is `read-write` not `read
         - does not have a good status API
         - ignores files that already exist in filestore before process starts
         - unsure how to scale horizontally
-2. custom using `Tika`
+2. - :ballot_box_with_check: custom using `Tika`
     - **Pros**
         - flexible, we can build it to our needs
         - Status API
