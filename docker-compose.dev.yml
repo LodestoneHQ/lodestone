@@ -28,19 +28,29 @@ services:
     networks:
       - lodenet
 
-  fscrawler:
-    build: fscrawler
+#  fscrawler:
+#    build: fscrawler
+#    depends_on:
+#      elasticsearch:
+#        condition: service_healthy
+#    environment:
+#      - JOB_NAME=lode
+#    ports:
+#      - 18080:8080
+#    volumes:
+#      - ./fscrawler/configs/lode:/usr/share/fscrawler/config/lode
+#      - ./fscrawler/configs/_default/7/_settings.json:/usr/share/fscrawler/config/_default/7/_settings.json
+#      - ./data/storage/documents/:/usr/share/fscrawler/data/:ro
+#    networks:
+#      - lodenet
+
+  processor:
+    build: processor
     depends_on:
       elasticsearch:
         condition: service_healthy
-    environment:
-      - JOB_NAME=lode
-    ports:
-      - 18080:8080
-    volumes:
-      - ./fscrawler/configs/lode:/usr/share/fscrawler/config/lode
-      - ./fscrawler/configs/_default/7/_settings.json:/usr/share/fscrawler/config/_default/7/_settings.json
-      - ./data/storage/documents:/usr/share/fscrawler/data/:ro
+      queue:
+        condition: service_healthy
     networks:
       - lodenet
 
