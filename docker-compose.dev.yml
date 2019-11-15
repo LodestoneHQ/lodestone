@@ -49,8 +49,6 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
-      queue:
-        condition: service_healthy
     networks:
       - lodenet
 
@@ -111,16 +109,6 @@ services:
       storage:
         condition: service_healthy
 
-  queue:
-    image: redis
-    container_name: queue
-    hostname: queue
-    volumes:
-      - ./data/queue:/data
-    command: redis-server --appendonly yes
-    networks:
-      - lodenet
-
   reverse-proxy:
     image: traefik:v2.0
     ports:
@@ -134,21 +122,21 @@ services:
     networks:
       - lodenet
 
+  rabbitmq:
+    image: rabbitmq:3-management #this should just be rabbitmq:3 for regular deployments
+    ports:
+      - "8080:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=lodestone
+      - RABBITMQ_DEFAULT_PASS=lodestone
+    networks:
+      - lodenet
 
 #######################################################################################################################
 # Optional Admin Containers for Development
 #
 
 
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    restart: always
-    environment:
-      - REDIS_HOSTS=local:queue:6379
-    ports:
-      - "8081:8081"
-    networks:
-      - lodenet
 
 
 networks:

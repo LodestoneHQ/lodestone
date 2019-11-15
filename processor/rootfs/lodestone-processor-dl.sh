@@ -9,3 +9,4 @@ curl -L -o /usr/bin/lodestone-processor $asset_url
 
 # make lodestone-processor executable
 chmod +x /usr/bin/lodestone-processor
+/usr/bin/lodestone-processor --version
