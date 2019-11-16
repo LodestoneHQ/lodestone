@@ -78,6 +78,9 @@ services:
       interval: 30s
       timeout: 30s
       retries: 3
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     ports:
       # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
       - 9000:9000
@@ -113,7 +116,13 @@ services:
   rabbitmq:
     image: rabbitmq:3-management #this should just be rabbitmq:3 for regular deployments
     ports:
-      - "8080:15672"
+      # this port is only necessary if you would like to view the admin backend for rabbitmq
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       - RABBITMQ_DEFAULT_USER=lodestone
       - RABBITMQ_DEFAULT_PASS=lodestone
