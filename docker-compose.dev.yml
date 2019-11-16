@@ -49,6 +49,10 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
     networks:
       - lodenet
 

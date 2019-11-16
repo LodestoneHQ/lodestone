@@ -1,12 +1,18 @@
 #!/bin/bash
 
 # retrieve the latest lodestone-fs-publisher release info
-asset_url=$(curl -L -s https://api.github.com/repos/AnalogJ/lodestone-processor/releases/latest \
-	| grep browser_download_url | grep 'lodestone-processor-linux-amd64' | cut -d '"' -f 4)
+thumb_url=$(curl -L -s https://api.github.com/repos/AnalogJ/lodestone-processor/releases/latest \
+	| grep browser_download_url | grep 'lodestone-thumbnail-processor-linux-amd64' | cut -d '"' -f 4)
+
+doc_url=$(curl -L -s https://api.github.com/repos/AnalogJ/lodestone-processor/releases/latest \
+	| grep browser_download_url | grep 'lodestone-thumbnail-processor-linux-amd64' | cut -d '"' -f 4)
 
 # download the lodestone-processor asset here.
-curl -L -o /usr/bin/lodestone-processor $asset_url
+curl -L -o /usr/bin/lodestone-thumbnail-processor $thumb_url
+curl -L -o /usr/bin/lodestone-document-processor $doc_url
 
 # make lodestone-processor executable
-chmod +x /usr/bin/lodestone-processor
-/usr/bin/lodestone-processor --version
+chmod +x /usr/bin/lodestone-thumbnail-processor
+chmod +x /usr/bin/lodestone-document-processor
+/usr/bin/lodestone-thumbnail-processor --version
+/usr/bin/lodestone-document-processor --version

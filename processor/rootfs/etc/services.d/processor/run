@@ -1,4 +1,0 @@
-#!/usr/bin/with-contenv bash
-
-ls -alt /usr/bin/lodestone-processor
-/usr/bin/lodestone-processor start --redis-hostname=queue

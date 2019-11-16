@@ -9,7 +9,6 @@ COPY /rootfs /
 ADD https://api.github.com/repos/AnalogJ/lodestone-processor/releases/latest /tmp/
 
 RUN /lodestone-processor-dl.sh \
-    && ls -alt /usr/bin/lodestone-processor
+    && ls -alt /usr/bin/lodestone-*
 
-#RUN cp /lodestone-fs-publisher-linux-amd64 /usr/bin/lodestone-fs-publisher && chmod +x /usr/bin/lodestone-fs-publisher
 ENTRYPOINT ["/init"]
