@@ -1,4 +1,4 @@
 #!/usr/bin/with-contenv bash
 
 ls -alt /usr/bin/lodestone-document-processor
-/usr/bin/lodestone-document-processor start --redis-hostname=queue
+/usr/bin/lodestone-document-processor start --amqp-url="amqp://lodestone:lodestone@rabbitmq:5672"
