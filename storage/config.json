@@ -59,17 +59,17 @@
         "autoDeleted": false,
         "deliveryMode": 0,
         "durable": false,
-        "enable": false,
-        "exchange": "",
-        "exchangeType": "",
+        "enable": true,
+        "exchange": "storageevents",
+        "exchangeType": "fanout",
         "immediate": false,
         "internal": false,
         "mandatory": false,
         "noWait": false,
         "queueDir": "",
         "queueLimit": 0,
-        "routingKey": "",
-        "url": ""
+        "routingKey": "storagelogs",
+        "url": "amqp://lodestone:lodestone@rabbitmq:5672"
       }
     },
     "elasticsearch": {
@@ -180,10 +180,10 @@
     },
     "redis": {
       "1": {
-        "address": "queue:6379",
-        "enable": true,
-        "format": "namespace",
-        "key": "documentsevents",
+        "address": "",
+        "enable": false,
+        "format": "",
+        "key": "",
         "password": "",
         "queueDir": "",
         "queueLimit": 0

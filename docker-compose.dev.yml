@@ -97,18 +97,6 @@ services:
       - "traefik.http.routers.storage.middlewares=storage01"
       - "traefik.http.middlewares.storage01.stripprefix.prefixes=/storage"
 
-
-  storageconfig:
-    build: storageconfig
-    environment:
-      - MINIO_ACCESS_KEY=minio
-      - MINIO_SECRET_KEY=minio123
-    networks:
-      - lodenet
-    depends_on:
-      storage:
-        condition: service_healthy
-
   reverse-proxy:
     image: traefik:v2.0
     ports:

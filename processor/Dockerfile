@@ -6,6 +6,8 @@ RUN apk --no-cache add bash curl
 
 COPY /rootfs /
 
+ADD https://api.github.com/repos/AnalogJ/lodestone-processor/releases/latest /tmp/
+
 RUN /lodestone-processor-dl.sh \
     && ls -alt /usr/bin/lodestone-processor
 
