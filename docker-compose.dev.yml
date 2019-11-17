@@ -55,6 +55,9 @@ services:
         condition: service_healthy
     networks:
       - lodenet
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=minio123
 
   webapp:
     build:

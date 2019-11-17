@@ -17,9 +17,10 @@ mc policy set none minio/thumbnails
 mc policy set none minio/documents
 
 mc policy set download minio/thumbnails
+mc policy set upload minio/thumbnails
 mc policy set download minio/documents
 
 # (Re)Set event watcher on documents bucket
-mc event add minio/documents arn:minio:sqs::1:amqp -p
+mc event add minio/documents arn:minio:sqs::1:amqp -p --event put,post,delete
 
 
