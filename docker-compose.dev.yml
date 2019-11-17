@@ -53,6 +53,8 @@ services:
         condition: service_healthy
       storage:
         condition: service_healthy
+      tika:
+        condition: service_healthy
     networks:
       - lodenet
     environment:
@@ -136,11 +138,19 @@ services:
     networks:
       - lodenet
 
+  tika:
+    image: logicalspark/docker-tikaserver
+    healthcheck:
+      test: "curl --silent --fail localhost:9998/tika || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lodenet
+
 #######################################################################################################################
 # Optional Admin Containers for Development
 #
-
-
 
 
 networks:
