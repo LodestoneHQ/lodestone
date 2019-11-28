@@ -1,6 +1,6 @@
 export class AppSettings {
   //ElasticSearch Settings
-  public static ES_INDEX = 'lode';
+  public static ES_INDEX = 'lodestone';
   public static ES_PAGE_SIZE = 10;
 
   public static SORT_BY_OPTIONS = {

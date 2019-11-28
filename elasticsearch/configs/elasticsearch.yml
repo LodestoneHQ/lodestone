@@ -13,3 +13,11 @@ http.cors.enabled : true
 http.cors.allow-origin : "*"
 http.cors.allow-methods : OPTIONS, HEAD, GET, POST, PUT, DELETE
 http.cors.allow-headers : X-Requested-With,X-Auth-Token,Content-Type, Content-Length
+
+
+
+# configure cluster limits
+cluster.routing.allocation.disk.watermark.low: "2gb"
+cluster.routing.allocation.disk.watermark.high: "1gb"
+cluster.routing.allocation.disk.watermark.flood_stage: "500mb"
+cluster.info.update.interval: "5m"
