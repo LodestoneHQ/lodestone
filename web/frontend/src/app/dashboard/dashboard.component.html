@@ -132,7 +132,7 @@
           <div [routerLink]="'/details/' + result._id" class="job-listing-details cursor_pointer">
             <!-- Logo -->
             <div class="job-listing-company-logo">
-              <img src="assets/images/company-logo-01.png" alt="">
+              <img [src]="'/storage/' + result._source.storage.thumb_bucket +'/' + result._source.storage.thumb_path" alt="">
             </div>
 
             <!-- Details -->
@@ -148,7 +148,7 @@
             <ul>
               <li><i class="icon-material-outline-location-on"></i>{{result._source.file.extension}}  </li>
               <li><i class="icon-material-outline-business-center"></i> {{result._source.file.filesize | filesize}} </li>
-              <li><i class="icon-material-outline-account-balance-wallet"></i> {{result._source.path.virtual}} </li>
+              <li><i class="icon-material-outline-account-balance-wallet"></i> {{result._source.storage.path}} </li>
               <li><i class="icon-material-outline-access-time"></i> {{result._source.file.created | amTimeAgo}} </li>
             </ul>
           </div>

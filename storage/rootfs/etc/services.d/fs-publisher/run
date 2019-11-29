@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+
+echo "waiting for minio service to start"
+s6-svwait -u /var/run/s6/services/minio
+
+ls -alt /usr/bin/lodestone-fs-publisher
+/usr/bin/lodestone-fs-publisher start --dir=/data/documents --bucket=documents --amqp-url="amqp://lodestone:lodestone@rabbitmq:5672"

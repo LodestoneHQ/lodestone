@@ -1,15 +1,15 @@
+# docker-compose up --force-recreate --build
+
 version: '2.2'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.1
+    build: elasticsearch
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
       interval: 30s
       timeout: 30s
       retries: 3
     environment:
-      - node.name=elasticsearch
-      - discovery.type=single-node
       #      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -18,29 +18,32 @@ services:
         hard: -1
     volumes:
       - ./elasticsearch/configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./elasticsearch/configs/enterprise-search.yml:/usr/share/elasticsearch/config/enterprise-search.yml
-      - lodedata:/usr/share/elasticsearch/data
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
     ports:
       - 19200:9200
       - 19300:9300
     networks:
       - lodenet
 
-  fscrawler:
-    build: fscrawler
+  processor:
+    build: processor
     depends_on:
       elasticsearch:
         condition: service_healthy
-    environment:
-      - JOB_NAME=lode
-    ports:
-      - 18080:8080
+      rabbitmq:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
+      tika:
+        condition: service_healthy
     volumes:
-      - ./fscrawler/configs/lode:/usr/share/fscrawler/config/lode
-      - ./fscrawler/configs/_default/7/_settings.json:/usr/share/fscrawler/config/_default/7/_settings.json
-      - ./watchfolder:/usr/share/fscrawler/data/:ro
+      - ~/repos/gopath/src/github.com/analogj/lodestone-processor/lodestone-document-processor-linux-amd64:/usr/bin/lodestone-document-processor
+      - ~/repos/gopath/src/github.com/analogj/lodestone-processor/lodestone-thumbnail-processor-linux-amd64:/usr/bin/lodestone-thumbnail-processor
     networks:
       - lodenet
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=minio123
 
   webapp:
     build:
@@ -48,6 +51,8 @@ services:
       dockerfile: Dockerfile.dev
     depends_on:
       elasticsearch:
+        condition: service_healthy
+      storage:
         condition: service_healthy
     volumes:
       - ./web/frontend:/lodestone/frontend
@@ -60,24 +65,28 @@ services:
       - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
 
   storage:
-    image: minio/minio
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9000/minio/health/ready || exit 1"]
       interval: 30s
       timeout: 30s
       retries: 3
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     ports:
       # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
       - 9000:9000
     volumes:
-      - ./watchfolder:/data/documents
-      - ./thumbnails:/data/thumbnails
+      - ./data/storage:/data
+      - ./storage/config.json:/data/.minio.sys/config/config.json
     environment:
 #      - MINIO_BROWSER=off
-      - MINIO_WORM=on
+#      - MINIO_WORM=on
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-    command: gateway nas /data
     networks:
       - lodenet
     labels:
@@ -85,19 +94,6 @@ services:
       - "traefik.http.routers.storage.rule=PathPrefix(`/storage`)"
       - "traefik.http.routers.storage.middlewares=storage01"
       - "traefik.http.middlewares.storage01.stripprefix.prefixes=/storage"
-
-
-  storageconfig:
-    build: storageconfig
-    environment:
-      - MINIO_ACCESS_KEY=minio
-      - MINIO_SECRET_KEY=minio123
-    networks:
-      - lodenet
-    depends_on:
-      storage:
-        condition: service_healthy
-
 
   reverse-proxy:
     image: traefik:v2.0
@@ -112,9 +108,44 @@ services:
     networks:
       - lodenet
 
-volumes:
-  lodedata:
-    driver: local
+  rabbitmq:
+    image: rabbitmq:3-management #this should just be rabbitmq:3 for regular deployments
+    ports:
+      # this port is only necessary if you would like to view the admin backend for rabbitmq
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - RABBITMQ_DEFAULT_USER=lodestone
+      - RABBITMQ_DEFAULT_PASS=lodestone
+    networks:
+      - lodenet
+
+  tika:
+    image: logicalspark/docker-tikaserver
+    healthcheck:
+      test: "curl --silent --fail localhost:9998/tika || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lodenet
+
+#######################################################################################################################
+# Optional Admin Containers for Development
+#
+  # docker run -d --rm --name elasticsearch  -e "discovery.type=single-node" -e "http.cors.enabled=true" -e "http.cors.allow-origin=*" -e "http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization" -e "http.cors.allow-credentials=true" docker.elastic.co/elasticsearch/elasticsearch-oss:7.0.1
+  dejavu:
+    image: appbaseio/dejavu
+    ports:
+      - "1358:1358"
+    networks:
+      - lodenet
+
+
 
 networks:
   lodenet:

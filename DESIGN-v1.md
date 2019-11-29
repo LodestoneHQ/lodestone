@@ -79,7 +79,7 @@ Minio supports [WORM (Write-Once-Read-Multiple)](https://docs.min.io/docs/minio-
 means that we can ensure that files written by the UI/Email are not modified.
 However this would require the docker filesystem mount is `read-write` not `read-only`.
 
-## Processor - Filesystem
+## Publisher - Filesystem
 
 1. `fscrawler`
     - **Pros**
@@ -107,6 +107,39 @@ However this would require the docker filesystem mount is `read-write` not `read
         - https://docs.filerun.com/docker-tika
         - https://github.com/radovskyb/watcher/issues/66
         - https://github.com/paulmillr/chokidar
+
+Supported Formats:
+
+    - "*/*.doc"
+    - "*/*.docx"
+    - "*/*.xls"
+    - "*/*.xlsx"
+    - "*/*.ppt"
+    - "*/*.pptx"
+    - "*/*.pages"
+    - "*/*.numbers"
+    - "*/*.key"
+    - "*/*.pdf"
+    - "*/*.rtf"
+    - "*/*.jpg"
+    - "*/*.jpeg"
+    - "*/*.png"
+    - "*/*.tiff"
+    - "*/*.tif"
+
+Excluded Formats
+
+    # mostly taken from https://github.com/github/gitignore/tree/master/Global
+    - "*/.gitignore"
+    - "*/.DS_Store"
+    - "*/._*"
+    - "*/.Spotlight-V100"
+    - "*/.TemporaryItems"
+    - "*/.Trashes"
+    - "*/Thumbs.db"
+    - "*/Thumbs.db:encryptable"
+    - "*/$RECYCLE.BIN"
+    - "*/*.lnk"
 
 
 ## :ballot_box_with_check: Web

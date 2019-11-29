@@ -18,11 +18,13 @@ export class SearchResult {
 
       created: string;
       last_modified: string;
-      indexing_date: string;
-      url: string;
+      indexed_date: string;
     }
-    path: {
-      virtual: string
+    storage: {
+      bucket: string;
+      path: string;
+      thumb_bucket: string;
+      thumb_path: string;
     }
   }
   highlight: {
