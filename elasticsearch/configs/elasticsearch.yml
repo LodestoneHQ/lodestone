@@ -1,5 +1,7 @@
 cluster.name: "docker-cluster"
 network.host: 0.0.0.0
+discovery.type: single-node
+node.name: elasticsearch
 
 # this value is required because we set "network.host"
 # be sure to modify it appropriately for a production cluster deployment

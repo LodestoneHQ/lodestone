@@ -1,15 +1,13 @@
 version: '2.2'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.1
+    image: analogj/lodestone:elasticsearch
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
       interval: 30s
       timeout: 30s
       retries: 3
     environment:
-      - node.name=elasticsearch
-      - discovery.type=single-node
       #      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -17,8 +15,6 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./elasticsearch/configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./elasticsearch/configs/enterprise-search.yml:/usr/share/elasticsearch/config/enterprise-search.yml
       - ./data/elasticsearch:/usr/share/elasticsearch/data
     ports:
       - 19200:9200
@@ -26,28 +22,30 @@ services:
     networks:
       - lodenet
 
-  fscrawler:
-    image: analogj/lodestone:fscrawler
+  processor:
+    image: analogj/lodestone:processor
     depends_on:
       elasticsearch:
         condition: service_healthy
-    environment:
-      - JOB_NAME=lode
-    volumes:
-      - ./fscrawler/configs/lode:/usr/share/fscrawler/config/lode
-      - ./fscrawler/configs/_default/7/_settings.json:/usr/share/fscrawler/config/_default/7/_settings.json
-      - ./data/storage/documents:/usr/share/fscrawler/data/:ro
+      rabbitmq:
+        condition: service_healthy
+      storage:
+        condition: service_healthy
+      tika:
+        condition: service_healthy
     networks:
       - lodenet
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=minio123
 
   webapp:
     image: analogj/lodestone:web
     depends_on:
       elasticsearch:
         condition: service_healthy
-    volumes:
-      - ./web/frontend:/lodestone/frontend
-      - ./web/backend:/lodestone/backend
+      storage:
+        condition: service_healthy
     networks:
       - lodenet
     labels:
@@ -56,12 +54,15 @@ services:
       - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
 
   storage:
-    image: minio/minio
+    image: analogj/lodestone:storage
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9000/minio/health/ready || exit 1"]
       interval: 30s
       timeout: 30s
       retries: 3
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
 #    ports:
 #      # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
 #      - 9000:9000
@@ -73,7 +74,6 @@ services:
       - MINIO_WORM=on
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-    command: gateway nas /data
     networks:
       - lodenet
     labels:
@@ -81,26 +81,6 @@ services:
       - "traefik.http.routers.storage.rule=PathPrefix(`/storage`)"
       - "traefik.http.routers.storage.middlewares=storage01"
       - "traefik.http.middlewares.storage01.stripprefix.prefixes=/storage"
-
-
-  storageconfig:
-    image: analogj/lodestone:storageconfig
-    environment:
-      - MINIO_ACCESS_KEY=minio
-      - MINIO_SECRET_KEY=minio123
-    networks:
-      - lodenet
-    depends_on:
-      storage:
-        condition: service_healthy
-
-  queue:
-    image: redis
-    volumes:
-      - ./data/queue:/data
-    command: redis-server --appendonly yes
-    networks:
-      - lodenet
 
   reverse-proxy:
     image: traefik:v2.0
@@ -114,6 +94,31 @@ services:
     command: --api.insecure=true --providers.docker --entrypoints.web.address=:80
     networks:
       - lodenet
+
+  rabbitmq:
+    image: rabbitmq:3 #use rabbitmq:3-management to see the admin backend
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - RABBITMQ_DEFAULT_USER=lodestone
+      - RABBITMQ_DEFAULT_PASS=lodestone
+    networks:
+      - lodenet
+
+  tika:
+    image: logicalspark/docker-tikaserver
+    healthcheck:
+      test: "curl --silent --fail localhost:9998/tika || exit 1"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lodenet
+
+
 
 networks:
   lodenet:
