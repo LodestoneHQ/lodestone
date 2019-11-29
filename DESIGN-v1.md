@@ -9,20 +9,20 @@
 Lodestone is made up of a handful of components, each isolated to its own Docker container.
 At runtime each component is started by docker-compose, and glued together into a single application via a [reverse proxy](https://github.com/AnalogJ/lodestone/issues/31).
 
-- **ElasticSearch cluster** - acts as data storage for all document content.
-- **Collector - Filesystem Watcher** - filesystem watcher that continuously watches directories for new files to process
-- **Collector - Email Watcher** - email watcher that continuously watches an inbox for new emails
-- **Storage** - S3 compatible blob storage api that can be used to serve files (and thumbnails) via the UI
+- :ballot_box_with_check: **ElasticSearch cluster** - acts as data storage for all document content.
+- :ballot_box_with_check: **Publisher - Filesystem Watcher** - filesystem watcher that continuously watches directories for new files to process
+- **Publisher - Email Watcher** - email watcher that continuously watches an inbox for new emails
+- :ballot_box_with_check: **Storage** - S3 compatible blob storage api that can be used to serve files (and thumbnails) via the UI
 - **Queue** - used to coordinate and schedule Collectors
-- **Web** - Static frontend for user to interact with
-- **API** - extendable API layer used by Web component. Used to control all other components
-- **Reverse Proxy** - Front door for application
+- :ballot_box_with_check: **Web** - Static frontend for user to interact with
+- :ballot_box_with_check: **API** - extendable API layer used by Web component. Used to control all other components
+- :ballot_box_with_check: **Reverse Proxy** - Front door for application
 
 ## API
 
 We have a couple of different options for our API design, `Unified`, `Direct/Component` or `Framework` API
 
-### Unified
+### :ballot_box_with_check: Unified 
 
 - We can create a comprehensive API that wraps all the functionality of our components (storage/collectors/elasticsearch),
 providing a unified API that we can then iterate on
@@ -35,8 +35,8 @@ providing a unified API that we can then iterate on
 
 - Other components that do not have an API (but need to be available via HTTP) can be accessed via top level paths
 
-    - `/web`
-    - `/storage`
+    - :ballot_box_with_check: `/web`
+    - :ballot_box_with_check: `/storage`
 
 - Any components that do not support a path prefix will need to have a API translation endpoint.
 
@@ -59,7 +59,7 @@ https://github.com/nodefony/nodefony
 https://moleculer.services
 
 
-## Storage
+## :ballot_box_with_check: Storage
 
 Lodestone pledges to keep your files safe and leave them untouched. However file storage needs to take into account
 multiple file types and sources:
@@ -73,13 +73,13 @@ In addition, the files need to be accessible via the Web UI, so they need to be 
 This can be done a couple of different ways:
 
 1. Nginx container serving static content
-2. Minio container with an S3 compatible API + content server.
+2. :ballot_box_with_check: Minio container with an S3 compatible API + content server. 
 
 Minio supports [WORM (Write-Once-Read-Multiple)](https://docs.min.io/docs/minio-server-configuration-guide.html#Worm) which
 means that we can ensure that files written by the UI/Email are not modified.
 However this would require the docker filesystem mount is `read-write` not `read-only`.
 
-## Publisherr - Filesystem
+## Publisher - Filesystem
 
 1. `fscrawler`
     - **Pros**
@@ -90,7 +90,7 @@ However this would require the docker filesystem mount is `read-write` not `read
         - does not have a good status API
         - ignores files that already exist in filestore before process starts
         - unsure how to scale horizontally
-2. custom using `Tika`
+2. - :ballot_box_with_check: custom using `Tika`
     - **Pros**
         - flexible, we can build it to our needs
         - Status API
@@ -142,7 +142,7 @@ Excluded Formats
     - "*/*.lnk"
 
 
-## Web
+## :ballot_box_with_check: Web
 - https://github.com/elastic/search-ui
 - https://swiftype.com/search-ui
 
