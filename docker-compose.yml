@@ -71,9 +71,9 @@ services:
       - ./storage/config.json:/data/.minio.sys/config/config.json
     environment:
       - MINIO_BROWSER=off
-      - MINIO_WORM=on
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
+#      - MINIO_WORM=on
     networks:
       - lodenet
     labels:
