@@ -70,6 +70,11 @@ export class ElasticsearchService {
             "terms": {
               "field": "file.extension"
             }
+          },
+          "by_tag": {
+            "terms": {
+              "field": "lodestone.tags"
+            }
           }
         }
       },
@@ -103,7 +108,42 @@ export class ElasticsearchService {
         }
       }
     }))
+  }
 
+  // https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
+  addDocumentTag(id: string, tag: string): Observable<any> {
+    console.log("ADDING DOCUMENT TAG", tag)
+    return from(this.client.update({
+      id: id,
+      index: AppSettings.ES_INDEX,
+      body: {
+        "script" : {
+          "source": "if (!ctx._source.lodestone.tags.contains(params.tag)) { ctx._source.lodestone.tags.add(params.tag) }",
+          "lang": "painless",
+          "params" : {
+            "tag" : tag
+          }
+        }
+      }
+    }))
+  }
+
+  // https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
+  removeDocumentTag(id: string, tag: string): Observable<any> {
+    console.log("REMOVE DOCUMENT TAG", tag)
+    return from(this.client.update({
+      id: id,
+      index: AppSettings.ES_INDEX,
+      body: {
+        "script" : {
+          "source": "if (ctx._source.lodestone.tags.contains(params.tag)) { ctx._source.lodestone.tags.remove(ctx._source.lodestone.tags.indexOf(params.tag)) }",
+          "lang": "painless",
+          "params" : {
+            "tag" : tag
+          }
+        }
+      }
+    }))
   }
 
   getSimilar(id: string): Observable<SearchWrapper> {
@@ -164,7 +204,7 @@ export class ElasticsearchService {
             "stats": {
               "field": "file.filesize"
             }
-          }
+          },
         },
       }
     })) as Observable<SearchWrapper>;

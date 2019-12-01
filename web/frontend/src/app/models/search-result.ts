@@ -8,6 +8,17 @@ export class SearchResult {
       bookmark: boolean;
     }
     meta: {
+      author: string;
+      date: string;
+      keywords: string[];
+      title: string;
+      language: string;
+      format: string;
+      identifier: string;
+      contributor: string;
+      publisher: string;
+      source: string;
+      description: string;
       comments: string;
     }
     file: {

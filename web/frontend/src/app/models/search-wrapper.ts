@@ -6,6 +6,9 @@ export class SearchWrapper {
     by_filetype: {
       buckets: { [key:string]:any; }[]
     }
+    by_tag: {
+      buckets: { [key:string]:any; }[]
+    }
     by_timerange: { [key:string]:any; }
     by_filesize: { [key:string]:any; }
   }

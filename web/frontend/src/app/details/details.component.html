@@ -12,7 +12,7 @@
               <img [src]="'/storage/' + documentData._source.storage.thumb_bucket + '/' + documentData._source.storage.thumb_path" alt="">
             </a></div>
             <div class="header-details">
-              <h3>{{documentData._source.file.filename}}</h3>
+              <h3>{{documentData._source.meta.title || documentData._source.file.filename}}</h3>
               <ul>
                 <li><a href="single-company-profile.html"><i class="icon-material-outline-business"></i>{{documentData._source.file.extension}}</a></li>
                 <li><div class="star-rating" data-rating="4.9"></div></li>
@@ -52,11 +52,15 @@
       <!-- Skills -->
       <div class="single-page-section">
         <h3>Tags</h3>
-        <div class="task-tags">
-          <span>iOS</span>
-          <span>Android</span>
-          <span>mobile apps</span>
-          <span>design</span>
+        <div class="keywords-container">
+          <div class="keyword-input-container">
+            <input type="text" [(ngModel)]="newTag" class="keyword-input with-border" placeholder="Add Keywords">
+            <button class="keyword-input-button ripple-effect" (click)="addDocumentTag()"><i class="icon-material-outline-add"></i></button>
+          </div>
+          <div class="keywords-list" style="height: auto;">
+            <span *ngFor="let tag of documentData._source.lodestone.tags" class="keyword"><span (click)="removeDocumentTag(tag)" class="keyword-remove"></span><span class="keyword-text">{{tag}}</span></span>
+          </div>
+          <div class="clearfix"></div>
         </div>
       </div>
       <div class="clearfix"></div>

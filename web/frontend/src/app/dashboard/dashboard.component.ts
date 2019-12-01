@@ -32,6 +32,7 @@ export class DashboardComponent implements OnInit {
 
   searchResults: SearchResult[] = [];
   fileTypeBuckets = {};
+  tagBuckets = {};
   totalPages: number;
   currentPage: number = 1;
 
@@ -154,6 +155,7 @@ export class DashboardComponent implements OnInit {
           this.totalPages = wrapper.hits.total.value;
 
           this.fileTypeBuckets = wrapper.aggregations.by_filetype.buckets;
+          this.tagBuckets = wrapper.aggregations.by_tag.buckets;
           // for(let bucket of wrapper.aggregations.by_filetype.buckets){
           //   this.fileTypeBuckets[bucket.key] = bucket.doc_count
           // }
