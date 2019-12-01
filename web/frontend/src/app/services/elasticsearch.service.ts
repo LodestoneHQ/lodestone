@@ -255,9 +255,10 @@ export class ElasticsearchService {
 
 
 
-    // for(let tag of _filter.tags){
-    //   filterRules.push({ "term":  { "file.extension": fileType }})
-    // }
+    for(let tag of _filter.tags){
+      filterRules.push({ "term":  { "lodestone.tags": tag }})
+    }
+
 
     if(_filter.timeRange && _filter.fileSizes.length){
 

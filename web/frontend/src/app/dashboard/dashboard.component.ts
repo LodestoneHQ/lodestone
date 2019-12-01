@@ -106,6 +106,15 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  filterTag(tag: string, isChecked: boolean){
+
+    if(isChecked){
+      this.filterService.filterTagAdd(tag)
+    } else {
+      this.filterService.filterTagRemove(tag)
+    }
+  }
+
   filterTimeRange(timeRange: Date[]){
     console.log("Filter timeRange:", timeRange);
 

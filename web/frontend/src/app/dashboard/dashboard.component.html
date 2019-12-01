@@ -67,33 +67,9 @@
           <h3>Tags</h3>
 
           <div class="tags-container">
-            <div class="tag">
-              <input type="checkbox" id="tag1"/>
-              <label for="tag1">front-end dev</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" id="tag2"/>
-              <label for="tag2">angular</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" id="tag3"/>
-              <label for="tag3">react</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" id="tag4"/>
-              <label for="tag4">vue js</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" id="tag5"/>
-              <label for="tag5">web apps</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" id="tag6"/>
-              <label for="tag6">design</label>
-            </div>
-            <div class="tag">
-              <input type="checkbox" id="tag7"/>
-              <label for="tag7">wordpress</label>
+            <div *ngFor="let tag of tagBuckets" class="tag">
+              <input type="checkbox" [ngModel]="filter.tags.includes(tag.key)"/>
+              <label (click)="filterTag(tag.key, !filter.tags.includes(tag.key))">{{tag.key}}</label>
             </div>
           </div>
           <div class="clearfix"></div>
