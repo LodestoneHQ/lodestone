@@ -44,7 +44,8 @@ services:
     environment:
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-
+      - RABBITMQ_USER=lodestone
+      - RABBITMQ_PASS=lodestone
   webapp:
     build:
       context: ./web
@@ -63,6 +64,11 @@ services:
       - "traefik.http.services.webapp.loadbalancer.server.port=3000"
       - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=minio123
+      - RABBITMQ_USER=lodestone
+      - RABBITMQ_PASS=lodestone
 
   storage:
     build:
@@ -82,6 +88,8 @@ services:
     volumes:
       - ./data/storage:/data
       - ./storage/config.json:/data/.minio.sys/config/config.json
+      - ~/repos/gopath/src/github.com/analogj/lodestone-publisher/lodestone-fs-publisher-linux-amd64:/usr/bin/lodestone-fs-publisher
+
     environment:
 #      - MINIO_BROWSER=off
 #      - MINIO_WORM=on
@@ -118,6 +126,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    volumes:
+      - ./data/rabbitmq:/var/lib/rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=lodestone
       - RABBITMQ_DEFAULT_PASS=lodestone

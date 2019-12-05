@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment';
 
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {StatusResult} from "../models/status-result";
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,11 @@ export class ApiService {
       'Something bad happened; please try again later.');
   }
   // Unauthenticated functions
+  fetchStatus(): Observable<StatusResult> {
+    return this.http.get<StatusResult>('/api/v1/status')
+      .pipe(catchError(this.handleError));
+  }
+
 
   fetchDocumentData(path: string): Observable<HttpResponse<ArrayBuffer>> {
 

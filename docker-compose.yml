@@ -38,7 +38,8 @@ services:
     environment:
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-
+      - RABBITMQ_USER=lodestone
+      - RABBITMQ_PASS=lodestone
   webapp:
     image: analogj/lodestone:web
     depends_on:
@@ -52,7 +53,11 @@ services:
       - "traefik.http.services.webapp.loadbalancer.server.port=3000"
       - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
-
+    environment:
+      - MINIO_ACCESS_KEY=minio
+      - MINIO_SECRET_KEY=minio123
+      - RABBITMQ_USER=lodestone
+      - RABBITMQ_PASS=lodestone
   storage:
     image: analogj/lodestone:storage
     healthcheck:

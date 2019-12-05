@@ -60,7 +60,7 @@
         "deliveryMode": 0,
         "durable": false,
         "enable": true,
-        "exchange": "storageevents",
+        "exchange": "lodestone",
         "exchangeType": "fanout",
         "immediate": false,
         "internal": false,

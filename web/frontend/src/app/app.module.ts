@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './partials/header/header.component';
 import { FooterComponent } from './partials/footer/footer.component';
+import { DocPreviewComponent } from './partials/doc-preview/doc-preview.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DetailsComponent } from './details/details.component';
 import { StatusComponent } from './status/status.component';
@@ -19,7 +20,9 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import {NgxBootstrapSliderModule} from "ngx-bootstrap-slider";
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { DocPreviewComponent } from './partials/doc-preview/doc-preview.component';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 
 @NgModule({
@@ -46,6 +49,9 @@ import { DocPreviewComponent } from './partials/doc-preview/doc-preview.componen
     BsDatepickerModule.forRoot(),
     NgxBootstrapSliderModule,
     PopoverModule.forRoot(),
+    AccordionModule.forRoot(),
+    BrowserAnimationsModule,
+    TabsModule.forRoot(),
 
   ],
   providers: [],

@@ -51,7 +51,7 @@
 
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
-                    <li><strong>healthy</strong><span>Status</span></li>
+                    <li><strong>{{statusResult.elasticsearch.status}}</strong><span>Status</span></li>
                     <li><strong>1 min ago</strong><span>Last Checked</span></li>
                   </ul>
 
@@ -72,16 +72,16 @@
 
                       <!-- Details -->
                       <div class="job-listing-description">
-                        <h3 class="job-listing-title"><a href="#">Collector: Watch Folder</a></h3>
+                        <h3 class="job-listing-title"><a href="#">Processor: Documents</a></h3>
                       </div>
                     </div>
                   </div>
 
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
-                    <li><strong>5</strong><span>Added</span></li>
-                    <li><strong>15</strong><span>Deleted</span></li>
-                    <li><strong>1 min ago</strong><span>Last Checked</span></li>
+                    <li><strong>{{statusResult.rabbitmq.documents.messages}}</strong><span>Queue</span></li>
+                    <li><strong>{{statusResult.rabbitmq.documents.state}}</strong><span>Status</span></li>
+                    <li><strong>{{statusResult.rabbitmq.documents.idle_since | amFromUtc | amTimeAgo}}</strong><span>Last Checked</span></li>
                   </ul>
 
                   <!-- Buttons -->
@@ -99,15 +99,16 @@
 
                       <!-- Details -->
                       <div class="job-listing-description">
-                        <h3 class="job-listing-title"><a href="#">Collector: Email</a></h3>
+                        <h3 class="job-listing-title"><a href="#">Processor: Thumbnails</a></h3>
                       </div>
                     </div>
                   </div>
 
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
-                    <li><strong>0</strong><span>Added</span></li>
-                    <li><strong>1 min ago</strong><span>Last Checked</span></li>
+                    <li><strong>{{statusResult.rabbitmq.thumbnails.messages}}</strong><span>Queue</span></li>
+                    <li><strong>{{statusResult.rabbitmq.thumbnails.state}}</strong><span>Status</span></li>
+                    <li><strong>{{statusResult.rabbitmq.thumbnails.idle_since | amFromUtc | amTimeAgo}}</strong><span>Last Checked</span></li>
                   </ul>
 
                   <!-- Buttons -->
@@ -125,15 +126,15 @@
 
                       <!-- Details -->
                       <div class="job-listing-description">
-                        <h3 class="job-listing-title"><a href="#">Collector: Thumbnails</a></h3>
+                        <h3 class="job-listing-title"><a href="#">Errors</a></h3>
                       </div>
                     </div>
                   </div>
 
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
-                    <li><strong>10</strong><span>Added</span></li>
-                    <li><strong>1 min ago</strong><span>Last Checked</span></li>
+                    <li><strong>{{statusResult.rabbitmq.errors.messages}}</strong><span>Errors</span></li>
+                    <li><strong>{{statusResult.rabbitmq.errors.idle_since | amFromUtc | amTimeAgo}}</strong><span>Last Checked</span></li>
                   </ul>
 
                   <!-- Buttons -->

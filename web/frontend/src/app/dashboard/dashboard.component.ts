@@ -23,8 +23,7 @@ export class DashboardComponent implements OnInit {
     sortBy: AppSettings.SORT_BY_OPTIONS
   }
 
-  constructor(private es: ElasticsearchService, private filterService: DashboardFilterService) {
-  }
+  constructor(private es: ElasticsearchService, private filterService: DashboardFilterService) {}
 
   filter: DashboardFilter = new DashboardFilter();
 
