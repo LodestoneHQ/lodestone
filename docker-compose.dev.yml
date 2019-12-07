@@ -116,7 +116,7 @@ services:
       - lodenet
 
   rabbitmq:
-    image: rabbitmq:3-management #this should just be rabbitmq:3 for regular deployments
+    image: rabbitmq:3-management
     ports:
       # this port is only necessary if you would like to view the admin backend for rabbitmq
       - "15672:15672"

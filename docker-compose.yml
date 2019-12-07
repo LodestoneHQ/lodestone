@@ -100,7 +100,7 @@ services:
       - lodenet
 
   rabbitmq:
-    image: rabbitmq:3 #use rabbitmq:3-management to see the admin backend
+    image: rabbitmq:3-management #use rabbitmq:3-management because we need the API plugin to be installed.
     healthcheck:
       test: ["CMD", "rabbitmqctl", "status"]
       interval: 5s
