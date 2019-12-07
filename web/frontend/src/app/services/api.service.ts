@@ -29,12 +29,12 @@ export class ApiService {
     return throwError(
       'Something bad happened; please try again later.');
   }
+
   // Unauthenticated functions
   fetchStatus(): Observable<StatusResult> {
     return this.http.get<StatusResult>('/api/v1/status')
       .pipe(catchError(this.handleError));
   }
-
 
   fetchDocumentData(path: string): Observable<HttpResponse<ArrayBuffer>> {
 

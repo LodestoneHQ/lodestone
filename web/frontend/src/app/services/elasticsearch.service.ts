@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-import { Client } from 'elasticsearch-browser';
 import {Observable, throwError, from} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {DashboardFilter} from "../models/dashboard-filter";
@@ -15,14 +14,33 @@ import {AppSettings} from "../app-settings";
 })
 export class ElasticsearchService {
 
-  private client: Client;
+  // private client: Client;
+  //
+  // constructor(private http: HttpClient) {
+  //   this.client = new Client({
+  //     host: environment.esBaseApi,
+  //     log: 'trace'
+  //   });
+  // }
+  //
+  // private handleError(error: HttpErrorResponse) {
+  //   console.error(error);
+  //   if (error.error instanceof ErrorEvent) {
+  //     // A client-side or network error occurred. Handle it accordingly.
+  //     console.error('An error occurred:', error.error.message);
+  //   } else {
+  //     // The backend returned an unsuccessful response code.
+  //     // The response body may contain clues as to what went wrong,
+  //     console.error(
+  //       `Backend returned code ${error.status}, ` +
+  //       `body was: ${error.error}`);
+  //   }
+  //   // return an observable with a user-facing error message
+  //   return throwError(
+  //     'Something bad happened; please try again later.');
+  // }
 
-  constructor(private http: HttpClient) {
-    this.client = new Client({
-      host: environment.esBaseApi,
-      log: 'trace'
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   private handleError(error: HttpErrorResponse) {
     console.error(error);
@@ -41,8 +59,9 @@ export class ElasticsearchService {
       'Something bad happened; please try again later.');
   }
 
+
   isConnected(): any {
-    return this.client.ping({
+    return this.http.post('/api/v1/elastic/ping', {
       requestTimeout: Infinity,
       body: 'hello world!'
     }).pipe(catchError(this.handleError));
@@ -91,11 +110,12 @@ export class ElasticsearchService {
       searchPayload.body['post_filter'] = postFilter;
     }
 
-    return from(this.client.search(searchPayload)) as Observable<SearchWrapper>
+    return this.http.post<SearchWrapper>('/api/v1/elastic/search', searchPayload).pipe(catchError(this.handleError));
+    // return from(this.client.search(searchPayload)) as Observable<SearchWrapper>
   }
 
   bookmarkDocument(id: string, state: boolean): Observable<any> {
-    return from(this.client.update({
+    return this.http.post('/api/v1/elastic/update', {
       id: id,
       type: '_doc',
       index: AppSettings.ES_INDEX,
@@ -107,13 +127,13 @@ export class ElasticsearchService {
           }
         }
       }
-    }))
+    }).pipe(catchError(this.handleError));
   }
 
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
   addDocumentTag(id: string, tag: string): Observable<any> {
     console.log("ADDING DOCUMENT TAG", tag)
-    return from(this.client.update({
+    return this.http.post('/api/v1/elastic/update', {
       id: id,
       index: AppSettings.ES_INDEX,
       body: {
@@ -125,13 +145,14 @@ export class ElasticsearchService {
           }
         }
       }
-    }))
+    }).pipe(catchError(this.handleError));
   }
 
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
   removeDocumentTag(id: string, tag: string): Observable<any> {
     console.log("REMOVE DOCUMENT TAG", tag)
-    return from(this.client.update({
+
+    return this.http.post('/api/v1/elastic/update', {
       id: id,
       index: AppSettings.ES_INDEX,
       body: {
@@ -143,7 +164,7 @@ export class ElasticsearchService {
           }
         }
       }
-    }))
+    }).pipe(catchError(this.handleError));
   }
 
   getSimilar(id: string): Observable<SearchWrapper> {
@@ -167,30 +188,34 @@ export class ElasticsearchService {
       },
       // '_source': ['fullname', 'address']
     }
-    return from(this.client.search(searchPayload)) as Observable<SearchWrapper>
+
+    return this.http.post<SearchWrapper>('/api/v1/elastic/search', searchPayload).pipe(catchError(this.handleError));
   }
 
   getById(id: string): Observable<SearchResult> {
-    return from(this.client.get({
+    return this.http.post<SearchResult>('/api/v1/elastic/get', {
       index: AppSettings.ES_INDEX,
       type: '_doc',
       id: id
-    })) as Observable<SearchResult>
+    }).pipe(catchError(this.handleError));
+
   }
 
   getAllDocuments(): Observable<SearchWrapper> {
-    return from(this.client.search({
+
+    return this.http.post<SearchWrapper>('/api/v1/elastic/search', {
       index: AppSettings.ES_INDEX,
       body: {
         'query': {
           'match_all': {}
         }
       }
-    })) as Observable<SearchWrapper>;
+    }).pipe(catchError(this.handleError));
   }
 
   getAggregations(): Observable<SearchWrapper> {
-    return from(this.client.search({
+
+    return this.http.post<SearchWrapper>('/api/v1/elastic/search', {
       index: AppSettings.ES_INDEX,
       body: {
         'size': 0,
@@ -207,7 +232,7 @@ export class ElasticsearchService {
           },
         },
       }
-    })) as Observable<SearchWrapper>;
+    }).pipe(catchError(this.handleError));
   }
 
   // private buildFilter(_filter: DashboardFilter): any {

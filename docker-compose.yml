@@ -21,7 +21,6 @@ services:
       - 19300:9300
     networks:
       - lodenet
-
   processor:
     image: analogj/lodestone:processor
     depends_on:
