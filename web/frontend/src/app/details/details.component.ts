@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {ElasticsearchService} from "../services/elasticsearch.service";
 import {ActivatedRoute} from "@angular/router";
 import {SearchResult} from "../models/search-result";
+import {environment} from "../../environments/environment";
+import {AppSettings} from "../app-settings";
 
 @Component({
   selector: 'app-details',
@@ -13,6 +15,7 @@ export class DetailsComponent implements OnInit {
   documentId: string;
   documentData: SearchResult = new SearchResult();
   newTag: string = "";
+  tagsAutocomplete = [];
   constructor(private es: ElasticsearchService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -26,6 +29,8 @@ export class DetailsComponent implements OnInit {
         error => console.error(error),
         () => console.log("FINISHED")
       );
+
+    this.generateTagsAutocomplete()
   }
 
   bookmarkDocument(currentState){
@@ -96,4 +101,32 @@ export class DetailsComponent implements OnInit {
       );
   }
 
+  storageEndpoint(bucket: string, path: string){
+    return (environment.apiBase ? environment.apiBase: '') + '/storage/' + bucket +'/' + path;
+  }
+
+  generateTagsAutocomplete(){
+    console.log("GENERATING TAGS");
+    for(let tagGroup of AppSettings.TAGS.tags){
+      this.tagsAutocomplete.push({
+        id: tagGroup.label,
+        name: tagGroup.label,
+        group: tagGroup.label
+      })
+
+      if (!tagGroup.tags){
+        continue
+      }
+
+      for(let tagName of tagGroup.tags){
+        this.tagsAutocomplete.push({
+          id: `${tagGroup.label}.${tagName.label}`,
+          name: tagName.label,
+          group: tagGroup.label
+        })
+      }
+    }
+
+    console.log("FINISHED GENERATING TAGS", AppSettings.TAGS)
+  }
 }

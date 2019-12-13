@@ -61,7 +61,7 @@ export class ElasticsearchService {
 
 
   isConnected(): any {
-    return this.http.post('/api/v1/elastic/ping', {
+    return this.http.post(this.apiEndpoint('/api/v1/elastic/ping'), {
       requestTimeout: Infinity,
       body: 'hello world!'
     }).pipe(catchError(this.handleError));
@@ -110,12 +110,12 @@ export class ElasticsearchService {
       searchPayload.body['post_filter'] = postFilter;
     }
 
-    return this.http.post<SearchWrapper>('/api/v1/elastic/search', searchPayload).pipe(catchError(this.handleError));
+    return this.http.post<SearchWrapper>(this.apiEndpoint('/api/v1/elastic/search'), searchPayload).pipe(catchError(this.handleError));
     // return from(this.client.search(searchPayload)) as Observable<SearchWrapper>
   }
 
   bookmarkDocument(id: string, state: boolean): Observable<any> {
-    return this.http.post('/api/v1/elastic/update', {
+    return this.http.post(this.apiEndpoint('/api/v1/elastic/update'), {
       id: id,
       type: '_doc',
       index: AppSettings.ES_INDEX,
@@ -133,7 +133,7 @@ export class ElasticsearchService {
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
   addDocumentTag(id: string, tag: string): Observable<any> {
     console.log("ADDING DOCUMENT TAG", tag)
-    return this.http.post('/api/v1/elastic/update', {
+    return this.http.post(this.apiEndpoint('/api/v1/elastic/update'), {
       id: id,
       index: AppSettings.ES_INDEX,
       body: {
@@ -152,7 +152,7 @@ export class ElasticsearchService {
   removeDocumentTag(id: string, tag: string): Observable<any> {
     console.log("REMOVE DOCUMENT TAG", tag)
 
-    return this.http.post('/api/v1/elastic/update', {
+    return this.http.post(this.apiEndpoint('/api/v1/elastic/update'), {
       id: id,
       index: AppSettings.ES_INDEX,
       body: {
@@ -189,11 +189,11 @@ export class ElasticsearchService {
       // '_source': ['fullname', 'address']
     }
 
-    return this.http.post<SearchWrapper>('/api/v1/elastic/search', searchPayload).pipe(catchError(this.handleError));
+    return this.http.post<SearchWrapper>(this.apiEndpoint('/api/v1/elastic/search'), searchPayload).pipe(catchError(this.handleError));
   }
 
   getById(id: string): Observable<SearchResult> {
-    return this.http.post<SearchResult>('/api/v1/elastic/get', {
+    return this.http.post<SearchResult>(this.apiEndpoint('/api/v1/elastic/get'), {
       index: AppSettings.ES_INDEX,
       type: '_doc',
       id: id
@@ -203,7 +203,7 @@ export class ElasticsearchService {
 
   getAllDocuments(): Observable<SearchWrapper> {
 
-    return this.http.post<SearchWrapper>('/api/v1/elastic/search', {
+    return this.http.post<SearchWrapper>(this.apiEndpoint('/api/v1/elastic/search'), {
       index: AppSettings.ES_INDEX,
       body: {
         'query': {
@@ -215,7 +215,7 @@ export class ElasticsearchService {
 
   getAggregations(): Observable<SearchWrapper> {
 
-    return this.http.post<SearchWrapper>('/api/v1/elastic/search', {
+    return this.http.post<SearchWrapper>(this.apiEndpoint('/api/v1/elastic/search'), {
       index: AppSettings.ES_INDEX,
       body: {
         'size': 0,
@@ -248,6 +248,10 @@ export class ElasticsearchService {
   //     }
   //   }
   // }
+
+  private apiEndpoint(path: string){
+    return (environment.apiBase ? environment.apiBase: '') + path
+  }
 
   private buildPostFilter(_filter: DashboardFilter): any {
 

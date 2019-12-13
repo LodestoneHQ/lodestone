@@ -108,7 +108,7 @@
           <div [routerLink]="'/details/' + result._id" class="job-listing-details cursor_pointer">
             <!-- Logo -->
             <div class="job-listing-company-logo">
-              <img [src]="'/storage/' + result._source.storage.thumb_bucket +'/' + result._source.storage.thumb_path" alt="">
+              <img [src]="thumbEndpoint(result._source.storage.thumb_bucket, result._source.storage.thumb_path)" alt="">
             </div>
 
             <!-- Details -->

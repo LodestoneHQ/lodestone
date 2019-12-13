@@ -94,10 +94,10 @@ https://forms.gle/u1RXnbocbFWqfxGb9
 
 ```bash
 # run the following command in 1 terminal
-docker-compose up -f docker-compose.dev.yml --force-recreate --build
+docker-compose -f docker-compose.dev.yml up --force-recreate --build
 
 # and the following in a different terminal
-cd web && ng build --output-path ./dist --base-href "/" --prod --watch
+cd web/frontend && ng serve --configuration=dev
 ```
 
 Place your documents in the `/data/storage/documents` directory, and the Filesystem Collector should automatically start processing them.

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  esBaseApi: 'localhost:19200'
+  apiBase: null
 };
 
 /*

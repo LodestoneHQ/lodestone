@@ -5,6 +5,7 @@ import * as mammoth from '../../../../node_modules/mammoth/mammoth.browser.js';
 import {ApiService} from "../../services/api.service";
 import {RTFJS} from 'rtf.js';
 import * as $ from "jquery";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-doc-preview',
@@ -76,8 +77,7 @@ export class DocPreviewComponent implements OnInit {
     const meta = doc.metadata();
     doc.render().then(function(htmlElements) {
       console.log(meta);
-      $("#thirdPartyRender").append(htmlElements)
+      //TODO: document.getElementById("thirdPartyRender").append(htmlElements)
     }).catch(error => console.error(error))
   }
-
 }

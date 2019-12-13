@@ -4,6 +4,7 @@ import {DashboardFilter} from "../models/dashboard-filter";
 import {DashboardFilterService} from "../filters/dashboard-filter.service";
 import {SearchResult} from "../models/search-result";
 import {AppSettings} from "../app-settings";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-dashboard',
@@ -132,6 +133,10 @@ export class DashboardComponent implements OnInit {
 
   clearFilter(){
     this.filterService.filterClear();
+  }
+
+  thumbEndpoint(bucket: string, path: string){
+    return (environment.apiBase ? environment.apiBase: '') + '/storage/' + bucket +'/' + path;
   }
 
   private getGlobalLimits() {

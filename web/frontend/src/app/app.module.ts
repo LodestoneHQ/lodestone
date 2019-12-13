@@ -23,6 +23,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     AccordionModule.forRoot(),
     BrowserAnimationsModule,
     TabsModule.forRoot(),
+    TypeaheadModule.forRoot(),
 
   ],
   providers: [],
