@@ -5,21 +5,34 @@ import {DashboardFilterService} from "../filters/dashboard-filter.service";
 import {SearchResult} from "../models/search-result";
 import {AppSettings} from "../app-settings";
 import {environment} from "../../environments/environment";
+import { Options } from 'ng5-slider';
+import * as filesize from 'filesize'
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
+
 export class DashboardComponent implements OnInit {
+  minFileSizeValue: number = 0;
+  maxFileSizeValue: number = 0;
+  sliderOptions: Options = {
+    floor: 0,
+    ceil: 0,
+    // showTicks: true,
+    translate: (value: number): string => {
+      const size = filesize.partial({bits: true, round: 0});
+      return size(value);
+    }
+  };
+
 
   //aggregation/filter data & limits
   globalLimits = {
     maxDate: new Date(),
     minDate: new Date(),
-
-    minFileSize: 0,
-    maxFileSize: 0,
 
     sortBy: AppSettings.SORT_BY_OPTIONS
   }
@@ -123,7 +136,7 @@ export class DashboardComponent implements OnInit {
 
   filterFileSize(data: any){
     console.log("FILTER FILESIZE", data)
-    this.filterService.filterFileSize(data.newValue as number[])
+    this.filterService.filterFileSize([this.minFileSizeValue, this.maxFileSizeValue])
   }
 
   filterBookmark(bookmark: boolean){
@@ -145,8 +158,15 @@ export class DashboardComponent implements OnInit {
           console.log("aggregations", wrapper);
           this.globalLimits.maxDate = new Date(wrapper.aggregations.by_timerange.max_as_string);
           this.globalLimits.minDate = new Date(wrapper.aggregations.by_timerange.min_as_string);
-          this.globalLimits.minFileSize = wrapper.aggregations.by_filesize.min;
-          this.globalLimits.maxFileSize = wrapper.aggregations.by_filesize.max;
+
+          // Due to change detection rules in Angular, we need to re-create the options object to apply the change
+          const newOptions: Options = Object.assign({}, this.sliderOptions);
+          newOptions.floor = wrapper.aggregations.by_filesize.min;
+          newOptions.ceil = wrapper.aggregations.by_filesize.max;
+          this.sliderOptions = newOptions;
+
+          this.minFileSizeValue = wrapper.aggregations.by_filesize.min;
+          this.maxFileSizeValue = wrapper.aggregations.by_filesize.max;
         },
         error => {
           console.error("documents FAILED", error)

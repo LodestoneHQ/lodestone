@@ -53,12 +53,12 @@
           <div class="margin-top-55"></div>
 
           <!-- Range Slider -->
-          <mv-slider
-            [min]="globalLimits.minFileSize"
-            [max]="globalLimits.maxFileSize"
-            [range]="true"
-            [tooltip]="'always'"
-            [enabled]="true" (change)="filterFileSize($event)"></mv-slider>
+
+          <ng5-slider
+            [(value)]="minFileSizeValue"
+            [(highValue)]="maxFileSizeValue"
+            [options]="sliderOptions"
+            (userChange)="filterFileSize($event)"></ng5-slider>
 
         </div>
 

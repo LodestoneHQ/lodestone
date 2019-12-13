@@ -18,13 +18,12 @@ import { FileSizeModule } from "ngx-filesize";
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import {NgxBootstrapSliderModule} from "ngx-bootstrap-slider";
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-
+import { Ng5SliderModule } from 'ng5-slider';
 
 @NgModule({
   declarations: [
@@ -48,12 +47,12 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
     PaginationModule.forRoot(),
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    NgxBootstrapSliderModule,
     PopoverModule.forRoot(),
     AccordionModule.forRoot(),
     BrowserAnimationsModule,
     TabsModule.forRoot(),
     TypeaheadModule.forRoot(),
+    Ng5SliderModule,
 
   ],
   providers: [],

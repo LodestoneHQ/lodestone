@@ -66,12 +66,33 @@ header#header-container div#navigation {
 /* ---------------------------------- */
 /* Dashboard - File Size Filter
 ------------------------------------- */
-mv-slider .slider .tooltip.tooltip-main {
-  opacity: 100;
-}
 
-mv-slider .slider .slider-track .slider-selection {
-  background-image: none;
+
+.ng5-slider {
+
+  .ng5-slider-pointer {
+    border: 2px solid $primary-color !important;
+    width: 20px !important;
+    height: 20px !important;
+    background-color: $primary-color !important;
+    border-radius: 50% !important;
+    top: -8px !important;
+
+    &:after {
+      width: 14px !important;
+      height: 14px !important;
+      top: 1px !important;
+      left: 1px !important;
+      border-radius: 30px !important;
+      background: #fff !important;
+    }
+  }
+
+
+
+  .ng5-slider-bar.ng5-slider-selection {
+    background: $primary-color;
+  }
 }
 
 /* ---------------------------------- */
