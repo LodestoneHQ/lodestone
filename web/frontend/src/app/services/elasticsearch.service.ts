@@ -284,10 +284,12 @@ export class ElasticsearchService {
 
 
 
+    // if(_filter.tags){
+    //   filterRules.push({ "terms":  { "lodestone.tags": _filter.tags }})
+    // }
     for(let tag of _filter.tags){
       filterRules.push({ "term":  { "lodestone.tags": tag }})
     }
-
 
     if(_filter.timeRange && _filter.fileSizes.length){
 

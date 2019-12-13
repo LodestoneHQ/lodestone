@@ -88,14 +88,13 @@ export class DetailsComponent implements OnInit {
           console.log("Successful update")
 
           if (this.documentData._source.lodestone && this.documentData._source.lodestone.tags){
-            this.documentData._source.lodestone.tags.splice(this.documentData._source.lodestone.tags.indexOf(this.newTag), 1)
+            this.documentData._source.lodestone.tags.splice(this.documentData._source.lodestone.tags.indexOf(existingTag), 1)
           }
         },
         error => {
           console.error("Failed update", error)
         },
         () => {
-          this.newTag = ""
           console.log("update finished")
         }
       );
@@ -106,7 +105,6 @@ export class DetailsComponent implements OnInit {
   }
 
   generateTagsAutocomplete(){
-    console.log("GENERATING TAGS");
     for(let tagGroup of AppSettings.TAGS.tags){
       this.tagsAutocomplete.push({
         id: tagGroup.label,
@@ -126,7 +124,5 @@ export class DetailsComponent implements OnInit {
         })
       }
     }
-
-    console.log("FINISHED GENERATING TAGS", AppSettings.TAGS)
   }
 }

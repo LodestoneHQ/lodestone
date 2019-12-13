@@ -31,6 +31,7 @@ export class ApiService {
   }
 
   // Unauthenticated functions
+
   fetchStatus(): Observable<StatusResult> {
     return this.http.get<StatusResult>((environment.apiBase ? environment.apiBase: '') + '/api/v1/status')
       .pipe(catchError(this.handleError));
