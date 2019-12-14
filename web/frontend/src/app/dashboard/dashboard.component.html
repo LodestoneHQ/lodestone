@@ -122,9 +122,9 @@
           <div class="job-listing-footer">
             <span (click)="bookmarkDocument(result, result._source.lodestone ? !!result._source.lodestone.bookmark : false )" class="bookmark-icon" [ngClass]="{'bookmarked': result._source.lodestone ? !!result._source.lodestone.bookmark : false }"></span>
             <ul>
-              <li><i class="icon-material-outline-location-on"></i>{{result._source.file.extension}}  </li>
-              <li><i class="icon-material-outline-business-center"></i> {{result._source.file.filesize | filesize}} </li>
-              <li><i class="icon-material-outline-account-balance-wallet"></i> {{result._source.storage.path}} </li>
+              <li><i class="icon-feather-file-text"></i>{{result._source.file.extension}}  </li>
+              <li><i class="icon-material-outline-attach-file"></i> {{result._source.file.filesize | filesize}} </li>
+              <li><i class="icon-line-awesome-terminal"></i> {{result._source.storage.path}} </li>
               <li><i class="icon-material-outline-access-time"></i> {{result._source.file.created | amTimeAgo}} </li>
             </ul>
           </div>

@@ -24,6 +24,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { Ng5SliderModule } from 'ng5-slider';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { Ng5SliderModule } from 'ng5-slider';
     TabsModule.forRoot(),
     TypeaheadModule.forRoot(),
     Ng5SliderModule,
+    CollapseModule.forRoot(),
 
   ],
   providers: [],
