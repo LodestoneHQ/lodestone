@@ -51,7 +51,7 @@
 
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
-                    <li><strong [ngClass]="{'danger': statusResult.elasticsearch.status == 'red', 'warning': statusResult.elasticsearch.status == 'yellow', 'success': statusResult.elasticsearch.status == 'green'}">{{statusResult.elasticsearch.status}}</strong><span>Status</span></li>
+                    <li><strong [ngClass]="{'text-danger': statusResult.elasticsearch.status == 'red', 'text-warning': statusResult.elasticsearch.status == 'yellow', 'text-success': statusResult.elasticsearch.status == 'green'}">{{statusResult.elasticsearch.status}}</strong><span>Status</span></li>
                     <li><strong>1 min ago</strong><span>Last Checked</span></li>
                   </ul>
 
@@ -80,7 +80,7 @@
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
                     <li><strong>{{statusResult.rabbitmq.documents.messages}}</strong><span>Queue</span></li>
-                    <li><strong [ngClass]="{'danger': statusResult.rabbitmq.documents.consumers == 0}">{{statusResult.rabbitmq.documents.consumers}}</strong><span>Listeners</span></li>
+                    <li><strong [ngClass]="{'text-danger': statusResult.rabbitmq.documents.consumers == 0}">{{statusResult.rabbitmq.documents.consumers}}</strong><span>Listeners</span></li>
                     <li><strong>{{statusResult.rabbitmq.documents.idle_since | amFromUtc | amTimeAgo}}</strong><span>Last Checked</span></li>
                   </ul>
 
@@ -107,7 +107,7 @@
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
                     <li><strong>{{statusResult.rabbitmq.thumbnails.messages}}</strong><span>Queue</span></li>
-                    <li><strong [ngClass]="{'danger': statusResult.rabbitmq.documents.consumers == 0}">{{statusResult.rabbitmq.thumbnails.consumers}}</strong><span>Listeners</span></li>
+                    <li><strong [ngClass]="{'text-danger': statusResult.rabbitmq.documents.consumers == 0}">{{statusResult.rabbitmq.thumbnails.consumers}}</strong><span>Listeners</span></li>
                     <li><strong>{{statusResult.rabbitmq.thumbnails.idle_since | amFromUtc | amTimeAgo}}</strong><span>Last Checked</span></li>
                   </ul>
 
@@ -133,7 +133,7 @@
 
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
-                    <li><strong [ngClass]="{'danger': statusResult.rabbitmq.errors.messages > 0}">{{statusResult.rabbitmq.errors.messages}}</strong><span>Errors</span></li>
+                    <li><strong [ngClass]="{'text-danger': statusResult.rabbitmq.errors.messages > 0}">{{statusResult.rabbitmq.errors.messages}}</strong><span>Errors</span></li>
                     <li><strong>{{statusResult.rabbitmq.errors.idle_since | amFromUtc | amTimeAgo}}</strong><span>Last Checked</span></li>
                   </ul>
 
