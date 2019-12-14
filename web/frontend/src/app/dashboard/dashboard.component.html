@@ -154,6 +154,8 @@
 
           <div class="task-listing-bid">
             <div class="task-listing-bid-inner">
+              <img [src]="thumbEndpoint(result._source.storage.thumb_bucket, result._source.storage.thumb_path)" alt="">
+
               <div class="task-offers">
                 <strong>{{result._source.file.extension}}</strong>
                 <span> {{result._source.file.filesize | filesize}} </span>

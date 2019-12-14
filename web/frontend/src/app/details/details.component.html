@@ -61,6 +61,10 @@
                    [typeahead]="tagsAutocomplete"
                    typeaheadOptionField="id"
                    typeaheadGroupField="group"
+                   [typeaheadMinLength]="0"
+                   [typeaheadOptionsLimit]="1000"
+                   [typeaheadScrollable]="true"
+                   [typeaheadOptionsInScrollableView]="12"
                    typeaheadPhraseDelimiters="&,-"
                    class="keyword-input with-border" placeholder="Add Keywords">
             <button class="keyword-input-button ripple-effect" (click)="addDocumentTag()"><i class="icon-material-outline-add"></i></button>
