@@ -13,20 +13,15 @@
             </a></div>
             <div class="header-details">
               <h3>{{documentData._source.meta.title || documentData._source.file.filename}}</h3>
-              <ul>
-                <li><a href="single-company-profile.html"><i class="icon-material-outline-business"></i>{{documentData._source.file.extension}}</a></li>
-                <li><div class="star-rating" data-rating="4.9"></div></li>
-                <li><img class="flag" src="images/flags/gb.svg" alt=""> United Kingdom</li>
-                <li><div class="verified-badge-with-title">Verified</div></li>
-              </ul>
+
             </div>
           </div>
-          <div class="right-side">
-            <div class="salary-box">
-              <div class="salary-type">Annual Salary</div>
-              <div class="salary-amount">$35k - $38k</div>
-            </div>
-          </div>
+<!--          <div class="right-side">-->
+<!--            <div class="salary-box">-->
+<!--              <div class="salary-type">Annual Salary</div>-->
+<!--              <div class="salary-amount">$35k - $38k</div>-->
+<!--            </div>-->
+<!--          </div>-->
         </div>
       </div>
     </div>
@@ -158,17 +153,17 @@
             <div class="job-overview-inner">
               <ul>
                 <li>
-                  <i class="icon-material-outline-location-on"></i>
+                  <i class="icon-feather-file-text"></i>
                   <span>File Type</span>
                   <h5>{{documentData._source.file.extension}}</h5>
                 </li>
                 <li>
-                  <i class="icon-material-outline-business-center"></i>
+                  <i class="icon-material-outline-attach-file"></i>
                   <span>File Size</span>
                   <h5>{{documentData._source.file.filesize | filesize}}</h5>
                 </li>
                 <li>
-                  <i class="icon-material-outline-local-atm"></i>
+                  <i class="icon-line-awesome-terminal"></i>
                   <span>Path</span>
                   <h5>{{documentData._source.storage.path}}</h5>
                 </li>
