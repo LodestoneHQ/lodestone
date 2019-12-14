@@ -17,22 +17,32 @@
         <!-- Main Navigation -->
         <div *ngIf="showSearchBar()" id="navigation">
           <nav class="w-50 mx-auto">
-            <div class="input-with-icon-left">
-              <i class="icon-feather-search"></i>
+
+
+            <div class="input-group mb-3">
               <input
+                type="text"
+                class="form-control"
+                placeholder="Type a query, then press 'Enter'"
+                aria-label="query"
+                aria-describedby="basic-addon2"
+
                 [popover]="popTemplate"
                 containerClass="search-popover"
                 popoverTitle="Search - Advanced Options"
                 container="body"
                 placement="bottom"
-                triggers="focus"
+                triggers=""
                 ngModel
                 #pop="bs-popover"
                 (keydown.enter)="pop.hide()"
                 (ngModelChange)="filterQuery($event)"
+              >
 
-                type="text" class="input-text with-border"
-                placeholder="Type a query, then press 'Enter'">
+
+              <div class="input-group-append">
+                <span (click)="pop.toggle()" class="input-group-text" id="basic-addon2"><i class="icon-feather-info"></i></span>
+              </div>
             </div>
           </nav>
         </div>
