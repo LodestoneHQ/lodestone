@@ -144,9 +144,9 @@
               <ul class="task-icons">
                 <li><i class="icon-material-outline-access-time"></i> {{result._source.file.created | amTimeAgo}}</li>
               </ul>
-              <p *ngFor="let highlight of result.highlight.content" class="task-listing-text" [innerHTML]="highlight"></p>
+              <p *ngFor="let highlight of result?.highlight?.content" class="task-listing-text" [innerHTML]="highlight"></p>
               <div *ngIf="result._source.lodestone.tags" class="task-tags">
-                <span (click)="filterTag(tag, !filter.tags.includes(tag))" *ngFor="let tag of result._source.lodestone.tags">{{tag}}</span>
+                <span (click)="filterTag(tag, !filter.tags.includes(tag))" *ngFor="let tag of result._source.lodestone?.tags">{{tag}}</span>
               </div>
             </div>
 
