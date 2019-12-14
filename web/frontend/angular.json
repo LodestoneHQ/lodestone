@@ -34,12 +34,10 @@
             "styles": [
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.scss",
-              "./node_modules/bootstrap-slider/dist/css/bootstrap-slider.css",
               "src/assets/sass/style.scss",
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/bootstrap-slider/dist/bootstrap-slider.js"
             ]
           },
           "configurations": {

@@ -30,6 +30,15 @@ export class DetailsComponent implements OnInit {
         () => console.log("FINISHED")
       );
 
+    // this.es.getSimilar(this.documentId)
+    //   .subscribe(
+    //     data => {
+    //       console.log("GET SIMILAR", data)
+    //     },
+    //     error => console.error(error),
+    //     () => console.log("FINISHED")
+    //   )
+
     this.generateTagsAutocomplete()
   }
 

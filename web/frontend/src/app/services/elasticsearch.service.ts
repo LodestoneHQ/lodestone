@@ -171,10 +171,11 @@ export class ElasticsearchService {
     const searchPayload = {
       index: AppSettings.ES_INDEX,
       // filterPath: ['hits.hits._source', 'hits.total', '_scroll_id'],
+      explain: true,
       body: {
         'query': {
           "more_like_this" : {
-            "fields" : ["title", "description"],
+            "fields" : ["meta.title", "meta.description", "meta.keywords", "file.filename"],
             "like" : [
               {
                 "_index" : AppSettings.ES_INDEX,

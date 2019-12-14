@@ -27,6 +27,8 @@
                 placement="bottom"
                 triggers="focus"
                 ngModel
+                #pop="bs-popover"
+                (keydown.enter)="pop.hide()"
                 (ngModelChange)="filterQuery($event)"
 
                 type="text" class="input-text with-border"

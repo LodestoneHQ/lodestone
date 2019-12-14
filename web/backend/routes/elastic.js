@@ -23,6 +23,7 @@ router.post('/search', async function(req, res, next) {
         resp = await client.search(req.body)
     } catch(e){
         console.log(e)
+        resp = {body: e}
     } finally {
         res.send(resp.body);
     }
@@ -36,7 +37,7 @@ router.post('/update', async function(req, res, next) {
         resp = await client.update(req.body)
     } catch(e){
         console.log(e)
-
+        resp = {body: e}
     } finally {
         res.send(resp.body);
     }
@@ -48,6 +49,7 @@ router.post('/ping', async function(req, res, next) {
         resp = await client.ping(req.body)
     } catch(e){
         console.log(e)
+        resp = {body: e}
 
     } finally {
         res.send(resp.body);

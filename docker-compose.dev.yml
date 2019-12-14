@@ -72,9 +72,7 @@ services:
       - RABBITMQ_PASS=lodestone
 
   storage:
-    build:
-      context: ./storage
-      dockerfile: Dockerfile
+    build: storage
     healthcheck:
       test: ["CMD-SHELL", "curl --silent --fail localhost:9000/minio/health/ready || exit 1"]
       interval: 30s
