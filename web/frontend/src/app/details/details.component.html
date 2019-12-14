@@ -38,11 +38,17 @@
     <div class="col-xl-8 col-lg-8 content-right-offset">
 
       <div class="single-page-section">
-        <h3 class="margin-bottom-25">Document Preview</h3>
 
-        <app-doc-preview *ngIf="documentData" [extension]="documentData._source.file.extension" [path]="storageEndpoint(documentData._source.storage.bucket, documentData._source.storage.path)"></app-doc-preview>
-
-
+        <tabset class="tabs">
+          <tab heading="Document Preview">
+            <app-doc-preview *ngIf="documentData" [extension]="documentData._source.file.extension" [path]="storageEndpoint(documentData._source.storage.bucket, documentData._source.storage.path)"></app-doc-preview>
+          </tab>
+          <tab heading="Extracted Text">
+            <div style="max-height: 800px; overflow: scroll; outline: auto;">
+              {{documentData._source.content}}
+            </div>
+          </tab>
+        </tabset>
       </div>
 
 
