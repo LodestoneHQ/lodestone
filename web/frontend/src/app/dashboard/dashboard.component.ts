@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     ceil: 0,
     // showTicks: true,
     translate: (value: number): string => {
-      const size = filesize.partial({bits: true, round: 0});
+      const size = filesize.partial({ round: 0});
       return size(value);
     }
   };
