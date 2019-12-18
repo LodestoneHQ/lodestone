@@ -11,7 +11,7 @@ import {StatusResult} from "../models/status-result";
 export class StatusComponent implements OnInit {
 
   statusResult: StatusResult = new StatusResult();
-
+  statusDate: Date = new Date()
   constructor(private apiService: ApiService) {}
 
   ngOnInit() {

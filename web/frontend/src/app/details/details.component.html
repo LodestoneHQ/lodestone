@@ -13,15 +13,15 @@
             </a></div>
             <div class="header-details">
               <h3>{{documentData._source.meta.title || documentData._source.file.filename}}</h3>
-
+              <p>{{documentData._source.meta.description}}</p>
             </div>
           </div>
-<!--          <div class="right-side">-->
-<!--            <div class="salary-box">-->
-<!--              <div class="salary-type">Annual Salary</div>-->
-<!--              <div class="salary-amount">$35k - $38k</div>-->
-<!--            </div>-->
-<!--          </div>-->
+          <div class="right-side">
+            <div class="salary-box">
+              <div class="salary-type"># of Pages</div>
+              <div class="salary-amount">{{documentData._source.meta.pages}}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

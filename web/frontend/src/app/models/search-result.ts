@@ -20,6 +20,7 @@ export class SearchResult {
       source: string;
       description: string;
       comments: string;
+      pages: string;
     }
     file: {
       content_type: string;

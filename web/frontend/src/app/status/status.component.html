@@ -52,7 +52,7 @@
                   <!-- Task Details -->
                   <ul class="dashboard-task-info">
                     <li><strong [ngClass]="{'text-danger': statusResult.elasticsearch.status == 'red', 'text-warning': statusResult.elasticsearch.status == 'yellow', 'text-success': statusResult.elasticsearch.status == 'green'}">{{statusResult.elasticsearch.status}}</strong><span>Status</span></li>
-                    <li><strong>1 min ago</strong><span>Last Checked</span></li>
+                    <li><strong>{{statusDate | amTimeAgo}}</strong><span>Last Checked</span></li>
                   </ul>
 
                   <!-- Buttons -->
