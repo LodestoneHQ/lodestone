@@ -16,7 +16,7 @@
               <p>{{documentData._source.meta.description}}</p>
             </div>
           </div>
-          <div class="right-side">
+          <div *ngIf="documentData._source.meta.pages" class="right-side">
             <div class="salary-box">
               <div class="salary-type"># of Pages</div>
               <div class="salary-amount">{{documentData._source.meta.pages}}</div>
@@ -79,63 +79,34 @@
       <div class="clearfix"></div>
 
       <div class="single-page-section">
-        <h3 class="margin-bottom-25">Similar Jobs</h3>
+        <h3 class="margin-bottom-25">Similar Documents</h3>
 
         <!-- Listings Container -->
         <div class="listings-container grid-layout">
 
           <!-- Job Listing -->
-          <a href="#" class="job-listing">
+          <a *ngFor="let result of similarDocuments" [routerLink]="'/details/' + result._id" class="job-listing">
 
             <!-- Job Listing Details -->
             <div class="job-listing-details">
               <!-- Logo -->
               <div class="job-listing-company-logo">
-                <img src="assets/images/company-logo-02.png" alt="">
+                <img [src]="storageEndpoint(result._source.storage.thumb_bucket, result._source.storage.thumb_path)" alt="">
               </div>
 
               <!-- Details -->
               <div class="job-listing-description">
-                <h4 class="job-listing-company">Coffee</h4>
-                <h3 class="job-listing-title">Barista and Cashier</h3>
+                <h3 class="job-listing-title">{{result._source.meta.title || result._source.file.filename}}</h3>
               </div>
             </div>
 
             <!-- Job Listing Footer -->
             <div class="job-listing-footer">
               <ul>
-                <li><i class="icon-material-outline-location-on"></i> San Francisco</li>
-                <li><i class="icon-material-outline-business-center"></i> Full Time</li>
-                <li><i class="icon-material-outline-account-balance-wallet"></i> $35000-$38000</li>
-                <li><i class="icon-material-outline-access-time"></i> 2 days ago</li>
-              </ul>
-            </div>
-          </a>
-
-          <!-- Job Listing -->
-          <a href="#" class="job-listing">
-
-            <!-- Job Listing Details -->
-            <div class="job-listing-details">
-              <!-- Logo -->
-              <div class="job-listing-company-logo">
-                <img src="assets/images/company-logo-03.png" alt="">
-              </div>
-
-              <!-- Details -->
-              <div class="job-listing-description">
-                <h4 class="job-listing-company">King <span class="verified-badge" title="Verified Employer" data-tippy-placement="top"></span></h4>
-                <h3 class="job-listing-title">Restaurant Manager</h3>
-              </div>
-            </div>
-
-            <!-- Job Listing Footer -->
-            <div class="job-listing-footer">
-              <ul>
-                <li><i class="icon-material-outline-location-on"></i> San Francisco</li>
-                <li><i class="icon-material-outline-business-center"></i> Full Time</li>
-                <li><i class="icon-material-outline-account-balance-wallet"></i> $35000-$38000</li>
-                <li><i class="icon-material-outline-access-time"></i> 2 days ago</li>
+                <li><i class="icon-feather-file-text"></i>{{result._source.file.extension}}  </li>
+                <li><i class="icon-material-outline-attach-file"></i> {{result._source.file.filesize | filesize}} </li>
+                <li><i class="icon-line-awesome-terminal"></i> {{result._source.storage.path}} </li>
+                <li><i class="icon-material-outline-access-time"></i> {{result._source.file.created | amTimeAgo}} </li>
               </ul>
             </div>
           </a>

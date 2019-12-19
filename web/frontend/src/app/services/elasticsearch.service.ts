@@ -173,9 +173,12 @@ export class ElasticsearchService {
       // filterPath: ['hits.hits._source', 'hits.total', '_scroll_id'],
       explain: true,
       body: {
+        "from" : 0,
+        "size" : 2,
         'query': {
           "more_like_this" : {
-            "fields" : ["meta.title", "meta.description", "meta.keywords", "file.filename"],
+            // "fields" : ["lodestone.tags", "meta.title", "meta.description", "meta.keywords", "file.filename"],
+            "fields" : ["content"],
             "like" : [
               {
                 "_index" : AppSettings.ES_INDEX,
@@ -283,13 +286,8 @@ export class ElasticsearchService {
       })
     }
 
-
-
-    // if(_filter.tags){
-    //   filterRules.push({ "terms":  { "lodestone.tags": _filter.tags }})
-    // }
-    for(let tag of _filter.tags){
-      filterRules.push({ "term":  { "lodestone.tags": tag }})
+    if(_filter.tags.length){
+      filterRules.push({ "terms":  { "lodestone.tags": _filter.tags }})
     }
 
     if(_filter.timeRange && _filter.fileSizes.length){
