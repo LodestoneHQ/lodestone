@@ -42,11 +42,14 @@ export class DocPreviewComponent implements OnInit {
   }
 
   previewType(extension: string){
-    if(extension == 'jpg' || extension == 'jpeg' || extension == 'png'){
+    if(extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension ==  'gif'){
       return 'native' //browser native preview
     }
     else if(extension == 'pdf'){
       return 'pdf' //uses viewer.js through ng2-pdfjs-viewer
+    }
+    else if(extension == 'html'){
+      return 'iframe' //uses iframe to render html.
     }
     else if(this.renderers[extension]){
       return 'third-party'

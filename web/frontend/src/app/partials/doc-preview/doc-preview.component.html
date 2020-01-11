@@ -4,6 +4,9 @@
   <!-- Render Browser Native file types: -->
   <img *ngIf="previewType(extension) == 'native'" [src]="path">
 
+  <!-- Render HTML in iframe: -->
+  <iframe *ngIf="previewType(extension) == 'iframe'" [src]="path"></iframe>
+
 
   <!-- Render PDF's -->
   <ng2-pdfjs-viewer *ngIf="previewType(extension) == 'pdf'" [pdfSrc]="path"></ng2-pdfjs-viewer>
