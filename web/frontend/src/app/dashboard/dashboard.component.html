@@ -68,8 +68,7 @@
 
           <div class="tags-container">
             <div *ngFor="let tag of tagBuckets" class="tag">
-              <input type="checkbox" [ngModel]="filter.tags.includes(tag.key)"/>
-              <label (click)="filterTag(tag.key, !filter.tags.includes(tag.key))">{{tag.key}}</label>
+              <tag-checkbox [tagName]="tag.key" [isSelected]="filter.tags.includes(tag.key)" (valueChange)="filterTag(tag.key, !filter.tags.includes(tag.key))"></tag-checkbox>
             </div>
           </div>
           <div class="clearfix"></div>

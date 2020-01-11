@@ -11,6 +11,7 @@ import { DocPreviewComponent } from './partials/doc-preview/doc-preview.componen
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DetailsComponent } from './details/details.component';
 import { StatusComponent } from './status/status.component';
+import { TagCheckboxComponent } from './partials/tag-checkbox/tag-checkbox.component';
 
 import { PdfJsViewerModule } from 'ng2-pdfjs-viewer'; // <-- Import PdfJsViewerModule module
 import { MomentModule } from 'ngx-moment';
@@ -35,6 +36,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     DetailsComponent,
     StatusComponent,
     DocPreviewComponent,
+    TagCheckboxComponent,
   ],
   imports: [
     BrowserModule,

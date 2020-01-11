@@ -103,6 +103,13 @@ header#header-container div#navigation {
   max-width: 100%;
 }
 
+/* ---------------------------------- */
+/* Dashboard - Tabs
+------------------------------------- */
+.tags-container input[type=checkbox]:checked+label span {
+  color: #fff;
+}
+
 
 /* ---------------------------------- */
 /* Details Page - Document Preview
@@ -214,3 +221,6 @@ header#header-container div#navigation {
 .text-break{
   overflow-wrap: break-word;
 }
+
+
+
