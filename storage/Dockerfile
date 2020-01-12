@@ -1,4 +1,4 @@
-FROM minio/minio
+FROM minio/minio:RELEASE.2019-12-30T05-45-39Z
 
 # TODO: run s6, minio, mc and a filesystem watcher/daemon all within the same container.
 # use s6-svwait to have the configuration updates and the filesystem watcher wait until minio has started successfully

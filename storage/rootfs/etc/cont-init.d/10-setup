@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+# create the default "buckets" that minio & lodestone expect
+mkdir -p /data/documents
+mkdir -p /data/thumbnails
