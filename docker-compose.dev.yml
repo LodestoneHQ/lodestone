@@ -140,7 +140,7 @@ services:
       - lodenet
 
   tika:
-    image: logicalspark/docker-tikaserver
+    build: tika
     healthcheck:
       test: "curl --silent --fail localhost:9998/tika || exit 1"
       interval: 5s
