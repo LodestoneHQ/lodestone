@@ -19,7 +19,7 @@ ADD https://api.github.com/repos/AnalogJ/lodestone-fs-publisher/releases/latest 
 RUN /lodestone-fs-publisher-dl.sh \
     && ls -alt /usr/bin/lodestone-fs-publisher
 
-RUN apk add --no-cache ca-certificates && \
+RUN apk add --no-cache ca-certificates shadow && \
     apk add --no-cache --virtual .build-deps curl && \
     curl https://dl.min.io/client/mc/release/linux-amd64/mc > /usr/bin/mc && \
     chmod +x /usr/bin/mc && apk del .build-deps

@@ -10,6 +10,7 @@ services:
     environment:
       #      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "TAKE_FILE_OWNERSHIP=1"
     ulimits:
       memlock:
         soft: -1

@@ -1,0 +1,8 @@
+#!/usr/bin/with-contenv bash
+
+MINIO_PUID=${MINIO_PUID:-1234}
+MINIO_PGID=${MINIO_PGID:-1234}
+
+useradd -u "$MINIO_PUID" -U -d /home/minio -s /bin/false minio
+usermod -G users minio
+groupmod -o -g "$MINIO_PGID" minio
