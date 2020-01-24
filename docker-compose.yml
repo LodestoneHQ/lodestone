@@ -78,6 +78,10 @@ services:
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
 #      - MINIO_WORM=on
+#      - MINIO_USERNAME=minio
+#      - MINIO_GROUPNAME=minio
+#      - MINIO_PUID=15000
+#      - MINIO_PGID=15000
     networks:
       - lodenet
     labels:
