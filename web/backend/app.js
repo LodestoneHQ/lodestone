@@ -22,6 +22,7 @@ app.use('/web',express.static(path.join(__dirname, 'public')));
 app.use('/web', indexRouter);
 
 
+app.use('/api/v1/data', express.static(path.join(__dirname, 'data')));
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/status', statusRouter);
 app.use('/api/v1/elastic', elasticRouter);

@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {StatusResult} from "../models/status-result";
+import {Tag} from "../models/tag";
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,11 @@ export class ApiService {
   }
 
   // Unauthenticated functions
+  fetchTags(): Observable<Tag> {
+    return this.http.get<Tag>((environment.apiBase ? environment.apiBase: '') + '/api/v1/data/tags.json')
+      .pipe(catchError(this.handleError));
+  }
+
 
   fetchStatus(): Observable<StatusResult> {
     return this.http.get<StatusResult>((environment.apiBase ? environment.apiBase: '') + '/api/v1/status')

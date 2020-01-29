@@ -4,6 +4,8 @@ import {ActivatedRoute} from "@angular/router";
 import {SearchResult} from "../models/search-result";
 import {environment} from "../../environments/environment";
 import {AppSettings} from "../app-settings";
+import {ApiService} from "../services/api.service";
+import {Tag} from "../models/tag";
 
 @Component({
   selector: 'app-details',
@@ -19,10 +21,21 @@ export class DetailsComponent implements OnInit {
 
   similarDocuments: SearchResult[] = [];
 
-  constructor(private es: ElasticsearchService, private activatedRoute: ActivatedRoute) { }
+  constructor(private es: ElasticsearchService, private apiService: ApiService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.documentId = this.activatedRoute.snapshot.params.id;
+
+    this.apiService.fetchTags()
+      .subscribe(
+        data => {
+
+          console.log("==== RETRIEVED TAGS", data)
+          this.generateTagsAutocomplete(data)
+        },
+        error => console.error(error),
+        () => console.log("FINISHED")
+      )
 
     this.es.getById(this.documentId)
       .subscribe(
@@ -41,8 +54,6 @@ export class DetailsComponent implements OnInit {
         error => console.error(error),
         () => console.log("FINISHED")
       )
-
-    this.generateTagsAutocomplete()
   }
 
   bookmarkDocument(currentState){
@@ -116,8 +127,8 @@ export class DetailsComponent implements OnInit {
     return (environment.apiBase ? environment.apiBase: '') + '/storage/' + bucket +'/' + path;
   }
 
-  generateTagsAutocomplete(){
-    for(let tagGroup of AppSettings.TAGS.tags){
+  generateTagsAutocomplete(availableTags: Tag){
+    for(let tagGroup of availableTags.tags){
       this.tagsAutocomplete.push({
         id: tagGroup.label,
         name: tagGroup.label,

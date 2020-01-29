@@ -1,5 +1,3 @@
-import tags from '../assets/data/tags.json';
-
 export class AppSettings {
   //ElasticSearch Settings
   public static ES_INDEX = 'lodestone';
@@ -20,6 +18,4 @@ export class AppSettings {
     "year": "This Year",
     "all": "All Time"
   };
-
-  public static TAGS = tags
 }
