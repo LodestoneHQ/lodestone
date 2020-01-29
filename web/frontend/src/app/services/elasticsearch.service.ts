@@ -138,7 +138,10 @@ export class ElasticsearchService {
       index: AppSettings.ES_INDEX,
       body: {
         "script" : {
-          "source": "if (!ctx._source.lodestone.tags.contains(params.tag)) { ctx._source.lodestone.tags.add(params.tag) }",
+          "source": [
+            "if (ctx._source.lodestone.tags == null) { ctx._source.lodestone.tags = [params.tag] }",
+            "else if (!ctx._source.lodestone.tags.contains(params.tag)) { ctx._source.lodestone.tags.add(params.tag) }"
+          ].join(" "),
           "lang": "painless",
           "params" : {
             "tag" : tag
@@ -157,7 +160,10 @@ export class ElasticsearchService {
       index: AppSettings.ES_INDEX,
       body: {
         "script" : {
-          "source": "if (ctx._source.lodestone.tags.contains(params.tag)) { ctx._source.lodestone.tags.remove(ctx._source.lodestone.tags.indexOf(params.tag)) }",
+          "source": [
+            "if (ctx._source.lodestone.tags.contains(params.tag)) { ctx._source.lodestone.tags.remove(ctx._source.lodestone.tags.indexOf(params.tag)) }",
+            "if (ctx._source.lodestone.tags == []) { ctx._source.lodestone.tags = null }"
+          ].join(" "),
           "lang": "painless",
           "params" : {
             "tag" : tag
@@ -342,8 +348,6 @@ export class ElasticsearchService {
     if(!_filter.sortBy){
       return null;
     }
-
-
     if(_filter.sortBy == 'new'){
       sortObj = [{
         "file.created": {
