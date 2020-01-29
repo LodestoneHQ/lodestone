@@ -8,11 +8,10 @@ router.post('/get', async function(req, res, next) {
     let resp;
     try {
         resp = await client.get(req.body)
-    } catch(e){
-        console.log(e)
-
-    } finally {
         res.send(resp.body);
+    } catch(e){
+        console.log("An error occurred", e)
+        next(e)
     }
 });
 
@@ -21,11 +20,10 @@ router.post('/search', async function(req, res, next) {
     let resp;
     try {
         resp = await client.search(req.body)
-    } catch(e){
-        console.log(e)
-        resp = {body: e}
-    } finally {
         res.send(resp.body);
+    } catch(e){
+        console.log("An error occurred", e)
+        next(e)
     }
 
 });
@@ -35,11 +33,11 @@ router.post('/update', async function(req, res, next) {
     let resp;
     try {
         resp = await client.update(req.body)
-    } catch(e){
-        console.log(e)
-        resp = {body: e}
-    } finally {
         res.send(resp.body);
+
+    } catch(e){
+        console.log("An error occurred", e)
+        next(e)
     }
 });
 
@@ -47,12 +45,11 @@ router.post('/ping', async function(req, res, next) {
     let resp;
     try {
         resp = await client.ping(req.body)
-    } catch(e){
-        console.log(e)
-        resp = {body: e}
-
-    } finally {
         res.send(resp.body);
+
+    } catch(e){
+        console.log("An error occurred", e)
+        next(e)
     }
 });
 
