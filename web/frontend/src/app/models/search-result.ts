@@ -6,6 +6,7 @@ export class SearchResult {
     lodestone:{
       tags: string[];
       bookmark: boolean;
+      title: string;
     }
     meta: {
       author: string;

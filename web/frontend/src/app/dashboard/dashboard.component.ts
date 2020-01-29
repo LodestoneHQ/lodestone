@@ -81,6 +81,7 @@ export class DashboardComponent implements OnInit {
             doc._source.lodestone.bookmark = !currentState
           } else {
             doc._source.lodestone = {
+              title: "",
               bookmark: !currentState,
               tags: []
             }

@@ -112,7 +112,7 @@
 
             <!-- Details -->
             <div class="job-listing-description">
-              <h3 class="job-listing-title">{{result._source.meta.title || result._source.file.filename}}</h3>
+              <h3 class="job-listing-title">{{result._source.lodestone.title || result._source.meta.title || result._source.file.filename}}</h3>
 
             </div>
           </div>
@@ -139,7 +139,7 @@
 
             <!-- Details -->
             <div class="task-listing-description">
-              <h3 class="task-listing-title">{{result._source.file.filename}}</h3>
+              <h3 class="task-listing-title">{{result._source.lodestone.title || result._source.meta.title || result._source.file.filename}}</h3>
               <ul class="task-icons">
                 <li><i class="icon-material-outline-access-time"></i> {{result._source.file.created | amTimeAgo}}</li>
               </ul>

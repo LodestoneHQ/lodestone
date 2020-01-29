@@ -12,7 +12,18 @@
               <img [src]="storageEndpoint(documentData._source.storage.thumb_bucket, documentData._source.storage.thumb_path)" alt="">
             </a></div>
             <div class="header-details">
-              <h3>{{documentData._source.meta.title || documentData._source.file.filename}}</h3>
+              <div class="cursor_pointer" *ngIf="!editingTitle" (click)="editingTitle = true">
+                <h3>{{documentData._source.lodestone.title || documentData._source.meta.title || documentData._source.file.filename}}</h3>
+              </div>
+              <div *ngIf="editingTitle">
+                <div class="input-group">
+                  <input [(ngModel)]="newTitle" type="text" class="form-control" [placeholder]="documentData._source.lodestone.title || documentData._source.meta.title || documentData._source.file.filename">
+                  <div class="input-group-append">
+                    <button (click)="updateTitle()" class="button ripple-effect" type="button"><span class="icon-feather-save"></span></button>
+                    <button (click)="discardTitle()" class="button gray ripple-effect" type="button"><span class="icon-feather-slash"></span></button>
+                  </div>
+                </div>
+              </div>
               <p>{{documentData._source.meta.description}}</p>
             </div>
           </div>

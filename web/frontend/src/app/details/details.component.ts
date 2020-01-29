@@ -18,7 +18,8 @@ export class DetailsComponent implements OnInit {
   documentData: SearchResult = new SearchResult();
   newTag: string = "";
   tagsAutocomplete = [];
-
+  editingTitle = false;
+  newTitle: string = "";
   similarDocuments: SearchResult[] = [];
 
   constructor(private es: ElasticsearchService, private apiService: ApiService, private activatedRoute: ActivatedRoute) { }
@@ -29,8 +30,6 @@ export class DetailsComponent implements OnInit {
     this.apiService.fetchTags()
       .subscribe(
         data => {
-
-          console.log("==== RETRIEVED TAGS", data)
           this.generateTagsAutocomplete(data)
         },
         error => console.error(error),
@@ -57,8 +56,6 @@ export class DetailsComponent implements OnInit {
   }
 
   bookmarkDocument(currentState){
-
-
     this.es.bookmarkDocument(this.documentData._id, !currentState)
       .subscribe(wrapper => {
           console.log("Successful update")
@@ -67,6 +64,7 @@ export class DetailsComponent implements OnInit {
             this.documentData._source.lodestone.bookmark = !currentState
           } else {
             this.documentData._source.lodestone = {
+              title: "",
               bookmark: !currentState,
               tags: []
             }
@@ -90,6 +88,7 @@ export class DetailsComponent implements OnInit {
             this.documentData._source.lodestone.tags.push(this.newTag)
           } else {
             this.documentData._source.lodestone = {
+              title: "",
               bookmark: false,
               tags: [this.newTag]
             }
@@ -148,4 +147,26 @@ export class DetailsComponent implements OnInit {
       }
     }
   }
+
+  updateTitle(){
+    this.es.updateDocumentTitle(this.documentData._id, this.newTitle)
+      .subscribe(wrapper => {
+          console.log("Successful update")
+          this.documentData._source.lodestone.title = this.newTitle;
+          this.newTitle = "";
+          this.editingTitle = false;
+        },
+        error => {
+          console.error("Failed update", error)
+        },
+        () => {
+          console.log("update finished")
+        }
+      );
+  }
+  discardTitle(){
+    this.newTitle = "";
+    this.editingTitle = false
+  }
+
 }

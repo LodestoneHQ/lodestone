@@ -130,6 +130,23 @@ export class ElasticsearchService {
     }).pipe(catchError(this.handleError));
   }
 
+  updateDocumentTitle(id: string, title: string): Observable<any> {
+    console.log("ADDING DOCUMENT TITLE", title)
+    return this.http.post(this.apiEndpoint('/api/v1/elastic/update'), {
+      id: id,
+      type: '_doc',
+      index: AppSettings.ES_INDEX,
+      body: {
+        // put the partial document under the `doc` key
+        doc: {
+          'lodestone': {
+            'title': title
+          }
+        }
+      }
+    }).pipe(catchError(this.handleError));
+  }
+
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html
   addDocumentTag(id: string, tag: string): Observable<any> {
     console.log("ADDING DOCUMENT TAG", tag)
@@ -362,9 +379,6 @@ export class ElasticsearchService {
       sortObj = [{
         "file.filename": {
           "order": "desc",
-          // "nested": {
-          //   "path": "file"
-          // }
         }
       }]
     }
