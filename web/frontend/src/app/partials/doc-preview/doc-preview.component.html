@@ -1,6 +1,4 @@
 <div class="doc-preview-wrapper">
-
-
   <!-- Render Browser Native file types: -->
   <img *ngIf="previewType(extension) == 'native'" [src]="path">
 
@@ -8,10 +6,12 @@
   <iframe *ngIf="previewType(extension) == 'iframe'" [src]="path"></iframe>
 
 
-  <!-- Render PDF's -->
-  <ng2-pdfjs-viewer *ngIf="previewType(extension) == 'pdf'" [pdfSrc]="path"></ng2-pdfjs-viewer>
-
   <!-- Render files that have a thirdparty library for processing  -->
+
+  <!-- Render PDF's -->
+  <ng2-pdfjs-viewer *ngIf="previewType(extension) == 'pdf'" openFile="false"></ng2-pdfjs-viewer>
+
+  <!-- Render anchor for non-angular native libraries -->
   <div *ngIf="previewType(extension) == 'third-party'" id="thirdPartyRender" class="well"></div>
 
   <div *ngIf="previewType(extension) == 'unsupported'">

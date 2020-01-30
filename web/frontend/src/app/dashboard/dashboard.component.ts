@@ -150,6 +150,7 @@ export class DashboardComponent implements OnInit {
   }
 
   thumbEndpoint(bucket: string, path: string){
+    path = path.split('/').map(part => encodeURIComponent(part)).join('/');
     return (environment.apiBase ? environment.apiBase: '') + '/storage/' + bucket +'/' + path;
   }
 

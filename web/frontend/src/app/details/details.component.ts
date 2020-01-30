@@ -123,6 +123,7 @@ export class DetailsComponent implements OnInit {
   }
 
   storageEndpoint(bucket: string, path: string){
+    path = path.split('/').map(part => encodeURIComponent(part)).join('/');
     return (environment.apiBase ? environment.apiBase: '') + '/storage/' + bucket +'/' + path;
   }
 

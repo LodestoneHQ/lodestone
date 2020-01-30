@@ -1,36 +1,47 @@
 // tslint:disable
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, AfterViewInit, ViewChild} from '@angular/core';
 import * as mammoth from '../../../../node_modules/mammoth/mammoth.browser.js';
 import {ApiService} from "../../services/api.service";
 import {RTFJS} from 'rtf.js';
 import * as $ from "jquery";
 import {environment} from "../../../environments/environment";
+import {PdfJsViewerComponent} from "ng2-pdfjs-viewer";
 
 @Component({
   selector: 'app-doc-preview',
   templateUrl: './doc-preview.component.html',
   styleUrls: ['./doc-preview.component.scss']
 })
-export class DocPreviewComponent implements OnInit {
+export class DocPreviewComponent implements AfterViewInit {
 
   @Input() extension: string;
   @Input() path: string;
 
-  renderers = {
-    'docx': this.renderDocx,
-    'rtf': this.renderRtf
-  }
+
+  thirdPartyRenderers = ['pdf', 'rtf', 'docx'];
+
+  @ViewChild(PdfJsViewerComponent, {static: false}) public pdfViewerAutoLoad: PdfJsViewerComponent;
+
   constructor(private api: ApiService) { }
 
-  ngOnInit() {
-
+  ngAfterViewInit() {
     if(this.previewType(this.extension) == 'third-party'){
-      this.api.fetchDocumentData(this.path)
+      this.api.fetchDocumentData(this.path, 'arraybuffer')
         .subscribe(
           arrBuffResp => {
-            console.log("SUCCESSFUL ARRYBUFFER")
-            this.renderers[this.extension](arrBuffResp.body)
+            this.chooseRenderer(this.extension, arrBuffResp.body)
+          },
+          err => console.error(err),
+          () => {
+            console.log("COMPLETE")
+          }
+        )
+    } else if(this.previewType(this.extension) == 'pdf') {
+      this.api.fetchDocumentData(this.path, 'blob')
+        .subscribe(
+          arrBuffResp => {
+            this.chooseRenderer(this.extension, arrBuffResp.body)
           },
           err => console.error(err),
           () => {
@@ -51,7 +62,7 @@ export class DocPreviewComponent implements OnInit {
     else if(extension == 'html'){
       return 'iframe' //uses iframe to render html.
     }
-    else if(this.renderers[extension]){
+    else if(this.thirdPartyRenderers.indexOf(extension) != -1){
       return 'third-party'
     } else {
       return 'unsupported'
@@ -59,6 +70,23 @@ export class DocPreviewComponent implements OnInit {
   }
 
   //Renderers
+  chooseRenderer = function(extension, data){
+    if(extension == 'docx'){
+      this.renderDocx(data)
+    }
+    else if(extension == 'rtf'){
+      this.renderRtf(data)
+    }
+    else if(extension == 'pdf'){
+      this.renderPdf(data)
+    }
+  }
+
+  renderPdf(data: Blob){
+    this.pdfViewerAutoLoad.pdfSrc = data;
+    this.pdfViewerAutoLoad.refresh();
+  }
+
   private renderDocx(data: ArrayBuffer) {
     console.log("REQUESTING MAMMOTH DOCUMENT.");
     mammoth.convertToHtml({arrayBuffer: data})

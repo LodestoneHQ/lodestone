@@ -107,7 +107,7 @@
 
               <!-- Details -->
               <div class="job-listing-description">
-                <h3 class="job-listing-title">{{result._source.meta.title || result._source.file.filename}}</h3>
+                <h3 class="job-listing-title">{{result._source.lodestone.title || result._source.meta.title || result._source.file.filename}}</h3>
               </div>
             </div>
 

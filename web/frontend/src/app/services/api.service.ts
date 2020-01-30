@@ -43,10 +43,9 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
-  fetchDocumentData(path: string): Observable<HttpResponse<ArrayBuffer>> {
-
+  fetchDocumentData(path: string, respType): Observable<HttpResponse<ArrayBuffer>> {
     return this.http.get(path, {
-      responseType: 'arraybuffer',
+      responseType: respType,
       observe: 'response'
     })
       .pipe(catchError(this.handleError));
