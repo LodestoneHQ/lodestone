@@ -19,29 +19,36 @@ export class DocPreviewComponent implements AfterViewInit {
   @Input() path: string;
 
 
-  thirdPartyRenderers = ['pdf', 'rtf', 'docx'];
+  thirdPartyRenderers = {
+    'pdf': {
+      fetchType: 'blob',
+      renderElem: 'pdf',
+      extensions: ['pdf']
+    },
+    'rtf': {
+      fetchType: 'arraybuffer',
+      renderElem: 'anchor',
+      extensions: ['rtf']
+    },
+    'docx': {
+      fetchType: 'arraybuffer',
+      renderElem: 'anchor',
+      extensions: ['docx', 'doc']
+    }
+  };
 
   @ViewChild(PdfJsViewerComponent, {static: false}) public pdfViewerAutoLoad: PdfJsViewerComponent;
 
   constructor(private api: ApiService) { }
 
   ngAfterViewInit() {
-    if(this.previewType(this.extension) == 'third-party'){
-      this.api.fetchDocumentData(this.path, 'arraybuffer')
+    let thirdPartyRenderType = this.renderType(this.extension)
+    let fetchData = this.thirdPartyRenderers[thirdPartyRenderType]
+    if(fetchData){
+      this.api.fetchDocumentData(this.path, fetchData.fetchType)
         .subscribe(
           arrBuffResp => {
-            this.chooseRenderer(this.extension, arrBuffResp.body)
-          },
-          err => console.error(err),
-          () => {
-            console.log("COMPLETE")
-          }
-        )
-    } else if(this.previewType(this.extension) == 'pdf') {
-      this.api.fetchDocumentData(this.path, 'blob')
-        .subscribe(
-          arrBuffResp => {
-            this.chooseRenderer(this.extension, arrBuffResp.body)
+            this.execRenderer(thirdPartyRenderType, arrBuffResp.body)
           },
           err => console.error(err),
           () => {
@@ -51,8 +58,8 @@ export class DocPreviewComponent implements AfterViewInit {
     }
 
   }
-
-  previewType(extension: string){
+  //given an extension (docx, doc, pdf, jpeg, gif, etc) determine the renderType (docx,native, iframe, etc)
+  renderType(extension: string){
     if(extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension ==  'gif'){
       return 'native' //browser native preview
     }
@@ -62,22 +69,26 @@ export class DocPreviewComponent implements AfterViewInit {
     else if(extension == 'html'){
       return 'iframe' //uses iframe to render html.
     }
-    else if(this.thirdPartyRenderers.indexOf(extension) != -1){
-      return 'third-party'
-    } else {
-      return 'unsupported'
+
+    //check if one of the third party renderers support this extension
+    for(let renderType of Object.keys(this.thirdPartyRenderers)){
+      if(this.thirdPartyRenderers[renderType].extensions.indexOf(extension) != -1){
+        return renderType
+      }
     }
+
+    return 'unsupported';
   }
 
   //Renderers
-  chooseRenderer = function(extension, data){
-    if(extension == 'docx'){
+  execRenderer = function(renderType, data){
+    if(renderType == 'docx'){
       this.renderDocx(data)
     }
-    else if(extension == 'rtf'){
+    else if(renderType == 'rtf'){
       this.renderRtf(data)
     }
-    else if(extension == 'pdf'){
+    else if(renderType == 'pdf'){
       this.renderPdf(data)
     }
   }
@@ -91,7 +102,7 @@ export class DocPreviewComponent implements AfterViewInit {
     console.log("REQUESTING MAMMOTH DOCUMENT.");
     mammoth.convertToHtml({arrayBuffer: data})
       .then((result) => {
-        document.getElementById("thirdPartyRender").innerHTML = result.value;
+        document.getElementById("thirdPartyAnchor").innerHTML = result.value;
         console.log(result.messages)
         // var messageHtml = result.messages.map(function(message) {
         //   return '<li class="' + message.type + '">' + message.message + "</li>";
@@ -108,7 +119,7 @@ export class DocPreviewComponent implements AfterViewInit {
     const meta = doc.metadata();
     doc.render().then(function(htmlElements) {
       console.log(meta);
-      //TODO: document.getElementById("thirdPartyRender").append(htmlElements)
+      //TODO: document.getElementById("thirdPartyAnchor").append(htmlElements)
     }).catch(error => console.error(error))
   }
 }
