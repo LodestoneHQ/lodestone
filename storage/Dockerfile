@@ -25,3 +25,5 @@ RUN apk add --no-cache ca-certificates shadow && \
     chmod +x /usr/bin/mc && apk del .build-deps
 
 ENTRYPOINT ["/init"]
+
+HEALTHCHECK --interval=5s --timeout=25s --retries=5 CMD curl --silent --fail localhost:9000/minio/health/ready || exit 1

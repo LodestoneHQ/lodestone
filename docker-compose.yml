@@ -2,11 +2,6 @@ version: '2.2'
 services:
   elasticsearch:
     image: analogj/lodestone:elasticsearch
-    healthcheck:
-      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
-      interval: 30s
-      timeout: 30s
-      retries: 3
     environment:
       #      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -59,11 +54,6 @@ services:
       - RABBITMQ_PASS=lodestone
   storage:
     image: analogj/lodestone:storage
-    healthcheck:
-      test: ["CMD-SHELL", "curl --silent --fail localhost:9000/minio/health/ready || exit 1"]
-      interval: 30s
-      timeout: 30s
-      retries: 3
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -125,11 +115,6 @@ services:
 
   tika:
     image: analogj/lodestone:tika
-    healthcheck:
-      test: "curl --silent --fail localhost:9998/tika || exit 1"
-      interval: 5s
-      timeout: 5s
-      retries: 5
     networks:
       - lodenet
 
