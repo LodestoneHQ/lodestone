@@ -318,8 +318,8 @@ export class ElasticsearchService {
       filterRules.push({
         "range": {
             "file.created": {
-                "gte": _filter.timeRange[0],
-                "lte": _filter.timeRange[1]
+                "gte": _filter.timeRange[0].toJSON() + '||/d',
+                "lte": _filter.timeRange[1].toJSON() + '||/d'
             }
         }
       })
