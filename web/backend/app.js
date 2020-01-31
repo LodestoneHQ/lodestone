@@ -28,7 +28,7 @@ app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/status', statusRouter);
 app.use('/api/v1/elastic', elasticRouter);
 app.use('/api/v1/sync', syncRouter);
-app.use('/', function(req, res, next) {
-    res.redirect('/web');
-});
+// app.use('/', function(req, res, next) {
+//     res.redirect('/web');
+// });
 module.exports = app;
