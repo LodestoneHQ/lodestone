@@ -22,6 +22,7 @@
                    [minDate]="globalLimits.minDate"
                    bsDaterangepicker
                    [bsConfig]="{ adaptivePosition: true }"
+                   [bsValue]="minMaxDateValue"
                    (bsValueChange)="filterTimeRange($event)">
             <i class="icon-line-awesome-calendar"></i>
           </div>

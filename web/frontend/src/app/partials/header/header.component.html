@@ -33,7 +33,7 @@
                 container="body"
                 placement="bottom"
                 triggers=""
-                ngModel
+                [(ngModel)]="queryValue"
                 #pop="bs-popover"
                 (keydown.enter)="pop.hide()"
                 (ngModelChange)="filterQuery($event)"

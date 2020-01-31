@@ -2,7 +2,7 @@ export class DashboardFilter {
   page: number = 1; //1 based indexing
 
   query: string;
-  timeRange: Date[];
+  timeRange: Date[] = [];
   fileTypes: string[] = [];
   fileSizes:  number[] = [];
   tags: string[] = [];

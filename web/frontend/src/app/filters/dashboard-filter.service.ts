@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {DashboardFilter} from "../models/dashboard-filter";
+import {Params} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -99,6 +100,40 @@ export class DashboardFilterService {
     filter.page = 1;
     filter.bookmark = nextBookmark;
     this.filterSource.next(filter);
+  }
+
+  filterSet(nextFilter: DashboardFilter){
+    this.filterSource.next(nextFilter)
+  }
+
+  filterSetFromParams(nextFilterData: Params){
+    var nextFilter = new DashboardFilter()
+    if(nextFilterData.page){
+      nextFilter.page = parseInt(nextFilterData.page)
+    }
+    if(nextFilterData.query){
+      nextFilter.query = nextFilterData.query
+    }
+    if(nextFilterData.timeRange){
+      nextFilter.timeRange = nextFilterData.timeRange.split(',').map((dateStr) => new Date(dateStr))
+    }
+    if(nextFilterData.fileTypes){
+      nextFilter.fileTypes = nextFilterData.fileTypes.split(',')
+    }
+    if(nextFilterData.fileSizes){
+      nextFilter.fileSizes = nextFilterData.fileSizes.split(',').map((fileStr) => parseInt(fileStr))
+    }
+    if(nextFilterData.tags){
+      nextFilter.tags = nextFilterData.tags.split(',')
+    }
+    if(nextFilterData.sortBy){
+      nextFilter.sortBy = nextFilterData.sortBy
+    }
+    if(nextFilterData.bookmark){
+      nextFilter.bookmark = (nextFilterData.bookmark === 'true')
+    }
+    this.filterSource.next(nextFilter);
+    return nextFilter;
   }
 
   filterClear(){

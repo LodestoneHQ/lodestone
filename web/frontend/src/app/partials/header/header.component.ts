@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DashboardFilterService} from "../../filters/dashboard-filter.service";
-import {Router} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -8,14 +8,20 @@ import {Router} from "@angular/router";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
-  constructor(private filterService: DashboardFilterService, private router: Router) { }
+  queryValue: string = "";
+  constructor(private filterService: DashboardFilterService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.activatedRoute.params.subscribe(params => {
+      this.queryValue = params.query
+    })
   }
 
   showSearchBar(): boolean {
-    return this.router.url === '/dashboard'
+    const urlTree = this.router.parseUrl(this.router.url);
+    const urlWithoutParams = urlTree.root.children['primary'].segments.map(it => it.path).join('/');
+    console.log(this.router.url, urlWithoutParams)
+    return urlWithoutParams === 'dashboard'
   }
 
   filterQuery(query: string){

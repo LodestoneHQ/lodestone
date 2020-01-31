@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {ElasticsearchService} from "../services/elasticsearch.service";
 import {DashboardFilter} from "../models/dashboard-filter";
 import {DashboardFilterService} from "../filters/dashboard-filter.service";
@@ -7,6 +8,7 @@ import {AppSettings} from "../app-settings";
 import {environment} from "../../environments/environment";
 import { Options } from 'ng5-slider';
 import * as filesize from 'filesize'
+import {Router, ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -28,6 +30,7 @@ export class DashboardComponent implements OnInit {
     }
   };
 
+  minMaxDateValue: Date[] = [];
 
   //aggregation/filter data & limits
   globalLimits = {
@@ -37,7 +40,14 @@ export class DashboardComponent implements OnInit {
     sortBy: AppSettings.SORT_BY_OPTIONS
   }
 
-  constructor(private es: ElasticsearchService, private filterService: DashboardFilterService) {}
+  constructor(
+    private es: ElasticsearchService,
+    private filterService: DashboardFilterService,
+    private location: Location,
+    private route: Router,
+    private activatedRoute: ActivatedRoute,
+
+  ) {}
 
   filter: DashboardFilter = new DashboardFilter();
 
@@ -59,18 +69,51 @@ export class DashboardComponent implements OnInit {
     //     console.error("PING FAILED", error)
     //   }
     // )
+    this.activatedRoute.params.subscribe(params => {
+      var parsedFilter = this.filterService.filterSetFromParams(params);
+      if(parsedFilter.fileSizes.length > 0){
+        //setting the max/min values for filesize slider
+        const newOptions: Options = Object.assign({}, this.sliderOptions);
+        newOptions.floor = 0;
+        newOptions.ceil = parsedFilter.fileSizes[1]+100;
+        this.sliderOptions = newOptions;
+        this.minFileSizeValue = parsedFilter.fileSizes[0];
+        this.maxFileSizeValue = parsedFilter.fileSizes[1];
+      }
+      if(parsedFilter.timeRange.length > 0){
+        //setting the max/min dates
+        this.minMaxDateValue = parsedFilter.timeRange;
+      }
+    })
 
     this.getGlobalLimits()
 
     this.filterService.currentFilter.subscribe(filter => {
+
       this.currentPage = filter.page
       this.filter = filter;
       this.queryDocuments()
+
+      // change the browser url whenever the filter is updated.
+      this.updateBrowserUrl()
     })
 
     //set the filter to nothing, so that we can trigger a document query (works even when pressing back button)
-    this.filterService.filterClear()
+    // this.filterService.filterClear()
   }
+
+  updateBrowserUrl(){
+    //deep copy current filter (So we can encode
+    var clonedFilter = JSON.parse(JSON.stringify(this.filter));
+    if(this.filter.timeRange && this.filter.timeRange.length){
+      clonedFilter.timeRange = this.filter.timeRange.map(item => item.toJSON());
+    }
+    const url = this.route
+      .createUrlTree([clonedFilter], {relativeTo: this.activatedRoute})
+      .toString();
+    this.location.replaceState(url);
+  }
+
 
   bookmarkDocument(doc:SearchResult, currentState:boolean){
     this.es.bookmarkDocument(doc._id, !currentState)
@@ -130,18 +173,14 @@ export class DashboardComponent implements OnInit {
   }
 
   filterTimeRange(timeRange: Date[]){
-    console.log("Filter timeRange:", timeRange);
-
     this.filterService.filterTimeRange(timeRange);
   }
 
   filterFileSize(data: any){
-    console.log("FILTER FILESIZE", data)
     this.filterService.filterFileSize([this.minFileSizeValue, this.maxFileSizeValue])
   }
 
   filterBookmark(bookmark: boolean){
-    console.log("FILTER Bookmark", bookmark)
     this.filterService.filterBookmark(bookmark)
   }
 
@@ -167,8 +206,11 @@ export class DashboardComponent implements OnInit {
           newOptions.ceil = wrapper.aggregations.by_filesize.max;
           this.sliderOptions = newOptions;
 
-          this.minFileSizeValue = wrapper.aggregations.by_filesize.min;
-          this.maxFileSizeValue = wrapper.aggregations.by_filesize.max;
+          if(this.minFileSizeValue == 0 && this.maxFileSizeValue == 0) {
+            //if there's no filter value set,
+            this.minFileSizeValue = wrapper.aggregations.by_filesize.min;
+            this.maxFileSizeValue = wrapper.aggregations.by_filesize.max;
+          }
         },
         error => {
           console.error("documents FAILED", error)
@@ -183,6 +225,8 @@ export class DashboardComponent implements OnInit {
 
   private queryDocuments() {
     //TODO: pass filter to function.
+    // this.location.replaceState('/dashboard','', this.filter)
+
     this.es.searchDocuments(this.filter)
       .subscribe(wrapper => {
           console.log("documents", wrapper);
@@ -204,7 +248,6 @@ export class DashboardComponent implements OnInit {
 
         }
       );
-
   }
 
 }
