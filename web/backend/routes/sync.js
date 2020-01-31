@@ -14,18 +14,22 @@ var minioClient = new Minio.Client({
 /* POST sync the document bucket with elasticsearch
 * Basically do a loop of all files in the bucket and ensure they all exist in elasticsearch
 *   */
-router.get('bucket', function(req, res, next) {
+router.get('/bucket', function(req, res, next) {
+    let items = [];
     var stream = minioClient.listObjects('documents','', true);
-    stream.on('data', function(obj) { res.json(obj) } );
+    stream.on('data', function(obj) { items.push(obj) } );
     stream.on('error', function(err) { console.log(err) } );
+    stream.on('end', function() { res.json(items) } );
+
 });
 
 
 /* POST sync a specific with elasticsearch (update operation)
  * Should regenerate missing thumbnails as well
  */
-router.get('file', function(req, res, next) {
+router.get('/file', function(req, res, next) {
     res.sendFile(path.resolve(__dirname, '../public/index.html') )
 });
 
 module.exports = router;
+

@@ -1,5 +1,14 @@
 #!/usr/bin/with-contenv bash
 
+if [ ! -z "$DISABLE_FRONTEND" ]; then
+    # hack: this is run-once service
+    # stop the s6-supervise process and ensure that its not started again
+    s6-svc -x /var/run/s6/services/frontend
+    rm -rf /var/run/s6/services/frontend
+    exit 0
+fi
+
+
 cd /lodestone/frontend
 rm -rf node_modules
 npm install

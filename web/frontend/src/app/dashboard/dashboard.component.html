@@ -104,7 +104,7 @@
         <div *ngFor="let result of searchResults" class="job-listing">
 
           <!-- Simple Card Listing -->
-          <div [routerLink]="'/details/' + result._id" class="job-listing-details cursor_pointer">
+          <a [routerLink]="'/details/' + result._id" class="job-listing-details cursor_pointer">
             <!-- Logo -->
             <div class="job-listing-company-logo">
               <img [src]="thumbEndpoint(result._source.storage.thumb_bucket, result._source.storage.thumb_path)" alt="">
@@ -115,7 +115,7 @@
               <h3 class="job-listing-title">{{result._source.lodestone.title || result._source.meta.title || result._source.file.filename}}</h3>
 
             </div>
-          </div>
+          </a>
 
           <!-- Job Listing Footer -->
           <div class="job-listing-footer">
@@ -135,7 +135,7 @@
         <div *ngFor="let result of searchResults" class="task-listing">
 
           <!-- Job Listing Details -->
-          <div class="task-listing-details cursor_pointer" [routerLink]="'/details/' + result._id">
+          <a class="task-listing-details cursor_pointer" [routerLink]="'/details/' + result._id">
 
             <!-- Details -->
             <div class="task-listing-description">
@@ -149,7 +149,7 @@
               </div>
             </div>
 
-          </div>
+          </a>
 
           <div class="task-listing-bid">
             <div class="task-listing-bid-inner">
