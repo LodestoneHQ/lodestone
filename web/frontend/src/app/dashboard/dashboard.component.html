@@ -147,7 +147,7 @@
               </ul>
               <p *ngFor="let highlight of result?.highlight?.content" class="task-listing-text" [innerHTML]="highlight"></p>
               <div *ngIf="result._source.lodestone.tags" class="task-tags">
-                {{result._source.lodestone.tags}}
+                <span *ngFor="let tag of result._source.lodestone?.tags">{{tag}}</span>
               </div>
             </div>
 
