@@ -1,142 +1,104 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {DashboardFilter} from "../models/dashboard-filter";
-import {Params} from "@angular/router";
+import {ActivatedRoute, Params} from "@angular/router";
+import {Form, FormBuilder, FormGroup} from "@angular/forms";
+import {Options} from "ng5-slider";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardFilterService {
 
-  private filterSource = new BehaviorSubject(new DashboardFilter());
-  currentFilter = this.filterSource.asObservable();
+  filterForm = this.formBuilder.group({
+    page: [1],
+    query: [''],
+    dateRange: [[]],
+    fileTypes: this.formBuilder.group({}),
+    tags: this.formBuilder.array([]),
+    fileSizes: [[0, 0]],
+    sortBy:['relevance'],
+    bookmarked: [false]
+  })
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder) {}
 
+  convertParamsToForm(paramsData:Params): any {
+    var updateData: {
+      page?: number,
+      query?: string,
+      dateRange?: Date[],
+      fileTypes?: [],
+      tags?: [],
+      fileSizes?: [],
+      sortBy?: string,
+      bookmarked?: boolean
+    } = {};
 
-  filterPage(nextPage: number) {
-    var filter = this.filterSource.getValue()
-    filter.page = nextPage
-    this.filterSource.next(filter);  }
-
-  filterQuery(nextQuery: string) {
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.query = nextQuery
-    this.filterSource.next(filter);
-  }
-
-  filterTimeRange(nextTimeRange: Date[]) {
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.timeRange = nextTimeRange;
-    this.filterSource.next(filter);
-  }
-
-  filterFileTypeAdd(newFileType: string){
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.fileTypes.push(newFileType);
-    this.filterSource.next(filter);
-  }
-
-  filterFileTypeRemove(removeFileType: string){
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    const index: number = filter.fileTypes.indexOf(removeFileType);
-    if (index !== -1) {
-      filter.fileTypes.splice(index, 1);
+    if(paramsData.page){
+      updateData.page = parseInt(paramsData.page)
     }
-    this.filterSource.next(filter);
-  }
-
-  filterFileTypes(nextFileTypes: string[]) {
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.fileTypes = nextFileTypes;
-    this.filterSource.next(filter);
-  }
-
-  filterTagAdd(newTag: string){
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.tags.push(newTag);
-    this.filterSource.next(filter);
-  }
-
-  filterTagRemove(removeTag: string){
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    const index: number = filter.tags.indexOf(removeTag);
-    if (index !== -1) {
-      filter.tags.splice(index, 1);
+    if(paramsData.query){
+      updateData.query = paramsData.query
     }
-    this.filterSource.next(filter);
+    if(paramsData.dateRange){
+      updateData.dateRange = paramsData.dateRange.split(',').map((dateStr) => new Date(dateStr))
+    }
+    if(paramsData.fileTypes){
+      console.log("TODO: UPDATE FORM FILETYPES", paramsData.fileTypes)
+      // updateData.fileTypes = paramsData.fileTypes.split(',')
+    }
+    if(paramsData.fileSizes){
+      updateData.fileSizes = paramsData.fileSizes.split(',').map((fileStr) => parseInt(fileStr))
+    }
+    if(paramsData.tags){
+      updateData.tags = paramsData.tags.split(',')
+    }
+    if(paramsData.sortBy){
+      updateData.sortBy = paramsData.sortBy
+    }
+    if(paramsData.bookmarked){
+      updateData.bookmarked = (paramsData.bookmarked === 'true')
+    }
+    return updateData;
   }
 
-  filterTags(nextTags: string[]) {
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.tags = nextTags;
-    this.filterSource.next(filter);
+  convertFormToDashboardFilter(form): DashboardFilter {
+
+    var dashboardFilter = new DashboardFilter();
+
+    if(form.page){
+      dashboardFilter.page = form.page;
+    }
+    if(form.query){
+      dashboardFilter.query = form.query;
+    }
+    if(form.dateRange && form.dateRange.length > 0){
+      dashboardFilter.dateRange = form.dateRange;
+    }
+    if(form.fileTypes){
+      dashboardFilter.fileTypes = [];
+      Object.keys(form.fileTypes).forEach((key) => {
+        if (form.fileTypes[key]) {
+          dashboardFilter.fileTypes.push(key);
+        }
+      })
+      // form.fileTypes.forEach()
+    }
+    if(form.tags && form.tags.length > 0){
+      dashboardFilter.tags = form.tags;
+    }
+    if(form.fileSizes && form.fileSizes.length > 0){
+      dashboardFilter.fileSizes = form.fileSizes;
+    }
+    if(form.sortBy){
+      dashboardFilter.sortBy = form.sortBy;
+    }
+    if(form.bookmarked){
+      dashboardFilter.bookmarked = form.bookmarked;
+    }
+
+    return dashboardFilter
   }
 
-  filterFileSize(nextFileSizes: number[]){
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.fileSizes = nextFileSizes;
-    this.filterSource.next(filter);
-  }
-
-  filterSortBy(nextSortBy: string) {
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.sortBy = nextSortBy;
-    this.filterSource.next(filter);
-  }
-
-  filterBookmark(nextBookmark: boolean){
-    var filter = this.filterSource.getValue()
-    filter.page = 1;
-    filter.bookmark = nextBookmark;
-    this.filterSource.next(filter);
-  }
-
-  filterSet(nextFilter: DashboardFilter){
-    this.filterSource.next(nextFilter)
-  }
-
-  filterSetFromParams(nextFilterData: Params){
-    var nextFilter = new DashboardFilter()
-    if(nextFilterData.page){
-      nextFilter.page = parseInt(nextFilterData.page)
-    }
-    if(nextFilterData.query){
-      nextFilter.query = nextFilterData.query
-    }
-    if(nextFilterData.timeRange){
-      nextFilter.timeRange = nextFilterData.timeRange.split(',').map((dateStr) => new Date(dateStr))
-    }
-    if(nextFilterData.fileTypes){
-      nextFilter.fileTypes = nextFilterData.fileTypes.split(',')
-    }
-    if(nextFilterData.fileSizes){
-      nextFilter.fileSizes = nextFilterData.fileSizes.split(',').map((fileStr) => parseInt(fileStr))
-    }
-    if(nextFilterData.tags){
-      nextFilter.tags = nextFilterData.tags.split(',')
-    }
-    if(nextFilterData.sortBy){
-      nextFilter.sortBy = nextFilterData.sortBy
-    }
-    if(nextFilterData.bookmark){
-      nextFilter.bookmark = (nextFilterData.bookmark === 'true')
-    }
-    this.filterSource.next(nextFilter);
-    return nextFilter;
-  }
-
-  filterClear(){
-    this.filterSource.next(new DashboardFilter())
-  }
 }

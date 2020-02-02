@@ -313,13 +313,13 @@ export class ElasticsearchService {
       filterRules.push({ "terms":  { "lodestone.tags": _filter.tags }})
     }
 
-    if(_filter.timeRange && _filter.fileSizes.length){
+    if(_filter.dateRange && _filter.dateRange.length){
 
       filterRules.push({
         "range": {
             "file.created": {
-                "gte": _filter.timeRange[0].toJSON() + '||/d',
-                "lte": _filter.timeRange[1].toJSON() + '||/d'
+                "gte": _filter.dateRange[0].toJSON() + '||/d',
+                "lte": _filter.dateRange[1].toJSON() + '||/d'
             }
         }
       })
@@ -337,11 +337,11 @@ export class ElasticsearchService {
       })
     }
 
-    if(_filter.bookmark){
+    if(_filter.bookmarked){
 
       filterRules.push({
         "term": {
-          "lodestone.bookmark": _filter.bookmark
+          "lodestone.bookmark": _filter.bookmarked
         }
       })
     }
