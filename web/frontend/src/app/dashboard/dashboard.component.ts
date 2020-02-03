@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
   //customize slider plugin
   sliderOptions: Options = {
     floor: 0,
-    ceil: 0,
+    ceil: 100_000_000, //100mb ceiling, overrides when global data returned.
     // showTicks: true,
     translate: (value: number): string => {
       const size = filesize.partial({ round: 0});
@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  filterForm =  this.filterService.filterForm;
+  filterForm = this.filterService.filterForm;
 
   searchResults: SearchResult[] = [];
 
@@ -78,18 +78,35 @@ export class DashboardComponent implements OnInit {
     })
 
     this.activatedRoute.params.subscribe((params: Params) => {
+      if(Object.keys(params).length === 0){
+        //if no ch
+        return
+      }
       //this should only change when angular detects a page change (not when we set the route manually for deeplinking in updateBrowserUrl)
       console.log("ROUTE PARAMS CHANGED IN SERVICE", params)
       var updatedFormFields = this.filterService.convertParamsToForm(params)
       console.log("UPDATED FORM FIELDS", updatedFormFields, this.filterForm.value)
-      if(updatedFormFields.fileSizes && this.sliderOptions.floor === 0 && this.sliderOptions.ceil === 0){
+      if(updatedFormFields.fileSizes && this.sliderOptions.floor === 0 && this.sliderOptions.ceil === 100_000_000){
         //setting the max/min values for filesize slider
+        console.log("RESETTING THE SLIDER MAX VALUE", updatedFormFields.fileSizes[1])
         const newOptions: Options = Object.assign({}, this.sliderOptions);
         newOptions.floor = 0;
         newOptions.ceil = updatedFormFields.fileSizes[1];
         this.sliderOptions = newOptions;
       }
-      this.filterForm.patchValue(updatedFormFields, {emitEvent: false});
+
+
+      //ensure that checkbox list values exist before trying to "patch" them in.
+      if(updatedFormFields.fileTypes){
+        var currentFileTypes = this.filterForm.get('fileTypes').value;
+        Object.keys(updatedFormFields.fileTypes).forEach((bucketKey) => {
+          if(!currentFileTypes.hasOwnProperty(bucketKey)){
+            (this.filterForm.get('fileTypes') as FormGroup).addControl(bucketKey, new FormControl(false))
+          }
+        })
+      }
+
+      this.filterForm.patchValue(updatedFormFields);
 
       // if(parsedFilter.timeRange.length > 0){
       //   //setting the max/min dates
@@ -142,6 +159,7 @@ export class DashboardComponent implements OnInit {
 
 
   filterSortBy(filterSortBy: string){
+    console.log("[MODIFY] Setting update form because of filter sort by", this.filterForm.value, filterSortBy)
     this.filterForm.patchValue({
       sortBy: filterSortBy
     })
@@ -171,18 +189,19 @@ export class DashboardComponent implements OnInit {
           var fileSizes = this.filterForm.get('fileSizes').value;
           console.log("CURRENT FILESIZES WHEN GLOBAL DATA LOADED", fileSizes)
           if(fileSizes.length == 0 || (fileSizes[0] === 0 && fileSizes[1] === 0)) {
-            console.log("SETTING new filesizes.",  [wrapper.aggregations.by_filesize.min, wrapper.aggregations.by_filesize.max])
+            var fileSizeArr = [wrapper.aggregations.by_filesize.min, wrapper.aggregations.by_filesize.max]
+            console.log("[MODIFY] Setting new filesizes because of Global Data", this.filterForm.value, fileSizeArr)
             //if there's no filter value set,
-            this.filterForm.patchValue({
-              fileSizes: [wrapper.aggregations.by_filesize.min, wrapper.aggregations.by_filesize.max]
+            this.filterService.filterForm.patchValue({
+              fileSizes: fileSizeArr
             }, {emitEvent:false})
           }
         },
         error => {
-          console.error("documents FAILED", error)
+          console.error("global limits FAILED", error)
         },
         () => {
-          console.log("documents finished")
+          console.log("global limits finished")
 
         }
       );
@@ -203,27 +222,19 @@ export class DashboardComponent implements OnInit {
           this.resultLimits.tagBuckets = wrapper.aggregations.by_tag.buckets;
 
 
-          console.log(this.resultLimits.fileTypeBuckets)
 
-          var fileTypeControls = this.filterForm.get('fileTypes') as FormGroup;
-          this.resultLimits.fileTypeBuckets.forEach((option: any) => {
-            if(option.key && !fileTypeControls.contains(option.key)){
-              fileTypeControls.addControl(option.key, new FormControl(false));
+          var currentFileTypes = this.filterForm.get('fileTypes').value;
+          this.resultLimits.fileTypeBuckets.forEach((bucketData) => {
+            if(!currentFileTypes.hasOwnProperty(bucketData.key)){
+              (this.filterForm.get('fileTypes') as FormGroup).addControl(bucketData.key, new FormControl(false))
             }
-          });
+          })
 
-          //
-          //
-          // //this should clear out the controls without generating an event (which would cause an inf loop)
-          // fileTypeControls.controls.splice(0, fileTypeControls.controls.length)
-          //
-          // this.resultLimits.fileTypeBuckets.forEach((o, i) => {
-          //   console.log("ADDING FILETTYPEBUCKET", o, i)
-          //   const control = new FormControl(i === 0); // if first item set to true, else false
-          //   // this should (re)add a control without causing a form event (which would cause an inf loop)
-          //   fileTypeControls.controls.push(control)
+          // const fileTypes = <FormGroup>this.filterForm.get('fileTypes');
+          // fileTypes.forEach((option: any) => {
+          //   checkboxes.addControl(option.title, new FormControl(true));
           // });
-          // // this.filterForm.controls.fileTypes.setValue(fileTypeControls)
+
         },
         error => {
           console.error("documents FAILED", error)
@@ -233,6 +244,9 @@ export class DashboardComponent implements OnInit {
         }
       );
   }
+
+
+
 
   bucketDocCount(buckets: { [key: string]:any; }[], key){
 

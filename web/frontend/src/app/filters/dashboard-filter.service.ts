@@ -16,7 +16,7 @@ export class DashboardFilterService {
     dateRange: [[]],
     fileTypes: this.formBuilder.group({}),
     tags: this.formBuilder.array([]),
-    fileSizes: [[0, 0]],
+    fileSizes: this.formBuilder.control([0, 100_000_000]),
     sortBy:['relevance'],
     bookmarked: [false]
   })
@@ -28,7 +28,7 @@ export class DashboardFilterService {
       page?: number,
       query?: string,
       dateRange?: Date[],
-      fileTypes?: [],
+      fileTypes?: {},
       tags?: [],
       fileSizes?: [],
       sortBy?: string,
@@ -45,8 +45,10 @@ export class DashboardFilterService {
       updateData.dateRange = paramsData.dateRange.split(',').map((dateStr) => new Date(dateStr))
     }
     if(paramsData.fileTypes){
-      console.log("TODO: UPDATE FORM FILETYPES", paramsData.fileTypes)
-      // updateData.fileTypes = paramsData.fileTypes.split(',')
+      updateData.fileTypes = updateData.fileTypes ? updateData.fileTypes : {};
+      for(let fileType of paramsData.fileTypes.split(',')){
+        updateData.fileTypes[fileType] = true;
+      }
     }
     if(paramsData.fileSizes){
       updateData.fileSizes = paramsData.fileSizes.split(',').map((fileStr) => parseInt(fileStr))
@@ -83,7 +85,6 @@ export class DashboardFilterService {
           dashboardFilter.fileTypes.push(key);
         }
       })
-      // form.fileTypes.forEach()
     }
     if(form.tags && form.tags.length > 0){
       dashboardFilter.tags = form.tags;
