@@ -37,6 +37,10 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  scanStorage(): Observable<any> {
+    return this.http.post<any>((environment.apiBase ? environment.apiBase: '') + '/api/v1/sync/bucket', {})
+      .pipe(catchError(this.handleError));
+  }
 
   fetchStatus(): Observable<StatusResult> {
     return this.http.get<StatusResult>((environment.apiBase ? environment.apiBase: '') + '/api/v1/status')

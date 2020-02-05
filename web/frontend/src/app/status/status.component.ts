@@ -26,5 +26,18 @@ export class StatusComponent implements OnInit {
       },
     );
   }
+  scanMissing(){
+    //scan for missing documents
+    this.apiService.scanStorage().subscribe(result => {
+        console.log("Successful scan");
+        console.log(result);
+
+        this.statusResult = result
+      },
+      error => {
+        console.error("Failed scan", error)
+      },
+    );
+  }
 
 }
