@@ -57,7 +57,6 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     TypeaheadModule.forRoot(),
     Ng5SliderModule,
     CollapseModule.forRoot(),
-
   ],
   providers: [],
   bootstrap: [AppComponent]

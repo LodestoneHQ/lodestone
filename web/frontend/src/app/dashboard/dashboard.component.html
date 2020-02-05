@@ -66,12 +66,35 @@
         <div class="sidebar-widget">
           <h3>Tags</h3>
 
-          <div class="tags-container">
-            <div *ngFor="let tag of resultLimits.tagBuckets" class="tag">
-              {{tag}}
-            </div>
+          <ng-template #customItemTemplate let-model="item" let-index="index">
+            <h5>{{model.name}}
+              <span *ngIf="!(filterForm.get('tags').get(model.id) || {}).value" class="badge badge-primary">{{bucketDocCount(resultLimits.tagBuckets, model.id)}}</span>
+            </h5>
+          </ng-template>
+
+          <input *ngIf="globalLimits.tags.length > 0" type="text"
+                 [(ngModel)]="newTag"
+                 [ngModelOptions]="{standalone: true}"
+                 (typeaheadOnSelect)="filterAddTag($event)"
+                 [typeahead]="globalLimits.tags"
+                 typeaheadOptionField="id"
+                 typeaheadGroupField="group"
+                 [typeaheadMinLength]="0"
+                 [typeaheadOptionsLimit]="1000"
+                 [typeaheadScrollable]="true"
+                 [typeaheadOptionsInScrollableView]="12"
+                 [typeaheadWaitMs]="200"
+                 [typeaheadItemTemplate]="customItemTemplate"
+                 typeaheadPhraseDelimiters="&,-"
+                 class="keyword-input with-border mb-4" placeholder="Filter by Tag">
+
+
+          <div formGroupName="tags" class="switches-list">
+              <tag-checkbox *ngFor="let tag of filterForm.get('tags').value | keyvalue" [tagName]="tag.key" [formControlName]="tag.key"></tag-checkbox>
+            <div class="clearfix">
           </div>
-          <div class="clearfix"></div>
+
+          </div>
         </div>
 
       </div>

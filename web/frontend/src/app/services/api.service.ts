@@ -56,4 +56,33 @@ export class ApiService {
     //         .catch(this.handleError))
   }
 
+
+  // Helper functions
+
+  transformTagsAutocomplete(availableTags: Tag): any[] {
+    let tagsAutoComplete = []
+    //add untagged tag
+    tagsAutoComplete.push({
+      id: 'untagged',
+      name: 'untagged',
+      group: 'custom'
+    })
+    for(let tagGroup of availableTags.tags){
+      if (!tagGroup.tags){
+        continue
+      }
+
+      for(let tagName of tagGroup.tags){
+        tagsAutoComplete.push({
+          id: `${tagGroup.label}.${tagName.label}`,
+          name: tagName.label,
+          group: tagGroup.label
+        })
+      }
+    }
+
+
+
+    return tagsAutoComplete
+  }
 }

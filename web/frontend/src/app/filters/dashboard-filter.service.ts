@@ -15,7 +15,7 @@ export class DashboardFilterService {
     query: [''],
     dateRange: [[]],
     fileTypes: this.formBuilder.group({}),
-    tags: this.formBuilder.array([]),
+    tags: this.formBuilder.group({}),
     fileSizes: this.formBuilder.control([0, 100_000_000]),
     sortBy:['relevance'],
     bookmarked: [false]
@@ -29,7 +29,7 @@ export class DashboardFilterService {
       query?: string,
       dateRange?: Date[],
       fileTypes?: {},
-      tags?: [],
+      tags?: {},
       fileSizes?: [],
       sortBy?: string,
       bookmarked?: boolean
@@ -54,7 +54,10 @@ export class DashboardFilterService {
       updateData.fileSizes = paramsData.fileSizes.split(',').map((fileStr) => parseInt(fileStr))
     }
     if(paramsData.tags){
-      updateData.tags = paramsData.tags.split(',')
+      updateData.tags = updateData.tags ? updateData.tags : {};
+      for(let tag of paramsData.tags.split(',')){
+        updateData.tags[tag] = true;
+      }
     }
     if(paramsData.sortBy){
       updateData.sortBy = paramsData.sortBy
@@ -86,8 +89,13 @@ export class DashboardFilterService {
         }
       })
     }
-    if(form.tags && form.tags.length > 0){
-      dashboardFilter.tags = form.tags;
+    if(form.tags){
+      dashboardFilter.tags = [];
+      Object.keys(form.tags).forEach((key) => {
+        if (form.tags[key]) {
+          dashboardFilter.tags.push(key);
+        }
+      })
     }
     if(form.fileSizes && form.fileSizes.length > 0){
       dashboardFilter.fileSizes = form.fileSizes;

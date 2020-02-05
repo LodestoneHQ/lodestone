@@ -11,6 +11,8 @@ import * as filesize from 'filesize'
 import {Router, ActivatedRoute, Params} from "@angular/router";
 import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {debounceTime} from "rxjs/operators";
+import {ApiService} from "../services/api.service";
+import {TypeaheadMatch} from "ngx-bootstrap";
 
 
 @Component({
@@ -31,12 +33,28 @@ export class DashboardComponent implements OnInit {
     }
   };
 
+  //customize tags dropdown
+  tagsDropdownOptions = {
+    singleSelection: true,
+    text: "Select Tags",
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    searchPlaceholderText: 'Search Tags',
+    enableSearchFilter: true,
+    badgeShowLimit: 5,
+    // groupBy: "group",
+    labelKey: "name",
+    primaryKey: 'id',
+
+  };
+
   //aggregation/filter data & limits
   globalLimits = {
     maxDate: new Date(),
     minDate: new Date(),
 
-    sortBy: AppSettings.SORT_BY_OPTIONS
+    sortBy: AppSettings.SORT_BY_OPTIONS,
+    tags: []
   }
 
   //limits that are tied to the current result set.
@@ -50,6 +68,7 @@ export class DashboardComponent implements OnInit {
   filterForm = this.filterService.filterForm;
 
   searchResults: SearchResult[] = [];
+  newTag: "" //storage for new tag, because otehrwise the component complains.
 
   constructor(
     private es: ElasticsearchService,
@@ -57,7 +76,7 @@ export class DashboardComponent implements OnInit {
     private location: Location,
     private route: Router,
     private activatedRoute: ActivatedRoute,
-
+    private apiService: ApiService,
   ) {}
 
 
@@ -102,6 +121,13 @@ export class DashboardComponent implements OnInit {
         Object.keys(updatedFormFields.fileTypes).forEach((bucketKey) => {
           if(!currentFileTypes.hasOwnProperty(bucketKey)){
             (this.filterForm.get('fileTypes') as FormGroup).addControl(bucketKey, new FormControl(false))
+          }
+        })
+      }
+      if(updatedFormFields.tags){
+        Object.keys(updatedFormFields.tags).forEach((bucketKey) => {
+          if(!this.filterForm.get('tags').get(bucketKey)){
+            (this.filterForm.get('tags') as FormGroup).addControl(bucketKey, new FormControl(false))
           }
         })
       }
@@ -157,6 +183,30 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  filterAddTag(event: TypeaheadMatch): void {
+    console.log(event);
+    var currentValues = this.filterForm.get('tags').value;
+    console.log("CURRENT VALUE FOR TAGS", this.filterForm.get('tags').value, this.filterForm.get('tags').get(event.item.id))
+
+    if(currentValues.hasOwnProperty(event.item.id) && !currentValues[event.item.id].value) {
+      //tag control already exist, but the value isfalse
+      console.log("Tag control already exists, but value is false")
+      var payload = {tags: {}};
+      payload.tags[event.item.id] = true;
+      this.filterService.filterForm.patchValue(payload)
+    }
+
+    if(!currentValues.hasOwnProperty(event.item.id)){
+      //tag control missing
+      (this.filterForm.get('tags') as FormGroup).addControl(event.item.id, new FormControl(true))
+
+      console.log("Tag control missing")
+    }
+
+    this.newTag = "" //reset
+
+  }
+
 
   filterSortBy(filterSortBy: string){
     console.log("[MODIFY] Setting update form because of filter sort by", this.filterForm.value, filterSortBy)
@@ -206,6 +256,15 @@ export class DashboardComponent implements OnInit {
         }
       );
 
+    this.apiService.fetchTags()
+      .subscribe(
+        data => {
+          this.globalLimits.tags = this.globalLimits.tags.concat(this.apiService.transformTagsAutocomplete(data));
+          console.log(this.globalLimits.tags);
+        },
+        error => console.error(error),
+        () => console.log("FINISHED RETRIEVING TAGS")
+      )
   }
 
   private queryDocuments(filter: DashboardFilter) {
@@ -230,6 +289,16 @@ export class DashboardComponent implements OnInit {
             }
           })
 
+          this.resultLimits.tagBuckets.forEach((bucketData) => {
+            if(!this.globalLimits.tags.some((tag) => { return tag.id === bucketData.key})){
+              this.globalLimits.tags.push({
+                id: bucketData.key,
+                name: bucketData.key,
+                group: 'custom'
+              })
+            }
+          })
+
           // const fileTypes = <FormGroup>this.filterForm.get('fileTypes');
           // fileTypes.forEach((option: any) => {
           //   checkboxes.addControl(option.title, new FormControl(true));
@@ -244,9 +313,6 @@ export class DashboardComponent implements OnInit {
         }
       );
   }
-
-
-
 
   bucketDocCount(buckets: { [key: string]:any; }[], key){
 
