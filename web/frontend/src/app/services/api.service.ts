@@ -72,6 +72,12 @@ export class ApiService {
       group: 'custom'
     })
     for(let tagGroup of availableTags.tags){
+      tagsAutoComplete.push({
+        id: `${tagGroup.label}`,
+        name: tagGroup.label,
+        group: tagGroup.label
+      })
+
       if (!tagGroup.tags){
         continue
       }
