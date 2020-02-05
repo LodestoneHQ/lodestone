@@ -20,12 +20,12 @@ export class HeaderComponent implements OnInit {
   showSearchBar(): boolean {
     const urlTree = this.router.parseUrl(this.router.url);
     const urlWithoutParams = urlTree.root.children['primary'].segments.map(it => it.path).join('/');
-    console.log(this.router.url, urlWithoutParams)
+    // console.log(this.router.url, urlWithoutParams)
     return urlWithoutParams === 'dashboard'
   }
 
-  filterQuery(query: string){
-    console.log("Filter query:", query);
-    this.filterService.filterQuery(query)
+  filterQuery(queryStr: string){
+    console.log("Filter query:", queryStr);
+    this.filterService.filterForm.patchValue({query: queryStr})
   }
 }

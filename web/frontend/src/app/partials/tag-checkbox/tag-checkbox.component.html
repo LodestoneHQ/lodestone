@@ -1,6 +1,6 @@
-<div>
-  <input type="checkbox" [(ngModel)]="isSelected"/>
-  <label (click)="tagClicked()">
-    {{displayText}}
+<div *ngIf="ctrl.value" class="switch-container">
+  <label   class="switch">
+    <input type="checkbox" [formControl]="ctrl" [value]="ctrl.value">
+    <span class="switch-button"></span>{{displayText}}
   </label>
 </div>

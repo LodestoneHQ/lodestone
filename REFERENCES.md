@@ -20,3 +20,4 @@
 - https://coryrylan.com/blog/creating-a-dynamic-checkbox-list-in-angular
 - https://mdbootstrap.com/support/angular/switch-radio-button-not-working/
 - https://www.concretepage.com/angular-2/angular-2-radio-button-and-checkbox-example#reactive-create
+- https://stackblitz.com/edit/reactive-form-checkbox-v6?file=app%2Fapp.component.ts

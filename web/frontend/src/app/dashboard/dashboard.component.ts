@@ -8,7 +8,11 @@ import {AppSettings} from "../app-settings";
 import {environment} from "../../environments/environment";
 import { Options } from 'ng5-slider';
 import * as filesize from 'filesize'
-import {Router, ActivatedRoute} from "@angular/router";
+import {Router, ActivatedRoute, Params} from "@angular/router";
+import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {debounceTime} from "rxjs/operators";
+import {ApiService} from "../services/api.service";
+import {TypeaheadMatch} from "ngx-bootstrap";
 
 
 @Component({
@@ -18,11 +22,10 @@ import {Router, ActivatedRoute} from "@angular/router";
 })
 
 export class DashboardComponent implements OnInit {
-  minFileSizeValue: number = 0;
-  maxFileSizeValue: number = 0;
+  //customize slider plugin
   sliderOptions: Options = {
     floor: 0,
-    ceil: 0,
+    ceil: 100_000_000, //100mb ceiling, overrides when global data returned.
     // showTicks: true,
     translate: (value: number): string => {
       const size = filesize.partial({ round: 0});
@@ -30,15 +33,42 @@ export class DashboardComponent implements OnInit {
     }
   };
 
-  minMaxDateValue: Date[] = [];
+  //customize tags dropdown
+  tagsDropdownOptions = {
+    singleSelection: true,
+    text: "Select Tags",
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    searchPlaceholderText: 'Search Tags',
+    enableSearchFilter: true,
+    badgeShowLimit: 5,
+    // groupBy: "group",
+    labelKey: "name",
+    primaryKey: 'id',
+
+  };
 
   //aggregation/filter data & limits
   globalLimits = {
     maxDate: new Date(),
     minDate: new Date(),
 
-    sortBy: AppSettings.SORT_BY_OPTIONS
+    sortBy: AppSettings.SORT_BY_OPTIONS,
+    tags: []
   }
+
+  //limits that are tied to the current result set.
+  resultLimits = {
+    totalPages: 0,
+    fileTypeBuckets: [], // { [key: string]:any; }[],
+    tagBuckets: [] //{ [key:string]:any; }[] = [],
+
+  }
+
+  filterForm = this.filterService.filterForm;
+
+  searchResults: SearchResult[] = [];
+  newTag: "" //storage for new tag, because otehrwise the component complains.
 
   constructor(
     private es: ElasticsearchService,
@@ -46,67 +76,80 @@ export class DashboardComponent implements OnInit {
     private location: Location,
     private route: Router,
     private activatedRoute: ActivatedRoute,
-
+    private apiService: ApiService,
   ) {}
 
-  filter: DashboardFilter = new DashboardFilter();
-
-
-
-  searchResults: SearchResult[] = [];
-  fileTypeBuckets = {};
-  tagBuckets = {};
-  totalPages: number;
-  currentPage: number = 1;
 
 
   ngOnInit() {
-    // this.api.ping().then(
-    //   () => {
-    //     console.log("PING SUCCESSFUL")
-    //   },
-    //   error => {
-    //     console.error("PING FAILED", error)
-    //   }
-    // )
-    this.activatedRoute.params.subscribe(params => {
-      var parsedFilter = this.filterService.filterSetFromParams(params);
-      if(parsedFilter.fileSizes.length > 0){
+
+
+    this.filterForm.valueChanges.pipe(debounceTime(200)).subscribe(val => {
+      console.log("FILTER FORM CHANGED:", val)
+
+      var dashboardFilter = this.filterService.convertFormToDashboardFilter(val)
+      console.log("generated dashboard filter", dashboardFilter)
+
+      this.queryDocuments(dashboardFilter)
+
+      // change the browser url whenever the filter is updated.
+      this.updateBrowserUrl(dashboardFilter)
+    })
+
+    this.activatedRoute.params.subscribe((params: Params) => {
+      if(Object.keys(params).length === 0){
+        //if no ch
+        return
+      }
+      //this should only change when angular detects a page change (not when we set the route manually for deeplinking in updateBrowserUrl)
+      console.log("ROUTE PARAMS CHANGED IN SERVICE", params)
+      var updatedFormFields = this.filterService.convertParamsToForm(params)
+      console.log("UPDATED FORM FIELDS", updatedFormFields, this.filterForm.value)
+      if(updatedFormFields.fileSizes && this.sliderOptions.floor === 0 && this.sliderOptions.ceil === 100_000_000){
         //setting the max/min values for filesize slider
+        console.log("RESETTING THE SLIDER MAX VALUE", updatedFormFields.fileSizes[1])
         const newOptions: Options = Object.assign({}, this.sliderOptions);
         newOptions.floor = 0;
-        newOptions.ceil = parsedFilter.fileSizes[1]+100;
+        newOptions.ceil = updatedFormFields.fileSizes[1];
         this.sliderOptions = newOptions;
-        this.minFileSizeValue = parsedFilter.fileSizes[0];
-        this.maxFileSizeValue = parsedFilter.fileSizes[1];
       }
-      if(parsedFilter.timeRange.length > 0){
-        //setting the max/min dates
-        this.minMaxDateValue = parsedFilter.timeRange;
+
+
+      //ensure that checkbox list values exist before trying to "patch" them in.
+      if(updatedFormFields.fileTypes){
+        var currentFileTypes = this.filterForm.get('fileTypes').value;
+        Object.keys(updatedFormFields.fileTypes).forEach((bucketKey) => {
+          if(!currentFileTypes.hasOwnProperty(bucketKey)){
+            (this.filterForm.get('fileTypes') as FormGroup).addControl(bucketKey, new FormControl(false))
+          }
+        })
       }
+      if(updatedFormFields.tags){
+        Object.keys(updatedFormFields.tags).forEach((bucketKey) => {
+          if(!this.filterForm.get('tags').get(bucketKey)){
+            (this.filterForm.get('tags') as FormGroup).addControl(bucketKey, new FormControl(false))
+          }
+        })
+      }
+
+      this.filterForm.patchValue(updatedFormFields);
+
+      // if(parsedFilter.timeRange.length > 0){
+      //   //setting the max/min dates
+      //   this.minMaxDateValue = parsedFilter.timeRange;
+      // }
     })
 
     this.getGlobalLimits()
-
-    this.filterService.currentFilter.subscribe(filter => {
-
-      this.currentPage = filter.page
-      this.filter = filter;
-      this.queryDocuments()
-
-      // change the browser url whenever the filter is updated.
-      this.updateBrowserUrl()
-    })
-
-    //set the filter to nothing, so that we can trigger a document query (works even when pressing back button)
-    // this.filterService.filterClear()
   }
 
-  updateBrowserUrl(){
+  updateBrowserUrl(dashboardFilter: DashboardFilter){
+    console.log("TODO: update the browser url")
+
     //deep copy current filter (So we can encode
-    var clonedFilter = JSON.parse(JSON.stringify(this.filter));
-    if(this.filter.timeRange && this.filter.timeRange.length){
-      clonedFilter.timeRange = this.filter.timeRange.map(item => item.toJSON());
+    var clonedFilter = JSON.parse(JSON.stringify(dashboardFilter));
+    if(dashboardFilter.dateRange && dashboardFilter.dateRange.length){
+      clonedFilter.dateRange = dashboardFilter.dateRange.map(item => item.toJSON());
     }
     const url = this.route
       .createUrlTree([clonedFilter], {relativeTo: this.activatedRoute})
@@ -139,54 +182,41 @@ export class DashboardComponent implements OnInit {
       );
   }
 
-  filterPage(page: number){
-    console.log("Page changed:", page);
-    this.filterService.filterPage(page)
-  }
 
-  filterQuery(query: string){
-    console.log("Filter query:", query);
-    this.filterService.filterQuery(query)
-  }
+  filterAddTag(event: TypeaheadMatch): void {
+    console.log(event);
+    var currentValues = this.filterForm.get('tags').value;
+    console.log("CURRENT VALUE FOR TAGS", this.filterForm.get('tags').value, this.filterForm.get('tags').get(event.item.id))
 
-  filterSortBy(sortBy: string){
-    console.log("filterSortBy:", sortBy)
-    this.filterService.filterSortBy(sortBy);
-  }
-
-  filterFileType(fileType: string, isChecked: boolean){
-
-    if(isChecked){
-      this.filterService.filterFileTypeAdd(fileType)
-    } else {
-      this.filterService.filterFileTypeRemove(fileType)
+    if(currentValues.hasOwnProperty(event.item.id) && !currentValues[event.item.id].value) {
+      //tag control already exist, but the value isfalse
+      console.log("Tag control already exists, but value is false")
+      var payload = {tags: {}};
+      payload.tags[event.item.id] = true;
+      this.filterService.filterForm.patchValue(payload)
     }
-  }
 
-  filterTag(tag: string, isChecked: boolean){
+    if(!currentValues.hasOwnProperty(event.item.id)){
+      //tag control missing
+      (this.filterForm.get('tags') as FormGroup).addControl(event.item.id, new FormControl(true))
 
-    if(isChecked){
-      this.filterService.filterTagAdd(tag)
-    } else {
-      this.filterService.filterTagRemove(tag)
+      console.log("Tag control missing")
     }
+
+    this.newTag = "" //reset
+
   }
 
-  filterTimeRange(timeRange: Date[]){
-    this.filterService.filterTimeRange(timeRange);
+
+  filterSortBy(filterSortBy: string){
+    console.log("[MODIFY] Setting update form because of filter sort by", this.filterForm.value, filterSortBy)
+    this.filterForm.patchValue({
+      sortBy: filterSortBy
+    })
+
+    console.log("filterSortBy:", filterSortBy)
   }
 
-  filterFileSize(data: any){
-    this.filterService.filterFileSize([this.minFileSizeValue, this.maxFileSizeValue])
-  }
-
-  filterBookmark(bookmark: boolean){
-    this.filterService.filterBookmark(bookmark)
-  }
-
-  clearFilter(){
-    this.filterService.filterClear();
-  }
 
   thumbEndpoint(bucket: string, path: string){
     path = path.split('/').map(part => encodeURIComponent(part)).join('/');
@@ -206,38 +236,73 @@ export class DashboardComponent implements OnInit {
           newOptions.ceil = wrapper.aggregations.by_filesize.max;
           this.sliderOptions = newOptions;
 
-          if(this.minFileSizeValue == 0 && this.maxFileSizeValue == 0) {
+          var fileSizes = this.filterForm.get('fileSizes').value;
+          console.log("CURRENT FILESIZES WHEN GLOBAL DATA LOADED", fileSizes)
+          if(fileSizes.length == 0 || (fileSizes[0] === 0 && fileSizes[1] === 0)) {
+            var fileSizeArr = [wrapper.aggregations.by_filesize.min, wrapper.aggregations.by_filesize.max]
+            console.log("[MODIFY] Setting new filesizes because of Global Data", this.filterForm.value, fileSizeArr)
             //if there's no filter value set,
-            this.minFileSizeValue = wrapper.aggregations.by_filesize.min;
-            this.maxFileSizeValue = wrapper.aggregations.by_filesize.max;
+            this.filterService.filterForm.patchValue({
+              fileSizes: fileSizeArr
+            }, {emitEvent:false})
           }
         },
         error => {
-          console.error("documents FAILED", error)
+          console.error("global limits FAILED", error)
         },
         () => {
-          console.log("documents finished")
+          console.log("global limits finished")
 
         }
       );
 
+    this.apiService.fetchTags()
+      .subscribe(
+        data => {
+          this.globalLimits.tags = this.globalLimits.tags.concat(this.apiService.transformTagsAutocomplete(data));
+          console.log(this.globalLimits.tags);
+        },
+        error => console.error(error),
+        () => console.log("FINISHED RETRIEVING TAGS")
+      )
   }
 
-  private queryDocuments() {
+  private queryDocuments(filter: DashboardFilter) {
     //TODO: pass filter to function.
     // this.location.replaceState('/dashboard','', this.filter)
 
-    this.es.searchDocuments(this.filter)
+    this.es.searchDocuments(filter)
       .subscribe(wrapper => {
           console.log("documents", wrapper);
           this.searchResults = wrapper.hits.hits;
-          this.totalPages = wrapper.hits.total.value;
+          this.resultLimits.totalPages = wrapper.hits.total.value;
 
-          this.fileTypeBuckets = wrapper.aggregations.by_filetype.buckets;
-          this.tagBuckets = wrapper.aggregations.by_tag.buckets;
-          // for(let bucket of wrapper.aggregations.by_filetype.buckets){
-          //   this.fileTypeBuckets[bucket.key] = bucket.doc_count
-          // }
+          this.resultLimits.fileTypeBuckets = wrapper.aggregations.by_filetype.buckets;
+          this.resultLimits.tagBuckets = wrapper.aggregations.by_tag.buckets;
+
+
+
+          var currentFileTypes = this.filterForm.get('fileTypes').value;
+          this.resultLimits.fileTypeBuckets.forEach((bucketData) => {
+            if(!currentFileTypes.hasOwnProperty(bucketData.key)){
+              (this.filterForm.get('fileTypes') as FormGroup).addControl(bucketData.key, new FormControl(false))
+            }
+          })
+
+          this.resultLimits.tagBuckets.forEach((bucketData) => {
+            if(!this.globalLimits.tags.some((tag) => { return tag.id === bucketData.key})){
+              this.globalLimits.tags.push({
+                id: bucketData.key,
+                name: bucketData.key,
+                group: 'custom'
+              })
+            }
+          })
+
+          // const fileTypes = <FormGroup>this.filterForm.get('fileTypes');
+          // fileTypes.forEach((option: any) => {
+          //   checkboxes.addControl(option.title, new FormControl(true));
+          // });
 
         },
         error => {
@@ -245,9 +310,12 @@ export class DashboardComponent implements OnInit {
         },
         () => {
           console.log("documents finished")
-
         }
       );
   }
 
+  bucketDocCount(buckets: { [key: string]:any; }[], key){
+
+    return (buckets.find((bucket) => { return bucket.key === key }) || {}).doc_count
+  }
 }

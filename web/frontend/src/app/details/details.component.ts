@@ -30,7 +30,7 @@ export class DetailsComponent implements OnInit {
     this.apiService.fetchTags()
       .subscribe(
         data => {
-          this.generateTagsAutocomplete(data)
+          this.tagsAutocomplete = this.apiService.transformTagsAutocomplete(data)
         },
         error => console.error(error),
         () => console.log("FINISHED")
@@ -125,28 +125,6 @@ export class DetailsComponent implements OnInit {
   storageEndpoint(bucket: string, path: string){
     path = path.split('/').map(part => encodeURIComponent(part)).join('/');
     return (environment.apiBase ? environment.apiBase: '') + '/storage/' + bucket +'/' + path;
-  }
-
-  generateTagsAutocomplete(availableTags: Tag){
-    for(let tagGroup of availableTags.tags){
-      this.tagsAutocomplete.push({
-        id: tagGroup.label,
-        name: tagGroup.label,
-        group: tagGroup.label
-      })
-
-      if (!tagGroup.tags){
-        continue
-      }
-
-      for(let tagName of tagGroup.tags){
-        this.tagsAutocomplete.push({
-          id: `${tagGroup.label}.${tagName.label}`,
-          name: tagName.label,
-          group: tagGroup.label
-        })
-      }
-    }
   }
 
   updateTitle(){

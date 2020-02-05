@@ -6,14 +6,18 @@
 <!-- Page Content
 ================================================== -->
 <div class="container">
-  <div class="row">
+  <div [formGroup]="filterForm" class="row">
     <div class="col-xl-3 col-lg-4">
       <div class="sidebar-container">
 
-
         <!-- Time -->
         <div class="sidebar-widget">
-          <h3>Time Range</h3>
+          <label>
+            Query:
+            <input type="text" formControlName="query">
+          </label> <br>
+
+          <h3>Date Range</h3>
           <div class="input-with-icon no-border">
             <input type="text"
                    placeholder="Date Range"
@@ -22,8 +26,7 @@
                    [minDate]="globalLimits.minDate"
                    bsDaterangepicker
                    [bsConfig]="{ adaptivePosition: true }"
-                   [bsValue]="minMaxDateValue"
-                   (bsValueChange)="filterTimeRange($event)">
+                   formControlName="dateRange">
             <i class="icon-line-awesome-calendar"></i>
           </div>
 
@@ -33,15 +36,15 @@
         <div class="sidebar-widget">
           <h3>File Type</h3>
 
-          <div class="switches-list">
+          <div formGroupName="fileTypes" class="switches-list">
 
-
-            <div *ngFor="let fileType of fileTypeBuckets" class="switch-container">
+            <div *ngFor="let fileType of filterForm.get('fileTypes').value | keyvalue " class="switch-container">
               <label class="switch">
-                <input type="checkbox" [ngModel]="filter.fileTypes.includes(fileType.key)" (ngModelChange)="filterFileType(fileType.key, $event)">
+                <input type="checkbox" [formControlName]="fileType.key" [value]="fileType.value">
                 <span class="switch-button"></span>{{fileType.key}}
-                <span *ngIf="!filter.fileTypes.includes(fileType.key)" class="badge badge-primary">{{fileType.doc_count}}</span>
+                <span *ngIf="!filterForm.get('fileTypes').get(fileType.key).value" class="badge badge-primary">{{bucketDocCount(resultLimits.fileTypeBuckets, fileType.key)}}</span>
               </label>
+
             </div>
 
           </div>
@@ -55,11 +58,7 @@
 
           <!-- Range Slider -->
 
-          <ng5-slider
-            [(value)]="minFileSizeValue"
-            [(highValue)]="maxFileSizeValue"
-            [options]="sliderOptions"
-            (userChange)="filterFileSize($event)"></ng5-slider>
+          <ng5-slider [options]="sliderOptions" formControlName="fileSizes"></ng5-slider>
 
         </div>
 
@@ -67,12 +66,35 @@
         <div class="sidebar-widget">
           <h3>Tags</h3>
 
-          <div class="tags-container">
-            <div *ngFor="let tag of tagBuckets" class="tag">
-              <tag-checkbox [tagName]="tag.key" [isSelected]="filter.tags.includes(tag.key)" (valueChange)="filterTag(tag.key, !filter.tags.includes(tag.key))"></tag-checkbox>
-            </div>
+          <ng-template #customItemTemplate let-model="item" let-index="index">
+            <h5>{{model.name}}
+              <span *ngIf="!(filterForm.get('tags').get(model.id) || {}).value" class="badge badge-primary">{{bucketDocCount(resultLimits.tagBuckets, model.id)}}</span>
+            </h5>
+          </ng-template>
+
+          <input *ngIf="globalLimits.tags.length > 0" type="text"
+                 [(ngModel)]="newTag"
+                 [ngModelOptions]="{standalone: true}"
+                 (typeaheadOnSelect)="filterAddTag($event)"
+                 [typeahead]="globalLimits.tags"
+                 typeaheadOptionField="id"
+                 typeaheadGroupField="group"
+                 [typeaheadMinLength]="0"
+                 [typeaheadOptionsLimit]="1000"
+                 [typeaheadScrollable]="true"
+                 [typeaheadOptionsInScrollableView]="12"
+                 [typeaheadWaitMs]="200"
+                 [typeaheadItemTemplate]="customItemTemplate"
+                 typeaheadPhraseDelimiters="&,-"
+                 class="keyword-input with-border mb-4" placeholder="Filter by Tag">
+
+
+          <div formGroupName="tags" class="switches-list">
+              <tag-checkbox *ngFor="let tag of filterForm.get('tags').value | keyvalue" [tagName]="tag.key" [formControlName]="tag.key"></tag-checkbox>
+            <div class="clearfix">
           </div>
-          <div class="clearfix"></div>
+
+          </div>
         </div>
 
       </div>
@@ -83,7 +105,9 @@
 
       <div class="notify-box margin-top-15">
         <div class="switch-container">
-          <label class="switch"><input type="checkbox" [ngModel]="filter.bookmark" (ngModelChange)="filterBookmark($event)"><span class="switch-button"></span><span class="switch-text">Only bookmarked</span></label>
+          <label class="switch" for="onlyBookmarked">
+            <input type="checkbox" id="onlyBookmarked" formControlName="bookmarked"><span class="switch-button"></span><span class="switch-text">Only bookmarked</span>
+          </label>
         </div>
 
         <div class="sort-by">
@@ -91,7 +115,7 @@
 
 
           <div class="btn-group bootstrap-select hide-tick" dropdown>
-            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle btn-default" aria-controls="dropdown-basic">{{filter.sortBy ? globalLimits.sortBy[filter.sortBy] : 'Relevance' }}</button>
+            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle btn-default" aria-controls="dropdown-basic">{{filterForm.get('sortBy').value ? globalLimits.sortBy[filterForm.get('sortBy').value] : 'Relevance' }}</button>
             <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
                 role="menu" aria-labelledby="button-basic">
               <li *ngFor="let sortByOpt of globalLimits.sortBy | keyvalue" role="menuitem"><a class="dropdown-item" (click)="filterSortBy(sortByOpt.key)">{{sortByOpt.value}}</a></li>
@@ -100,7 +124,7 @@
         </div>
       </div>
 
-      <div *ngIf="!filter.query" class="listings-container grid-layout margin-top-35">
+      <div *ngIf="!filterForm.get('query').value" class="listings-container grid-layout margin-top-35">
         <!-- Simple Card Listing -->
         <div *ngFor="let result of searchResults" class="job-listing">
 
@@ -131,7 +155,7 @@
         </div>
       </div>
 
-      <div *ngIf="filter.query" class="tasks-list-container margin-top-35">
+      <div *ngIf="filterForm.get('query').value" class="tasks-list-container margin-top-35">
         <!-- Search Context Listing -->
         <div *ngFor="let result of searchResults" class="task-listing">
 
@@ -146,7 +170,7 @@
               </ul>
               <p *ngFor="let highlight of result?.highlight?.content" class="task-listing-text" [innerHTML]="highlight"></p>
               <div *ngIf="result._source.lodestone.tags" class="task-tags">
-                <span (click)="filterTag(tag, !filter.tags.includes(tag))" *ngFor="let tag of result._source.lodestone?.tags">{{tag}}</span>
+                <span *ngFor="let tag of result._source.lodestone?.tags">{{tag}}</span>
               </div>
             </div>
 
@@ -182,12 +206,11 @@
             <nav class="pagination">
               <pagination
                 class="mx-auto"
-                [(ngModel)]="currentPage"
-                (ngModelChange)="filterPage($event)"
+                formControlName="page"
                 previousText="&lsaquo;" nextText="&rsaquo;"
                 [itemsPerPage]="10"
                 [maxSize]="10"
-                [totalItems]="totalPages"></pagination>
+                [totalItems]="resultLimits.totalPages"></pagination>
             </nav>
           </div>
         </div>
