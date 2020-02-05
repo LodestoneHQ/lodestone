@@ -21,7 +21,7 @@ const { Transform } = require('stream');
 /* POST sync the document bucket with elasticsearch
 * Basically do a loop of all files in the bucket and ensure they all exist in elasticsearch
 *   */
-router.get('/bucket', function (req, res, next) {
+router.post('/bucket', function (req, res, next) {
     let items = [];
     var stream = minioClient.listObjects('documents','', true)
         .pipe(new BatchTransform({batchSize:10}))
