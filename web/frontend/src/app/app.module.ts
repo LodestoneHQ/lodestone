@@ -26,6 +26,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { Ng5SliderModule } from 'ng5-slider';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
     TypeaheadModule.forRoot(),
     Ng5SliderModule,
     CollapseModule.forRoot(),
+    TooltipModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]
