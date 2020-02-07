@@ -11,6 +11,12 @@
   <!-- Render PDF's -->
   <ng2-pdfjs-viewer *ngIf="renderType(extension) == 'pdf'" openFile="false"></ng2-pdfjs-viewer>
 
+  <!-- Render Markdown files -->
+  <markdown *ngIf="renderType(extension) == 'md'" [src]="path"></markdown>
+
+  <!-- Render XLSX file -->
+  <sheetjs *ngIf="renderType(extension) == 'xlsx'" [src]="path"></sheetjs>
+
   <!-- Render anchor for non-angular native libraries -->
   <div *ngIf="renderType(extension) == 'docx' || renderType(extension) == 'rtf'" id="thirdPartyAnchor" class="well"></div>
 

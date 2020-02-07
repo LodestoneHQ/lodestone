@@ -118,6 +118,9 @@ header#header-container div#navigation {
   height: 900px;
   outline: auto;
   overflow: scroll;
+  img {
+    width: 100%;
+  }
 }
 
 /* ---------------------------------- */

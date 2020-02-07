@@ -60,7 +60,7 @@ export class DocPreviewComponent implements AfterViewInit {
   }
   //given an extension (docx, doc, pdf, jpeg, gif, etc) determine the renderType (docx,native, iframe, etc)
   renderType(extension: string){
-    if(extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension ==  'gif'){
+    if(extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension ==  'gif' || extension == 'webp'){
       return 'native' //browser native preview
     }
     else if(extension == 'pdf'){
@@ -68,6 +68,12 @@ export class DocPreviewComponent implements AfterViewInit {
     }
     else if(extension == 'html'){
       return 'iframe' //uses iframe to render html.
+    }
+    else if(extension == 'md'){
+      return 'md' //uses ngx-markdown
+    }
+    else if(extension == 'xlsx'){
+      return 'xlsx' //uses ngx-markdown
     }
 
     //check if one of the third party renderers support this extension

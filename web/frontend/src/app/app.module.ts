@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -27,6 +27,8 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { Ng5SliderModule } from 'ng5-slider';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MarkdownModule } from 'ngx-markdown';
+import { SheetjsComponent } from './partials/sheetjs/sheetjs.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     StatusComponent,
     DocPreviewComponent,
     TagCheckboxComponent,
+    SheetjsComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +62,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     Ng5SliderModule,
     CollapseModule.forRoot(),
     TooltipModule.forRoot(),
+    MarkdownModule.forRoot({ loader: HttpClient })
   ],
   providers: [],
   bootstrap: [AppComponent]
