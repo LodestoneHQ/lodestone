@@ -10,7 +10,9 @@
 version: '2.2'
 services:
   elasticsearch:
-    image: analogj/lodestone:elasticsearch
+    build: elasticsearch
+
+    #    image: analogj/lodestone:elasticsearch
     environment:
       #      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -22,7 +24,8 @@ services:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
 
   processor:
-    image: analogj/lodestone:processor
+#    image: analogj/lodestone:processor
+    build: processor
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -47,12 +50,15 @@ services:
       - RABBITMQ_PASS=lodestone
 
   webapp:
-    image: analogj/lodestone:web
+#    image: analogj/lodestone:web
+    build: web
     depends_on:
       elasticsearch:
         condition: service_healthy
       storage:
         condition: service_healthy
+    ports:
+      - 3000:3000
     environment:
       - LS_STORAGE_HOST=${LS_STORAGE_HOST:-storage}
       - LS_STORAGE_PORT=${LS_STORAGE_PORT:-9000}
@@ -71,7 +77,8 @@ services:
 
 
   storage:
-    image: analogj/lodestone:storage
+    build: storage
+#    image: analogj/lodestone:storage
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -105,6 +112,3 @@ services:
   tika:
     image: analogj/lodestone:tika
 
-
-networks:
-  lodenet:

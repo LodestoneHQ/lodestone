@@ -7,8 +7,8 @@ const client = new Client({ node: `http://${process.env.LS_ELASTICSEARCH_HOST}:$
 
 var Minio = require('minio')
 var minioClient = new Minio.Client({
-    endPoint: 'storage',
-    port: 9000,
+    endPoint: process.env.LS_STORAGE_HOST,
+    port: parseInt(process.env.LS_STORAGE_PORT, 10),
     useSSL: false,
     accessKey: process.env.MINIO_ACCESS_KEY,
     secretKey: process.env.MINIO_SECRET_KEY
@@ -171,7 +171,7 @@ class PublishMissingTransform extends Transform {
 
                 var promiseList = []
                 for(let storageInfo of batch){
-                    console.log("RRABBITMQ DOCS",storageInfo)
+                    console.log("RABBITMQ DOCS",storageInfo)
                     var payload = {
                         "Records":[
                             {

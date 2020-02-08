@@ -17,7 +17,6 @@ RUN npm install -g @angular/cli@latest \
 
 # install frontend and backend dependencies
 RUN cd /lodestone/frontend \
-
     && npm install \
     && cd /lodestone/backend \
     && npm install
