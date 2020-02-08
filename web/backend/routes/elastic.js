@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://elasticsearch:9200' })
+const client = new Client({ node: `http://${process.env.LS_ELASTICSEARCH_HOST}:${process.env.LS_ELASTICSEARCH_PORT}` })
 
 /* Get */
 router.post('/get', async function(req, res, next) {

@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://elasticsearch:9200' })
+const client = new Client({ node: `http://${process.env.LS_ELASTICSEARCH_HOST}:${process.env.LS_ELASTICSEARCH_PORT}` });
 
 var Minio = require('minio')
 var minioClient = new Minio.Client({
@@ -159,7 +159,7 @@ class PublishMissingTransform extends Transform {
         // By default we are in object mode but this can be overwritten by the user
         this.storageBucket = options.storageBucket || 'documents';
 
-        this.rabbitmqClient = amqp.connect(`amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASS}@rabbitmq:5672`)
+        this.rabbitmqClient = amqp.connect(`amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASS}@${process.env.LS_RABBITMQ_HOST}:${process.env.LS_RABBITMQ_PORT}`)
             .then(function(conn) {
                 return conn.createChannel();
             })

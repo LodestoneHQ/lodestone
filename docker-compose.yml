@@ -59,7 +59,6 @@ services:
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
-      - DISABLE_FRONTEND=true
   storage:
     image: analogj/lodestone:storage
     depends_on:
@@ -74,14 +73,6 @@ services:
       - MINIO_BROWSER=off
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-      - MINIO_NOTIFY_AMQP_ENABLE=on
-      - MINIO_NOTIFY_AMQP_URL=amqp://lodestone:lodestone@rabbitmq:5672
-      - MINIO_NOTIFY_AMQP_EXCHANGE=lodestone
-      - MINIO_NOTIFY_AMQP_EXCHANGE_TYPE=fanout
-      - MINIO_NOTIFY_AMQP_ROUTING_KEY=storagelogs
-      - MINIO_NOTIFY_AMQP_MANDATORY=off
-      - MINIO_NOTIFY_AMQP_AUTO_DELETED=off
-      - MINIO_NOTIFY_AMQP_DELIVERY_MODE=0
 #      - MINIO_WORM=on
 #      - MINIO_USERNAME=minio
 #      - MINIO_GROUPNAME=minio

@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 const { Client } = require('@elastic/elasticsearch');
-const client = new Client({ node: 'http://elasticsearch:9200' });
+const client = new Client({ node: `http://${process.env.LS_ELASTICSEARCH_HOST}:${process.env.LS_ELASTICSEARCH_PORT}` })
 const fetch = require('node-fetch');
 
 /* GET status listing. */
 router.get('/', async function(req, res, next) {
     try {
 
-        var rabbitmq = await fetch('http://lodestone:lodestone@rabbitmq:15672/api/queues')
+        var rabbitmq = await fetch(`http://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASS}@${process.env.LS_RABBITMQ_MG_HOST}:${process.env.LS_RABBITMQ_MG_PORT}/api/queues`)
             .then(response => response.json())
             .then(rabbit => {
                 console.log(Array.isArray(rabbit))
