@@ -35,6 +35,7 @@ RUN mkdir -p /lodestone/backend/public \
 
 # set the s6 service manager as the entrypoint for this container (which will startup the live reloading servers for angular and express)
 ENTRYPOINT ["/init"]
+EXPOSE 3000
 
 
 

@@ -31,13 +31,9 @@ FROM node:12-alpine
 
 # set working directory
 WORKDIR /lodestone
+EXPOSE 3000
 
 COPY --from=builder /lodestone/backend /lodestone
 
 CMD ["npm", "start"]
-
-
-
-
-
 
