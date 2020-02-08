@@ -1,3 +1,11 @@
+###############################################################################
+# Development Docker Compose configuration
+###############################################################################
+# This is the development docker-compose configuration for Lodestone.
+# It's designed for live reloading and overriding RabbitMQ publishers/processors
+# with custom built versions for testing. It also includes many additional port
+# bindings for local testing & admin containers for viewing data stores.
+#
 # docker-compose up --force-recreate --build
 
 version: '2.2'

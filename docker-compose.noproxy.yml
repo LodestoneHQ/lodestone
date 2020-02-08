@@ -1,12 +1,11 @@
 ###############################################################################
-# Default Docker Compose configuration
+# No-Proxy Docker Compose configuration
 ###############################################################################
-# This is the default docker-compose configuration for Lodestone.
-# You can use it to have a working Lodestone setup out of the box
+# This is a no-proxy docker-compose configuration for Lodestone.
+# It will not work out of the box, since it requires you to provide your own reverse proxy.
+# You can however use it as the basis of your own customized docker-compose/docker script.
 #
-# Note, this file includes its own reverse-proxy (traefik) and binds to port 80
-# If you would like to use your own pre-existing proxy, check out the
-# docker-compose.noproxy.yml file.
+# Note: See docker-compose.yml for a version that works out of the box.
 
 version: '2.2'
 services:
@@ -65,9 +64,9 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-#    ports:
-#      # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
-#      - 9000:9000
+    #    ports:
+    #      # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
+    #      - 9000:9000
     volumes:
       - ./data/storage:/data
     environment:
@@ -82,11 +81,11 @@ services:
       - MINIO_NOTIFY_AMQP_MANDATORY=off
       - MINIO_NOTIFY_AMQP_AUTO_DELETED=off
       - MINIO_NOTIFY_AMQP_DELIVERY_MODE=0
-#      - MINIO_WORM=on
-#      - MINIO_USERNAME=minio
-#      - MINIO_GROUPNAME=minio
-#      - MINIO_PUID=15000
-#      - MINIO_PGID=15000
+    #      - MINIO_WORM=on
+    #      - MINIO_USERNAME=minio
+    #      - MINIO_GROUPNAME=minio
+    #      - MINIO_PUID=15000
+    #      - MINIO_PGID=15000
     networks:
       - lodenet
     labels:
