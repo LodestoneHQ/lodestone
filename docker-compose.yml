@@ -121,12 +121,7 @@ services:
       - lodenet
 
   rabbitmq:
-    image: rabbitmq:3-management #use rabbitmq:3-management because we need the API plugin to be installed.
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    image: analogj/lodestone:rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=lodestone
       - RABBITMQ_DEFAULT_PASS=lodestone

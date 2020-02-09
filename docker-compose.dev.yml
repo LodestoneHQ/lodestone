@@ -134,15 +134,10 @@ services:
       - lodenet
 
   rabbitmq:
-    image: rabbitmq:3-management #use rabbitmq:3-management because we need the API plugin to be installed.
+    build: rabbitmq
     ports:
       # this port is only necessary if you would like to view the admin backend for rabbitmq
       - "15672:15672"
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
     volumes:
       - ./data/rabbitmq:/var/lib/rabbitmq
     environment:
