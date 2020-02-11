@@ -50,12 +50,6 @@ Place your documents in the `/data/storage/documents` directory, and the Filesys
 If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
 repository.
 
-### Notes:
-If your documents already exist, you may need to touch the files in the `/data/storage/documents` directory to trigger parsing by fscrawler.
-
-`find . -exec touch {} \;`
-
-
 # Considerations
 Lodestone is a very opinionated solution for personal document management. As such, there's a couple things you should know before even considering it.
 

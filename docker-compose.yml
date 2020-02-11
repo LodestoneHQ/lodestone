@@ -4,14 +4,13 @@
 # This is the default docker-compose configuration for Lodestone.
 # You can use it to have a working Lodestone setup out of the box
 #
-# Note, this file includes its own reverse-proxy (traefik) and binds to port 80
-# If you would like to use your own pre-existing proxy, check out the
-# docker-compose.noproxy.yml file.
 
 version: '2.2'
 services:
   elasticsearch:
-    image: analogj/lodestone:elasticsearch
+    build: elasticsearch
+
+    #    image: analogj/lodestone:elasticsearch
     environment:
       #      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -21,10 +20,10 @@ services:
         hard: -1
     volumes:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
-    networks:
-      - lodenet
+
   processor:
-    image: analogj/lodestone:processor
+    #    image: analogj/lodestone:processor
+    build: processor
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -34,8 +33,6 @@ services:
         condition: service_healthy
       tika:
         condition: service_healthy
-    networks:
-      - lodenet
     environment:
       - LS_ELASTICSEARCH_HOST=${LS_ELASTICSEARCH_HOST:-elasticsearch}
       - LS_ELASTICSEARCH_PORT=${LS_ELASTICSEARCH_PORT:-9200}
@@ -49,19 +46,17 @@ services:
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
+
   webapp:
-    image: analogj/lodestone:web
+    #    image: analogj/lodestone:web
+    build: web
     depends_on:
       elasticsearch:
         condition: service_healthy
       storage:
         condition: service_healthy
-    networks:
-      - lodenet
-    labels:
-      - "traefik.http.services.webapp.loadbalancer.server.port=3000"
-      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
-      - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
+    ports:
+      - 80:3000
     environment:
       - LS_STORAGE_HOST=${LS_STORAGE_HOST:-storage}
       - LS_STORAGE_PORT=${LS_STORAGE_PORT:-9000}
@@ -76,14 +71,15 @@ services:
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
+      - DISABLE_FRONTEND=true
+
+
   storage:
-    image: analogj/lodestone:storage
+    build: storage
+    #    image: analogj/lodestone:storage
     depends_on:
       rabbitmq:
         condition: service_healthy
-#    ports:
-#      # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
-#      - 9000:9000
     volumes:
       - ./data/storage:/data
     environment:
@@ -94,46 +90,19 @@ services:
       - MINIO_BROWSER=off
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-#      - MINIO_WORM=on
-#      - MINIO_USERNAME=minio
-#      - MINIO_GROUPNAME=minio
-#      - MINIO_PUID=15000
-#      - MINIO_PGID=15000
-    networks:
-      - lodenet
-    labels:
-      - "traefik.http.services.storage.loadbalancer.server.port=9000"
-      - "traefik.http.routers.storage.rule=PathPrefix(`/storage`)"
-      - "traefik.http.routers.storage.middlewares=storage01"
-      - "traefik.http.middlewares.storage01.stripprefix.prefixes=/storage"
-
-  reverse-proxy:
-    image: traefik:v2.0
-    ports:
-      # The HTTP port
-      - "80:80"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    command: --api.insecure=true --providers.docker --entrypoints.web.address=:80
-    networks:
-      - lodenet
+    #      - MINIO_WORM=on
+    #      - MINIO_USERNAME=minio
+    #      - MINIO_GROUPNAME=minio
+    #      - MINIO_PUID=15000
+    #      - MINIO_PGID=15000
 
   rabbitmq:
-    image: analogj/lodestone:rabbitmq
+    build: rabbitmq
+    #    image: analogj/lodestone:rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=lodestone
       - RABBITMQ_DEFAULT_PASS=lodestone
-    networks:
-      - lodenet
 
   tika:
     image: analogj/lodestone:tika
-    networks:
-      - lodenet
 
-
-
-networks:
-  lodenet:

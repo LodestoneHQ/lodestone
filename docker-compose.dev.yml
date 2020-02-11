@@ -25,8 +25,7 @@ services:
     ports:
       - 19200:9200
       - 19300:9300
-    networks:
-      - lodenet
+
   processor:
     build: processor
     depends_on:
@@ -41,8 +40,6 @@ services:
     volumes:
       - ~/repos/gopath/src/github.com/analogj/lodestone-processor/lodestone-document-processor-linux-amd64:/usr/bin/lodestone-document-processor
       - ~/repos/gopath/src/github.com/analogj/lodestone-processor/lodestone-thumbnail-processor-linux-amd64:/usr/bin/lodestone-thumbnail-processor
-    networks:
-      - lodenet
     environment:
       - LS_ELASTICSEARCH_HOST=${LS_ELASTICSEARCH_HOST:-elasticsearch}
       - LS_ELASTICSEARCH_PORT=${LS_ELASTICSEARCH_PORT:-9200}
@@ -70,12 +67,8 @@ services:
     volumes:
       - ./web/frontend:/lodestone/frontend
       - ./web/backend:/lodestone/backend
-    networks:
-      - lodenet
-    labels:
-      - "traefik.http.services.webapp.loadbalancer.server.port=3000"
-      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
-      - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
+    ports:
+      - 80:3000
     environment:
       - LS_STORAGE_HOST=${LS_STORAGE_HOST:-storage}
       - LS_STORAGE_PORT=${LS_STORAGE_PORT:-9000}
@@ -112,26 +105,6 @@ services:
       - MINIO_SECRET_KEY=minio123
       #      - MINIO_BROWSER=off
       #      - MINIO_WORM=on
-    networks:
-      - lodenet
-    labels:
-      - "traefik.http.services.storage.loadbalancer.server.port=9000"
-      - "traefik.http.routers.storage.rule=PathPrefix(`/storage`)"
-      - "traefik.http.routers.storage.middlewares=storage01"
-      - "traefik.http.middlewares.storage01.stripprefix.prefixes=/storage"
-
-  reverse-proxy:
-    image: traefik:v2.0
-    ports:
-      # The HTTP port
-      - "80:80"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    command: --api.insecure=true --providers.docker --entrypoints.web.address=:80
-    networks:
-      - lodenet
 
   rabbitmq:
     build: rabbitmq
@@ -143,13 +116,9 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=lodestone
       - RABBITMQ_DEFAULT_PASS=lodestone
-    networks:
-      - lodenet
 
   tika:
     build: tika
-    networks:
-      - lodenet
 
 #######################################################################################################################
 # Optional Admin Containers for Development
@@ -159,8 +128,3 @@ services:
     image: appbaseio/dejavu
     ports:
       - "1358:1358"
-    networks:
-      - lodenet
-
-networks:
-  lodenet:
