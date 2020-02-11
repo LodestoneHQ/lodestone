@@ -1,0 +1,58 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: webapp
+  namespace: lodestone
+  labels:
+    k8s-app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: webapp
+  template:
+    metadata:
+      labels:
+        k8s-app: webapp
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      terminationGracePeriodSeconds: 30
+      containers:
+      - image: analogj/lodestone:web
+        imagePullPolicy: Always
+        name: webapp
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: "minio"
+        - name: MINIO_SECRET_KEY
+          value: "minio123"
+        - name: RABBITMQ_USER
+          value: "lodestone"
+        - name: RABBITMQ_PASS
+          value: "lodestone"
+        - name: DISABLE_FRONTEND
+          value: "true"
+        ports:
+        - containerPort: 3000
+        securityContext:
+          allowPrivilegeEscalation: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: webapp
+  namespace: lodestone
+  labels:
+    k8s-app: webapp
+spec:
+  selector:
+    k8s-app: webapp
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      name: webapp

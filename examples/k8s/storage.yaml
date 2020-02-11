@@ -1,0 +1,83 @@
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: storage
+  namespace: lodestone
+  labels:
+    k8s-app: storage
+spec:
+  replicas: 1
+  serviceName: storage
+  selector:
+    matchLabels:
+      k8s-app: storage
+  volumeClaimTemplates:
+  - metadata:
+      name: storage
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+  template:
+    metadata:
+      labels:
+        k8s-app: storage
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      terminationGracePeriodSeconds: 30
+      containers:
+      - image: analogj/lodestone:storage
+        imagePullPolicy: Always
+        name: storage
+        env:
+        - name: MINIO_BROWSER
+          value: "off"
+        - name: MINIO_ACCESS_KEY
+          value: "minio"
+        - name: MINIO_SECRET_KEY
+          value: "minio123"
+        - name: MINIO_NOTIFY_AMQP_ENABLE
+          value: "on"
+        - name: MINIO_NOTIFY_AMQP_URL
+          value: "amqp://lodestone:lodestone@rabbitmq:5672"
+        - name: MINIO_NOTIFY_AMQP_EXCHANGE
+          value: "lodestone"
+        - name: MINIO_NOTIFY_AMQP_EXCHANGE_TYPE
+          value: "fanout"
+        - name: MINIO_NOTIFY_AMQP_ROUTING_KEY
+          value: "storagelogs"
+        - name: MINIO_NOTIFY_AMQP_MANDATORY
+          value: "off"
+        - name: MINIO_NOTIFY_AMQP_AUTO_DELETED
+          value: "off"
+        - name: MINIO_NOTIFY_AMQP_DELIVERY_MODE
+          value: "0"
+        volumeMounts:
+        - mountPath: /data
+          name: storage
+        ports:
+        - containerPort: 9000
+        securityContext:
+          allowPrivilegeEscalation: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: storage
+  namespace: lodestone
+  labels:
+    k8s-app: storage
+spec:
+  selector:
+    k8s-app: storage
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      name: storage

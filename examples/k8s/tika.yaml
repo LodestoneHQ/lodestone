@@ -1,0 +1,47 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: tika
+  namespace: lodestone
+  labels:
+    k8s-app: tika
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: tika
+  template:
+    metadata:
+      labels:
+        k8s-app: tika
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      terminationGracePeriodSeconds: 30
+      containers:
+      - image: analogj/lodestone:tika
+        imagePullPolicy: Always
+        name: tika
+        ports:
+        - containerPort: 9998
+        securityContext:
+          allowPrivilegeEscalation: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: tika
+  namespace: lodestone
+  labels:
+    k8s-app: tika
+spec:
+  selector:
+    k8s-app: tika
+  ports:
+    - protocol: TCP
+      port: 9998
+      targetPort: 9998
+      name: tika
