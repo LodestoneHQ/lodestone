@@ -36,6 +36,24 @@ spec:
           value: "lodestone"
         - name: DISABLE_FRONTEND
           value: "true"
+        - name: LS_ELASTICSEARCH_HOST
+          value: "elasticsearch"
+        - name: LS_ELASTICSEARCH_PORT
+          value: "9200"
+        - name: LS_RABBITMQ_HOST
+          value: rabbitmq
+        - name: LS_RABBITMQ_PORT
+          value: "5672"
+        - name: LS_RABBITMQ_MG_HOST
+          value: "rabbitmq"
+        - name: LS_RABBITMQ_MG_PORT
+          value: "15672"
+        - name: LS_STORAGE_HOST
+          value: storage
+        - name: LS_STORAGE_PORT
+          value: "9000"
+        - name: LS_STORAGE_PATH
+          value: "/storage/"
         ports:
         - containerPort: 3000
         securityContext:

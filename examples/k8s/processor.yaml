@@ -34,5 +34,21 @@ spec:
           value: "lodestone"
         - name: RABBITMQ_PASS
           value: "lodestone"
+        - name: LS_ELASTICSEARCH_HOST
+          value: "elasticsearch"
+        - name: LS_ELASTICSEARCH_PORT
+          value: "9200"
+        - name: LS_RABBITMQ_HOST
+          value: rabbitmq
+        - name: LS_RABBITMQ_PORT
+          value: 5672
+        - name: LS_STORAGE_HOST
+          value: storage
+        - name: LS_STORAGE_PORT
+          value: "9000"
+        - name: LS_TIKA_HOST
+          value: "tika"
+        - name: LS_TIKA_PORT
+          value: "9998"
         securityContext:
           allowPrivilegeEscalation: false

@@ -58,6 +58,10 @@ spec:
           value: "off"
         - name: MINIO_NOTIFY_AMQP_DELIVERY_MODE
           value: "0"
+        - name: LS_RABBITMQ_HOST
+          value: "rabbitmq"
+        - name: LS_RABBITMQ_PORT
+          value: "5672"
         volumeMounts:
         - mountPath: /data
           name: storage
