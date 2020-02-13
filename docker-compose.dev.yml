@@ -6,7 +6,7 @@
 # with custom built versions for testing. It also includes many additional port
 # bindings for local testing & admin containers for viewing data stores.
 #
-# docker-compose up --force-recreate --build
+# docker-compose -f docker-compose.dev.yml up --force-recreate --build
 
 version: '2.2'
 services:

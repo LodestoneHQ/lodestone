@@ -4,6 +4,7 @@
 # This is the default docker-compose configuration for Lodestone.
 # You can use it to have a working Lodestone setup out of the box
 #
+# Visit http://localhost to view the Lodestone dashboard
 
 version: '2.2'
 services:
