@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser')
 var AWS = require('aws-sdk');
 var _ = require('lodash');
 

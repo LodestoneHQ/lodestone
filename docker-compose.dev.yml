@@ -33,7 +33,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      storage:
+      webapp:
         condition: service_healthy
       tika:
         condition: service_healthy
@@ -45,8 +45,8 @@ services:
       - LS_ELASTICSEARCH_PORT=${LS_ELASTICSEARCH_PORT:-9200}
       - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
       - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
-      - LS_STORAGE_HOST=${LS_STORAGE_HOST:-storage}
-      - LS_STORAGE_PORT=${LS_STORAGE_PORT:-9000}
+      - LS_API_HOST=${LS_API_HOST:-webapp}
+      - LS_API_PORT=${LS_API_PORT:-3000}
       - LS_TIKA_HOST=${LS_TIKA_HOST:-tika}
       - LS_TIKA_PORT=${LS_TIKA_PORT:-9998}
       - MINIO_ACCESS_KEY=minio

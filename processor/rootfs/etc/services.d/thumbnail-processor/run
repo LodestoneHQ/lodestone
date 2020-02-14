@@ -3,5 +3,5 @@
 ls -alt /usr/bin/lodestone-thumbnail-processor
 /usr/bin/lodestone-thumbnail-processor start \
 --amqp-url="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@${LS_RABBITMQ_HOST}:${LS_RABBITMQ_PORT}" \
---storage-endpoint="http://${LS_STORAGE_HOST}:${LS_STORAGE_PORT}" \
+--api-endpoint="http://${LS_API_HOST}:${LS_API_PORT}" \
 ${DEBUG:+--debug}

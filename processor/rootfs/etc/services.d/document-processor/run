@@ -3,7 +3,7 @@
 ls -alt /usr/bin/lodestone-document-processor
 /usr/bin/lodestone-document-processor start \
 --amqp-url="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@${LS_RABBITMQ_HOST}:${LS_RABBITMQ_PORT}" \
---storage-endpoint="http://${LS_STORAGE_HOST}:${LS_STORAGE_PORT}" \
+--api-endpoint="http://${LS_API_HOST}:${LS_API_PORT}" \
 --tika-endpoint="http://${LS_TIKA_HOST}:${LS_TIKA_PORT}" \
 --elasticsearch-endpoint="http://${LS_ELASTICSEARCH_HOST}:${LS_ELASTICSEARCH_PORT}" \
 ${DEBUG:+--debug}
