@@ -32,7 +32,7 @@ router.post('/bucket', function (req, res, next) {
     stream.on('data', function(data){
         items = items.concat(data);
     })
-    stream.on('error', function(err) { console.log(err) } );
+    stream.on('error', function(err) { console.log(err); next(err) } );
     stream.on('end', async function() {
         console.log("END:", items)
         res.send(items);
@@ -143,7 +143,7 @@ class ElasticSearchMissingFilesTransform extends Transform {
                 //this file was not found in elasticsearch
                 this.push({
                     bucket: this.storageBucket,
-                    path: batch[ndx].name
+                    key: batch[ndx].name
                 })
             }
         }
@@ -198,7 +198,7 @@ class PublishMissingTransform extends Transform {
                                         "arn": `arn:aws:s3:::${storageInfo.bucket}`
                                     },
                                     "object":{
-                                        "key": storageInfo.path,
+                                        "key": storageInfo.key,
                                         "size": 0,
                                         "eTag":"eTag",
                                         "versionId":"1"

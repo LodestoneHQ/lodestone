@@ -83,7 +83,7 @@ services:
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
-#      - DISABLE_FRONTEND=true
+      - DISABLE_FRONTEND=true
 
   storage:
     build: storage

@@ -11,6 +11,7 @@ var statusRouter = require('./routes/status');
 var elasticRouter = require('./routes/elastic');
 var syncRouter = require('./routes/sync');
 var storageRouter = require('./routes/storage');
+var healthRouter = require('./routes/healthcheck');
 
 var app = express();
 
@@ -31,6 +32,8 @@ app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/status', statusRouter);
 app.use('/api/v1/elastic', elasticRouter);
 app.use('/api/v1/sync', syncRouter);
+app.use('/api/v1/healthcheck', healthRouter);
+
 app.get('/', function(req, res) {
     res.redirect('/web');
 });

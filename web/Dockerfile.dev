@@ -1,14 +1,14 @@
 # build image
 FROM node:12 AS builder
+# set working directory
+WORKDIR /lodestone
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --retries=5 CMD curl --silent --fail localhost:3000/api/v1/healthcheck || exit 1
 
 # Install S6 service manager (needed for live reloading of Express & Angular apps in the same container)
 # Not used in production.
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.21.8.0/s6-overlay-amd64.tar.gz /tmp/
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
-
-
-# set working directory
-WORKDIR /lodestone
 
 # add `/lodestone/node_modules/.bin` to $PATH
 ENV PATH /lodestone/backend/node_modules/.bin:/lodestone/frontend/node_modules/.bin:$PATH
@@ -35,7 +35,6 @@ RUN mkdir -p /lodestone/backend/public \
 
 # set the s6 service manager as the entrypoint for this container (which will startup the live reloading servers for angular and express)
 ENTRYPOINT ["/init"]
-EXPOSE 3000
 
 
 

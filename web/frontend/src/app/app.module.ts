@@ -29,6 +29,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { MarkdownModule } from 'ngx-markdown';
 import { SheetjsComponent } from './partials/sheetjs/sheetjs.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { SheetjsComponent } from './partials/sheetjs/sheetjs.component';
     Ng5SliderModule,
     CollapseModule.forRoot(),
     TooltipModule.forRoot(),
-    MarkdownModule.forRoot({ loader: HttpClient })
+    MarkdownModule.forRoot({ loader: HttpClient }),
+    ModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
