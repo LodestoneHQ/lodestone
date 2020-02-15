@@ -107,11 +107,12 @@ repository.
 | Name  | Software Version | Docker Image |
 | --- | :---: |  :---: |
 | Elasticsearch | Elasticsearch v7.2.1 | |
-| Filesystem Collector | Fscrawler v2.7 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:fscrawler.svg)](https://microbadger.com/images/analogj/lodestone:fscrawler "Get your own image badge on microbadger.com") |
+| Filesystem Publisher | Go | [![](https://images.microbadger.com/badges/image/analogj/lodestone:fscrawler.svg)](https://microbadger.com/images/analogj/lodestone:fscrawler "Get your own image badge on microbadger.com") |
+| Document/Thumbnail Processor | Go | [![](https://images.microbadger.com/badges/image/analogj/lodestone:processor.svg)](https://microbadger.com/images/analogj/lodestone:processor "Get your own image badge on microbadger.com") |
 | Web / Api | Angular v8.x / ExpressJS v4.16 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:web.svg)](https://microbadger.com/images/analogj/lodestone:web "Get your own image badge on microbadger.com") |
-| Storage | minio 2019 | [![](https://images.microbadger.com/badges/image/minio/minio.svg)](https://microbadger.com/images/minio/minio "Get your own image badge on microbadger.com") |
-| Reverse Proxy | Traefik v2 | [![](https://images.microbadger.com/badges/image/traefik:v2.0.svg)](https://microbadger.com/images/traefik:v2.0 "Get your own image badge on microbadger.com") |
-
+| Storage | minio 2019 (S3 compatible) | [![](https://images.microbadger.com/badges/image/minio/minio.svg)](https://microbadger.com/images/minio/minio "Get your own image badge on microbadger.com") |
+| Queue | RabbitMQ | [![](https://images.microbadger.com/badges/image/analogj/lodestone:rabbitmq.svg)](https://microbadger.com/images/analogj/lodestone:rabbitmq "Get your own image badge on microbadger.com") |
+| OCR | Tika | [![](https://images.microbadger.com/badges/image/analogj/lodestone:tika.svg)](https://microbadger.com/images/analogj/lodestone:tika "Get your own image badge on microbadger.com") |
 
 
 # Future Development
