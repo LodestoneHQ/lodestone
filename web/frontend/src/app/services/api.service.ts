@@ -47,6 +47,12 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  fetchStatusErrors(): Observable<[]> {
+    return this.http.get<[]>((environment.apiBase ? environment.apiBase: '') + '/api/v1/status/errors')
+      .pipe(catchError(this.handleError));
+  }
+
+
   fetchDocumentData(path: string, respType): Observable<HttpResponse<ArrayBuffer>> {
     return this.http.get(path, {
       responseType: respType,

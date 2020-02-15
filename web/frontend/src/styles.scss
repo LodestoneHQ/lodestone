@@ -226,4 +226,20 @@ header#header-container div#navigation {
 }
 
 
+/* ---------------------------------- */
+/* Status Page - Modal Tables
+------------------------------------- */
+.table .thead-primary th {
+  color: #fff;
+  background-color: #2a41e8;
+  border-color: #32383e;
+}
 
+/* Important part */
+.modal-dialog{
+  overflow-y: initial !important
+}
+.modal-body{
+  height: 80vh;
+  overflow-y: auto;
+}

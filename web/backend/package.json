@@ -8,6 +8,7 @@
   "dependencies": {
     "@elastic/elasticsearch": "^7.5.0",
     "amqplib": "^0.5.5",
+    "aws-sdk": "^2.614.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -22,6 +23,7 @@
       "*.test.js",
       "public"
     ],
+    "legacyWatch": true,
     "delay": "2500"
   }
 }

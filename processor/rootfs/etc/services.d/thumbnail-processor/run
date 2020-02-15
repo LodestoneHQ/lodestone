@@ -1,4 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 ls -alt /usr/bin/lodestone-thumbnail-processor
-/usr/bin/lodestone-thumbnail-processor start --amqp-url="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@rabbitmq:5672"
+/usr/bin/lodestone-thumbnail-processor start \
+--amqp-url="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@${LS_RABBITMQ_HOST}:${LS_RABBITMQ_PORT}" \
+--api-endpoint="http://${LS_API_HOST}:${LS_API_PORT}" \
+${DEBUG:+--debug}

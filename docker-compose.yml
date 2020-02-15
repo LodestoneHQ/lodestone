@@ -1,7 +1,17 @@
+###############################################################################
+# Default Docker Compose configuration
+###############################################################################
+# This is the default docker-compose configuration for Lodestone.
+# You can use it to have a working Lodestone setup out of the box
+#
+# Visit http://localhost to view the Lodestone dashboard
+
 version: '2.2'
 services:
   elasticsearch:
-    image: analogj/lodestone:elasticsearch
+    build: elasticsearch
+
+    #    image: analogj/lodestone:elasticsearch
     environment:
       #      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -11,115 +21,89 @@ services:
         hard: -1
     volumes:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
-    ports:
-      - 19200:9200
-      - 19300:9300
-    networks:
-      - lodenet
+
   processor:
-    image: analogj/lodestone:processor
+    #    image: analogj/lodestone:processor
+    build: processor
     depends_on:
       elasticsearch:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-      storage:
+      webapp:
         condition: service_healthy
       tika:
         condition: service_healthy
-    networks:
-      - lodenet
     environment:
+      - LS_ELASTICSEARCH_HOST=${LS_ELASTICSEARCH_HOST:-elasticsearch}
+      - LS_ELASTICSEARCH_PORT=${LS_ELASTICSEARCH_PORT:-9200}
+      - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
+      - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
+      - LS_API_HOST=${LS_API_HOST:-webapp}
+      - LS_API_PORT=${LS_API_PORT:-3000}
+      - LS_TIKA_HOST=${LS_TIKA_HOST:-tika}
+      - LS_TIKA_PORT=${LS_TIKA_PORT:-9998}
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
+
   webapp:
-    image: analogj/lodestone:web
+    #    image: analogj/lodestone:web
+    build: web
     depends_on:
       elasticsearch:
         condition: service_healthy
       storage:
         condition: service_healthy
-    networks:
-      - lodenet
-    labels:
-      - "traefik.http.services.webapp.loadbalancer.server.port=3000"
-      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
-      - "traefik.http.routers.web.rule=PathPrefix(`/web`)"
+    ports:
+      - 80:3000
     environment:
+      - LS_STORAGE_HOST=${LS_STORAGE_HOST:-storage}
+      - LS_STORAGE_PORT=${LS_STORAGE_PORT:-9000}
+      - LS_STORAGE_PATH=${LS_STORAGE_PATH:-/storage/}
+      - LS_ELASTICSEARCH_HOST=${LS_ELASTICSEARCH_HOST:-elasticsearch}
+      - LS_ELASTICSEARCH_PORT=${LS_ELASTICSEARCH_PORT:-9200}
+      - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
+      - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
+      - LS_RABBITMQ_MG_HOST=${LS_RABBITMQ_MG_HOST:-rabbitmq}
+      - LS_RABBITMQ_MG_PORT=${LS_RABBITMQ_MG_PORT:-15672}
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
       - DISABLE_FRONTEND=true
+
+
   storage:
-    image: analogj/lodestone:storage
+    build: storage
+    #    image: analogj/lodestone:storage
     depends_on:
       rabbitmq:
         condition: service_healthy
-#    ports:
-#      # this port is only necessary if you would like to view the admin backend for minio. MINIO_BROWSER=off must be commented out
-#      - 9000:9000
     volumes:
       - ./data/storage:/data
     environment:
+      - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
+      - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
+      - RABBITMQ_USER=lodestone
+      - RABBITMQ_PASS=lodestone
       - MINIO_BROWSER=off
       - MINIO_ACCESS_KEY=minio
       - MINIO_SECRET_KEY=minio123
-      - MINIO_NOTIFY_AMQP_ENABLE=on
-      - MINIO_NOTIFY_AMQP_URL=amqp://lodestone:lodestone@rabbitmq:5672
-      - MINIO_NOTIFY_AMQP_EXCHANGE=lodestone
-      - MINIO_NOTIFY_AMQP_EXCHANGE_TYPE=fanout
-      - MINIO_NOTIFY_AMQP_ROUTING_KEY=storagelogs
-      - MINIO_NOTIFY_AMQP_MANDATORY=off
-      - MINIO_NOTIFY_AMQP_AUTO_DELETED=off
-      - MINIO_NOTIFY_AMQP_DELIVERY_MODE=0
-#      - MINIO_WORM=on
-#      - MINIO_USERNAME=minio
-#      - MINIO_GROUPNAME=minio
-#      - MINIO_PUID=15000
-#      - MINIO_PGID=15000
-    networks:
-      - lodenet
-    labels:
-      - "traefik.http.services.storage.loadbalancer.server.port=9000"
-      - "traefik.http.routers.storage.rule=PathPrefix(`/storage`)"
-      - "traefik.http.routers.storage.middlewares=storage01"
-      - "traefik.http.middlewares.storage01.stripprefix.prefixes=/storage"
-
-  reverse-proxy:
-    image: traefik:v2.0
-    ports:
-      # The HTTP port
-      - "80:80"
-      # The Web UI (enabled by --api.insecure=true)
-      - "8080:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    command: --api.insecure=true --providers.docker --entrypoints.web.address=:80
-    networks:
-      - lodenet
+    #      - MINIO_WORM=on
+    #      - MINIO_USERNAME=minio
+    #      - MINIO_GROUPNAME=minio
+    #      - MINIO_PUID=15000
+    #      - MINIO_PGID=15000
 
   rabbitmq:
-    image: rabbitmq:3-management #use rabbitmq:3-management because we need the API plugin to be installed.
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    build: rabbitmq
+    #    image: analogj/lodestone:rabbitmq
     environment:
       - RABBITMQ_DEFAULT_USER=lodestone
       - RABBITMQ_DEFAULT_PASS=lodestone
-    networks:
-      - lodenet
 
   tika:
     image: analogj/lodestone:tika
-    networks:
-      - lodenet
 
-
-
-networks:
-  lodenet:

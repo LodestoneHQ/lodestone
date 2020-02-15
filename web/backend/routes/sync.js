@@ -3,12 +3,12 @@ var express = require('express');
 var router = express.Router();
 
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://elasticsearch:9200' })
+const client = new Client({ node: `http://${process.env.LS_ELASTICSEARCH_HOST}:${process.env.LS_ELASTICSEARCH_PORT}` });
 
 var Minio = require('minio')
 var minioClient = new Minio.Client({
-    endPoint: 'storage',
-    port: 9000,
+    endPoint: process.env.LS_STORAGE_HOST,
+    port: parseInt(process.env.LS_STORAGE_PORT, 10),
     useSSL: false,
     accessKey: process.env.MINIO_ACCESS_KEY,
     secretKey: process.env.MINIO_SECRET_KEY
@@ -32,7 +32,7 @@ router.post('/bucket', function (req, res, next) {
     stream.on('data', function(data){
         items = items.concat(data);
     })
-    stream.on('error', function(err) { console.log(err) } );
+    stream.on('error', function(err) { console.log(err); next(err) } );
     stream.on('end', async function() {
         console.log("END:", items)
         res.send(items);
@@ -143,7 +143,7 @@ class ElasticSearchMissingFilesTransform extends Transform {
                 //this file was not found in elasticsearch
                 this.push({
                     bucket: this.storageBucket,
-                    path: batch[ndx].name
+                    key: batch[ndx].name
                 })
             }
         }
@@ -159,7 +159,7 @@ class PublishMissingTransform extends Transform {
         // By default we are in object mode but this can be overwritten by the user
         this.storageBucket = options.storageBucket || 'documents';
 
-        this.rabbitmqClient = amqp.connect(`amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASS}@rabbitmq:5672`)
+        this.rabbitmqClient = amqp.connect(`amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASS}@${process.env.LS_RABBITMQ_HOST}:${process.env.LS_RABBITMQ_PORT}`)
             .then(function(conn) {
                 return conn.createChannel();
             })
@@ -171,7 +171,7 @@ class PublishMissingTransform extends Transform {
 
                 var promiseList = []
                 for(let storageInfo of batch){
-                    console.log("RRABBITMQ DOCS",storageInfo)
+                    console.log("RABBITMQ DOCS",storageInfo)
                     var payload = {
                         "Records":[
                             {
@@ -198,7 +198,7 @@ class PublishMissingTransform extends Transform {
                                         "arn": `arn:aws:s3:::${storageInfo.bucket}`
                                     },
                                     "object":{
-                                        "key": storageInfo.path,
+                                        "key": storageInfo.key,
                                         "size": 0,
                                         "eTag":"eTag",
                                         "versionId":"1"

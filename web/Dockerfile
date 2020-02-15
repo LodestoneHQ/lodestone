@@ -17,7 +17,6 @@ RUN npm install -g @angular/cli@latest \
 
 # install frontend and backend dependencies
 RUN cd /lodestone/frontend \
-
     && npm install \
     && cd /lodestone/backend \
     && npm install
@@ -31,13 +30,10 @@ FROM node:12-alpine
 
 # set working directory
 WORKDIR /lodestone
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=5s --retries=5 CMD curl --silent --fail localhost:3000/api/v1/healthcheck || exit 1
 
 COPY --from=builder /lodestone/backend /lodestone
 
 CMD ["npm", "start"]
-
-
-
-
-
 
