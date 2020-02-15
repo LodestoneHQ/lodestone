@@ -32,6 +32,7 @@ FROM node:12-alpine
 WORKDIR /lodestone
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --retries=5 CMD curl --silent --fail localhost:3000/api/v1/healthcheck || exit 1
+RUN apk --no-cache add curl
 
 COPY --from=builder /lodestone/backend /lodestone
 
