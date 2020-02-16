@@ -17,6 +17,7 @@
           <tr>
             <th>Storage Bucket</th>
             <th>Queued Document</th>
+            <th>Size</th>
           </tr>
           </thead>
           <tbody>
@@ -24,6 +25,7 @@
           <tr *ngFor="let doc of scannedFiles">
             <td>{{doc.bucket}}</td>
             <td>{{doc.key}}</td>
+            <td>{{doc.size | filesize}}</td>
           </tr>
           </tbody></table>
       </div>

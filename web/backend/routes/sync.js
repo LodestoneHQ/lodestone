@@ -109,7 +109,23 @@ class ElasticSearchMissingFilesTransform extends Transform {
     }
     async _transform(batch, encoding, done) {
 
-        var batchBody = []
+        //strip out any "files" from the batch that are size 0, or have a filepath that ends in '/'
+        batch = batch.filter(function(fileInfo){
+            console.log("Processing", fileInfo)
+            if(fileInfo.size === 0){
+                console.log("Ignoring:", fileInfo)
+                return false
+            }
+            else if(fileInfo.name.charAt(fileInfo.name.length - 1) === '/'){
+                console.log("Ignoring:", fileInfo)
+                return false
+            }
+            else {
+                return true
+            }
+        })
+
+        var batchBody = [];
 
         for(let fileInfo of batch){
             batchBody.push({}) // empty index object
@@ -143,7 +159,9 @@ class ElasticSearchMissingFilesTransform extends Transform {
                 //this file was not found in elasticsearch
                 this.push({
                     bucket: this.storageBucket,
-                    key: batch[ndx].name
+                    key: batch[ndx].name,
+                    size: batch[ndx].size,
+                    lastModified: batch[ndx].lastModified
                 })
             }
         }
@@ -171,7 +189,6 @@ class PublishMissingTransform extends Transform {
 
                 var promiseList = []
                 for(let storageInfo of batch){
-                    console.log("RABBITMQ DOCS",storageInfo)
                     var payload = {
                         "Records":[
                             {
@@ -199,7 +216,7 @@ class PublishMissingTransform extends Transform {
                                     },
                                     "object":{
                                         "key": storageInfo.key,
-                                        "size": 0,
+                                        "size": storageInfo.size,
                                         "eTag":"eTag",
                                         "versionId":"1"
                                     }
