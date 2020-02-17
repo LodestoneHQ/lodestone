@@ -54,4 +54,27 @@ router.post('/:bucket/*', function(req, res, next) {
 });
 
 
+/* POST file to minio, authentication handled server-side. Since minio is not exposed, and buckets
+ are still protected via access/secret key its better protected.  */
+router.delete('/:bucket/*', function(req, res, next) {
+
+    const params = {
+        Bucket: req.params.bucket,
+        Key: req.params['0'],
+    };
+
+    // Uploading files to the bucket
+    s3.deleteObject(params, function(err, data) {
+        if(err){
+            res.send('Error Deleting Data: ' + JSON.stringify(err) + '\n' + JSON.stringify(err.stack));
+
+        } else {
+            console.log(`File deleted successfully. ${data.Location}`);
+            res.json({"status":"success"})
+        }
+    });
+});
+
+
+
 module.exports = router;
