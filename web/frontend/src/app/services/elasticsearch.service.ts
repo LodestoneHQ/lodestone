@@ -110,6 +110,10 @@ export class ElasticsearchService {
       searchPayload.body['post_filter'] = postFilter;
     }
 
+    if(_filter.fields && _filter.fields.length){
+      searchPayload.body['_source'] = _filter.fields
+    }
+
     return this.http.post<SearchWrapper>(this.apiEndpoint('/api/v1/elastic/search'), searchPayload).pipe(catchError(this.handleError));
     // return from(this.client.search(searchPayload)) as Observable<SearchWrapper>
   }

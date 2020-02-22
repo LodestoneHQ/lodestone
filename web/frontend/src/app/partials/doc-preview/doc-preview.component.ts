@@ -1,6 +1,6 @@
 // tslint:disable
 
-import {Component, Input, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, Input, AfterViewInit, ViewChild, SimpleChanges} from '@angular/core';
 import * as mammoth from '../../../../node_modules/mammoth/mammoth.browser.js';
 import {ApiService} from "../../services/api.service";
 import {RTFJS} from 'rtf.js';
@@ -42,6 +42,15 @@ export class DocPreviewComponent implements AfterViewInit {
   constructor(private api: ApiService) { }
 
   ngAfterViewInit() {
+    this.loadDocumentFromPath()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    //reload this component when the "path" changes
+    this.loadDocumentFromPath();
+  }
+
+  loadDocumentFromPath(){
     let thirdPartyRenderType = this.renderType(this.extension)
     let fetchData = this.thirdPartyRenderers[thirdPartyRenderType]
     if(fetchData){
@@ -56,8 +65,9 @@ export class DocPreviewComponent implements AfterViewInit {
           }
         )
     }
-
   }
+
+
   //given an extension (docx, doc, pdf, jpeg, gif, etc) determine the renderType (docx,native, iframe, etc)
   renderType(extension: string){
     if(extension == 'jpg' || extension == 'jpeg' || extension == 'png' || extension ==  'gif' || extension == 'webp'){
