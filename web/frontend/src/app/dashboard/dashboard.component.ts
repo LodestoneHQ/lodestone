@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit {
         }
 
         //update the form with data from route (don't emit a new patch event), then submit query
-        var searchObservable = this.queryDocuments(this.filterService.toDashboardFilter(this.filterForm.value));
+        var searchObservable = this.queryDocuments(this.filterService.toDashboardFilter(updatedForm));
         searchObservable.subscribe(null, null, () => {
           this.filterForm.patchValue(updatedForm, { emitEvent: false});
         })
