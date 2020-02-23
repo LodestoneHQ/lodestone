@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ElasticsearchService} from "../services/elasticsearch.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {SearchResult} from "../models/search-result";
 import {environment} from "../../environments/environment";
 import {AppSettings} from "../app-settings";
@@ -22,9 +22,21 @@ export class DetailsComponent implements OnInit {
   newTitle: string = "";
   similarDocuments: SearchResult[] = [];
 
-  constructor(private es: ElasticsearchService, private apiService: ApiService, private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private es: ElasticsearchService,
+    private apiService: ApiService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit() {
+    this.loadDocument()
+    this.router.events.subscribe((val) => {
+      this.loadDocument()
+    });
+  }
+
+  loadDocument(){
     this.documentId = this.activatedRoute.snapshot.params.id;
 
     this.apiService.fetchTags()
@@ -54,6 +66,7 @@ export class DetailsComponent implements OnInit {
         () => console.log("FINISHED")
       )
   }
+
 
   bookmarkDocument(currentState){
     this.es.bookmarkDocument(this.documentData._id, !currentState)

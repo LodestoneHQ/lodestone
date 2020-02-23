@@ -2,12 +2,16 @@ import { Injectable } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {DashboardFilter} from "../models/dashboard-filter";
 import {ActivatedRoute, Params} from "@angular/router";
-import {Form, FormBuilder, FormGroup} from "@angular/forms";
+import {Form, FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {Options} from "ng5-slider";
+import {formatDate} from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
 })
+
+
+//this service stores the state for the Dashboard page
 export class DashboardFilterService {
 
   filterForm = this.formBuilder.group({
@@ -23,52 +27,122 @@ export class DashboardFilterService {
 
   constructor(private formBuilder: FormBuilder) {}
 
-  convertParamsToForm(paramsData:Params): any {
+
+
+  parseQueryParams(queryParams: {[name:string]:string}){
+
     var updateData: {
       page?: number,
       query?: string,
       dateRange?: Date[],
       fileTypes?: {},
       tags?: {},
-      fileSizes?: [],
+      fileSizes?: number[],
       sortBy?: string,
       bookmarked?: boolean
     } = {};
 
-    if(paramsData.page){
-      updateData.page = parseInt(paramsData.page)
+    if(queryParams.page){
+      updateData.page = parseInt(queryParams.page)
     }
-    if(paramsData.query){
-      updateData.query = paramsData.query
+    if(queryParams.query){
+      updateData.query = queryParams.query
     }
-    if(paramsData.dateRange){
-      updateData.dateRange = paramsData.dateRange.split(',').map((dateStr) => new Date(dateStr))
+    if(queryParams.dateRangeStart && queryParams.dateRangeEnd){
+      updateData.dateRange = [new Date(queryParams.dateRangeStart), new Date(queryParams.dateRangeEnd) ]
     }
-    if(paramsData.fileTypes){
+    if(queryParams.fileTypes){
       updateData.fileTypes = updateData.fileTypes ? updateData.fileTypes : {};
-      for(let fileType of paramsData.fileTypes.split(',')){
+      for(let fileType of queryParams.fileTypes.split(',')){
         updateData.fileTypes[fileType] = true;
       }
     }
-    if(paramsData.fileSizes){
-      updateData.fileSizes = paramsData.fileSizes.split(',').map((fileStr) => parseInt(fileStr))
+    if(queryParams.fileSizesStart && queryParams.fileSizesEnd){
+      updateData.fileSizes = [parseInt(queryParams.fileSizesStart), parseInt(queryParams.fileSizesEnd)]
     }
-    if(paramsData.tags){
+    if(queryParams.tags){
       updateData.tags = updateData.tags ? updateData.tags : {};
-      for(let tag of paramsData.tags.split(',')){
+      for(let tag of queryParams.tags.split(',')){
         updateData.tags[tag] = true;
       }
     }
-    if(paramsData.sortBy){
-      updateData.sortBy = paramsData.sortBy
+    if(queryParams.sortBy){
+      updateData.sortBy = queryParams.sortBy
     }
-    if(paramsData.bookmarked){
-      updateData.bookmarked = (paramsData.bookmarked === 'true')
+    if(queryParams.bookmarked){
+      updateData.bookmarked = (queryParams.bookmarked === 'true')
     }
+
+    //ensure that checkbox list values exist before trying to "patch" them in.
+    if(updateData.fileTypes){
+      var currentFileTypes = this.filterForm.get('fileTypes').value;
+      Object.keys(updateData.fileTypes).forEach((bucketKey) => {
+        if(!currentFileTypes.hasOwnProperty(bucketKey)){
+          (this.filterForm.get('fileTypes') as FormGroup).addControl(bucketKey, new FormControl(false))
+        }
+      })
+    }
+    if(updateData.tags){
+      Object.keys(updateData.tags).forEach((bucketKey) => {
+        if(!this.filterForm.get('tags').get(bucketKey)){
+          (this.filterForm.get('tags') as FormGroup).addControl(bucketKey, new FormControl(false))
+        }
+      })
+    }
+
     return updateData;
   }
 
-  convertFormToDashboardFilter(form): DashboardFilter {
+  toQueryParams() : {[name:string]:string} {
+    var form = this.filterForm.value;
+
+    var queryParams = {};
+
+    if(form.page){
+      queryParams['page'] = form.page.toString()
+    }
+    if(form.query){
+      queryParams['query'] = form.query
+    }
+    if(form.dateRange && form.dateRange.length){
+      queryParams['dateRangeStart'] = formatDate(form.dateRange[0], 'yyyy-MM-ddT00:00:00.000Z', 'en-US')
+      queryParams['dateRangeEnd'] = formatDate(form.dateRange[1], 'yyyy-MM-ddT00:00:00.000Z', 'en-US')
+    }
+    if(form.fileTypes && Object.keys(form.fileTypes).length){
+      var fileTypes = [];
+      Object.keys(form.fileTypes).forEach((key) => {
+        if (form.fileTypes[key]) {
+          fileTypes.push(key);
+        }
+      })
+
+      queryParams['fileTypes'] = fileTypes.join(',');
+    }
+
+    if(form.tags && Object.keys(form.tags).length){
+      var tags = [];
+      Object.keys(form.tags).forEach((key) => {
+        if (form.tags[key]) {
+          tags.push(key);
+        }
+      })
+      queryParams['tags'] = tags.join(',');
+
+    }
+    if(form.fileSizes && form.fileSizes.length){
+      queryParams['fileSizesStart'] = form.fileSizes[0].toString();
+      queryParams['fileSizesEnd'] = form.fileSizes[1].toString();
+    }
+    if(form.sortBy){
+      queryParams['sortBy'] = form.sortBy;
+    }
+    if(form.bookmarked){
+      queryParams['bookmarked'] = form.bookmarked.toString();
+    }
+    return queryParams;
+  }
+
+  toDashboardFilter(form): DashboardFilter {
 
     var dashboardFilter = new DashboardFilter();
 
@@ -109,5 +183,4 @@ export class DashboardFilterService {
 
     return dashboardFilter
   }
-
 }

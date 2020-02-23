@@ -65,6 +65,8 @@ export class DashboardComponent implements OnInit {
 
   }
 
+
+  //source of truth for current state
   filterForm = this.filterService.filterForm;
 
   searchResults: SearchResult[] = [];
@@ -84,77 +86,61 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
 
 
+    //changing the form, should change the URL, BUT NOT do a query
     this.filterForm.valueChanges.pipe(debounceTime(200)).subscribe(val => {
-      console.log("FILTER FORM CHANGED:", val)
-
-      var dashboardFilter = this.filterService.convertFormToDashboardFilter(val)
-      console.log("generated dashboard filter", dashboardFilter)
-
-      this.queryDocuments(dashboardFilter)
+      console.log("FILTER FORM CHANGED:", val, this.filterService.toQueryParams())
 
       // change the browser url whenever the filter is updated.
-      this.updateBrowserUrl(dashboardFilter)
+      this.updateBrowserUrl(this.filterService.toQueryParams())
     })
 
-    this.activatedRoute.params.subscribe((params: Params) => {
-      if(Object.keys(params).length === 0){
-        //if no ch
-        return
-      }
-      //this should only change when angular detects a page change (not when we set the route manually for deeplinking in updateBrowserUrl)
-      console.log("ROUTE PARAMS CHANGED IN SERVICE", params)
-      var updatedFormFields = this.filterService.convertParamsToForm(params)
-      console.log("UPDATED FORM FIELDS", updatedFormFields, this.filterForm.value)
-      if(updatedFormFields.fileSizes && this.sliderOptions.floor === 0 && this.sliderOptions.ceil === 100_000_000){
-        //setting the max/min values for filesize slider
-        console.log("RESETTING THE SLIDER MAX VALUE", updatedFormFields.fileSizes[1])
-        const newOptions: Options = Object.assign({}, this.sliderOptions);
-        newOptions.floor = 0;
-        newOptions.ceil = updatedFormFields.fileSizes[1];
-        this.sliderOptions = newOptions;
-      }
 
+    //changing the route should trigger a query
+    this.activatedRoute.queryParams
+      .subscribe(params => {
+        console.log("QUERY PARAMS CHANGED ON ROUTE", params); // {order: "popular"}
+        var updatedForm = this.filterService.parseQueryParams(params);
 
-      //ensure that checkbox list values exist before trying to "patch" them in.
-      if(updatedFormFields.fileTypes){
-        var currentFileTypes = this.filterForm.get('fileTypes').value;
-        Object.keys(updatedFormFields.fileTypes).forEach((bucketKey) => {
-          if(!currentFileTypes.hasOwnProperty(bucketKey)){
-            (this.filterForm.get('fileTypes') as FormGroup).addControl(bucketKey, new FormControl(false))
-          }
+        //set maximums for controls that dont handle empty data correctly
+        if(updatedForm.page > this.resultLimits.totalPages){
+          this.resultLimits.totalPages = updatedForm.page;
+        }
+
+        //update the form with data from route (don't emit a new patch event), then submit query
+        var searchObservable = this.queryDocuments(this.filterService.toDashboardFilter(this.filterForm.value));
+        searchObservable.subscribe(null, null, () => {
+          this.filterForm.patchValue(updatedForm, { emitEvent: false});
         })
-      }
-      if(updatedFormFields.tags){
-        Object.keys(updatedFormFields.tags).forEach((bucketKey) => {
-          if(!this.filterForm.get('tags').get(bucketKey)){
-            (this.filterForm.get('tags') as FormGroup).addControl(bucketKey, new FormControl(false))
-          }
-        })
-      }
+      });
 
-      this.filterForm.patchValue(updatedFormFields);
-
-      // if(parsedFilter.timeRange.length > 0){
-      //   //setting the max/min dates
-      //   this.minMaxDateValue = parsedFilter.timeRange;
-      // }
-    })
+    // this.activatedRoute.params.subscribe((params: Params) => {
+    //   if(Object.keys(params).length === 0){
+    //     //if no ch
+    //     return
+    //   }
+    //   //this should only change when angular detects a page change (not when we set the route manually for deeplinking in updateBrowserUrl)
+    //   console.log("ROUTE PARAMS CHANGED IN SERVICE", params)
+    //   var updatedFormFields = this.filterService.convertParamsToForm(params)
+    //   console.log("UPDATED FORM FIELDS", updatedFormFields, this.filterForm.value)
+    //   if(updatedFormFields.fileSizes && this.sliderOptions.floor === 0 && this.sliderOptions.ceil === 100_000_000){
+    //     //setting the max/min values for filesize slider
+    //     console.log("RESETTING THE SLIDER MAX VALUE", updatedFormFields.fileSizes[1])
+    //     const newOptions: Options = Object.assign({}, this.sliderOptions);
+    //     newOptions.floor = 0;
+    //     newOptions.ceil = updatedFormFields.fileSizes[1];
+    //     this.sliderOptions = newOptions;
+    //   }
+    //
+    //
+    // })
 
     this.getGlobalLimits()
   }
 
-  updateBrowserUrl(dashboardFilter: DashboardFilter){
-    console.log("TODO: update the browser url")
+  updateBrowserUrl(queryParams: {[name: string]: string}){
+    console.log("update the browser url with query params data", queryParams)
 
-    //deep copy current filter (So we can encode
-    var clonedFilter = JSON.parse(JSON.stringify(dashboardFilter));
-    if(dashboardFilter.dateRange && dashboardFilter.dateRange.length){
-      clonedFilter.dateRange = dashboardFilter.dateRange.map(item => item.toJSON());
-    }
-    const url = this.route
-      .createUrlTree([clonedFilter], {relativeTo: this.activatedRoute})
-      .toString();
-    this.location.replaceState(url);
+    this.route.navigate(['/dashboard'], { queryParams: queryParams })
   }
 
 
@@ -271,8 +257,10 @@ export class DashboardComponent implements OnInit {
     //TODO: pass filter to function.
     // this.location.replaceState('/dashboard','', this.filter)
 
-    this.es.searchDocuments(filter)
-      .subscribe(wrapper => {
+    filter.fields = ["file.*", "lodestone.*", "meta.*", "storage.*"];
+
+    var searchObservable = this.es.searchDocuments(filter);
+    searchObservable.subscribe(wrapper => {
           console.log("documents", wrapper);
           this.searchResults = wrapper.hits.hits;
           this.resultLimits.totalPages = wrapper.hits.total.value;
@@ -312,6 +300,7 @@ export class DashboardComponent implements OnInit {
           console.log("documents finished")
         }
       );
+    return searchObservable;
   }
 
   bucketDocCount(buckets: { [key: string]:any; }[], key){
