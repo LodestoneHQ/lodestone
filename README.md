@@ -5,12 +5,9 @@
 [![Gitter chat](https://img.shields.io/badge/chat-on%20gitter-brightgreen?style=flat-square)](https://gitter.im/lodestone-chat/devs)
 [![Get Notified](https://img.shields.io/badge/notify%20me-sign%20up-critical?style=flat-square)](https://forms.gle/u1RXnbocbFWqfxGb9)
 
-
-
 > NOTE: Lodestone is a Work-in-Progress and is not production ready.
->
+> 
 > If you want to be a tester/developer, please fill out this Google Form with your contact information: https://forms.gle/u1RXnbocbFWqfxGb9
-
 
 Lodestone is designed to be the modern and digital equivalent of a home filing cabinet.
 If you've gone searching for something similar in the past, you might be familiar with terms like Electronic Document
@@ -31,8 +28,8 @@ Lodestone is designed around a handful of core features:
 
 More screenshots available in the [docs/screenshots](docs/screenshots) directory.
 
-
 # Installation
+
 Lodestone is made up of a handful of open-source components, and as such its easiest to deploy using Docker/Docker Compose
 
 ```bash
@@ -41,29 +38,28 @@ docker-compose up
 # then open the following url in your browser
 
 http://localhost/web
-
 ```
 
 Place your documents in the `/data/storage/documents` directory, and the Filesystem Collector should automatically start processing them.
-
 
 If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
 repository.
 
 # Considerations
+
 Lodestone is a very opinionated solution for personal document management. As such, there's a couple things you should know before even considering it.
 
 - Currently there's no user management. Lodestone is designed to run at home, on your trusted network. This may be reconsidered at a future date.
+
 - Limited support for file types
-    - `doc`,`docx`,`xls`,`xlsx`, `ppt`, `pptx` - Microsoft Office Documents
-    - `pages`, `numbers`, `key` - Apple iWork Documents
-    - `pdf`
-    - `rtf`
-    - `jpg`, `jpeg`, `png`, `tiff`, `tif`
-
+  
+  - `doc`,`docx`,`xls`,`xlsx`, `ppt`, `pptx` - Microsoft Office Documents
+  - `pages`, `numbers`, `key` - Apple iWork Documents
+  - `pdf`
+  - `rtf`
+  - `jpg`, `jpeg`, `png`, `tiff`, `tif`
+    
     If you think there are additional document types that may be useful to support, please open an issue.
-
-
 
 # What about..
 
@@ -72,19 +68,16 @@ but unfortunately they all seem to miss one or more features that I think are re
 
 Here's some of my research, but you should take a look at them yourselves.
 
-| Name  | Docker/Linux | Web UI | Modern UI | Tagging | Non-destructive | OCR | Watch Folder | Email Import |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [MayanEDMS](https://www.mayan-edms.com/) | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :x: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-| [Paperless](https://github.com/the-paperless-project/paperless) | :white_check_mark: | :white_check_mark: | :heavy_exclamation_mark: | :white_check_mark: | :x: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-
-
+| Name                                                            | Docker/Linux       | Web UI             | Modern UI                | Tagging            | Non-destructive | OCR                | Watch Folder       | Email Import       |
+| --------------------------------------------------------------- |:------------------:|:------------------:|:------------------------:|:------------------:|:---------------:|:------------------:|:------------------:|:------------------:|
+| [MayanEDMS](https://www.mayan-edms.com/)                        | :white_check_mark: | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| [Paperless](https://github.com/the-paperless-project/paperless) | :white_check_mark: | :white_check_mark: | :heavy_exclamation_mark: | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 # Contributing
 
 If you're interested in contributing, please fill out the following Google Form:
 
 https://forms.gle/u1RXnbocbFWqfxGb9
-
 
 ```bash
 # run the following command in 1 terminal
@@ -101,32 +94,28 @@ repository.
 
 `find . -exec touch {} \;`
 
-
 ## Components
 
-| Name  | Software Version | Docker Image |
-| --- | :---: |  :---: |
-| Elasticsearch | Elasticsearch v7.2.1 | |
-| Filesystem Publisher | Go | [![](https://images.microbadger.com/badges/image/analogj/lodestone:fscrawler.svg)](https://microbadger.com/images/analogj/lodestone:fscrawler "Get your own image badge on microbadger.com") |
-| Document/Thumbnail Processor | Go | [![](https://images.microbadger.com/badges/image/analogj/lodestone:processor.svg)](https://microbadger.com/images/analogj/lodestone:processor "Get your own image badge on microbadger.com") |
-| Web / Api | Angular v8.x / ExpressJS v4.16 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:web.svg)](https://microbadger.com/images/analogj/lodestone:web "Get your own image badge on microbadger.com") |
-| Storage | minio 2019 (S3 compatible) | [![](https://images.microbadger.com/badges/image/minio/minio.svg)](https://microbadger.com/images/minio/minio "Get your own image badge on microbadger.com") |
-| Queue | RabbitMQ | [![](https://images.microbadger.com/badges/image/analogj/lodestone:rabbitmq.svg)](https://microbadger.com/images/analogj/lodestone:rabbitmq "Get your own image badge on microbadger.com") |
-| OCR | Tika | [![](https://images.microbadger.com/badges/image/analogj/lodestone:tika.svg)](https://microbadger.com/images/analogj/lodestone:tika "Get your own image badge on microbadger.com") |
-
+| Name                         | Software Version               | Docker Image                                                                                                                                                                                 |
+| ---------------------------- |:------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Elasticsearch                | Elasticsearch v7.2.1           |                                                                                                                                                                                              |
+| Filesystem Publisher         | Go                             | [![](https://images.microbadger.com/badges/image/analogj/lodestone:fscrawler.svg)](https://microbadger.com/images/analogj/lodestone:fscrawler "Get your own image badge on microbadger.com") |
+| Document/Thumbnail Processor | Go                             | [![](https://images.microbadger.com/badges/image/analogj/lodestone:processor.svg)](https://microbadger.com/images/analogj/lodestone:processor "Get your own image badge on microbadger.com") |
+| Web / Api                    | Angular v8.x / ExpressJS v4.16 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:web.svg)](https://microbadger.com/images/analogj/lodestone:web "Get your own image badge on microbadger.com")             |
+| Storage                      | minio 2019 (S3 compatible)     | [![](https://images.microbadger.com/badges/image/minio/minio.svg)](https://microbadger.com/images/minio/minio "Get your own image badge on microbadger.com")                                 |
+| Queue                        | RabbitMQ                       | [![](https://images.microbadger.com/badges/image/analogj/lodestone:rabbitmq.svg)](https://microbadger.com/images/analogj/lodestone:rabbitmq "Get your own image badge on microbadger.com")   |
+| OCR                          | Tika                           | [![](https://images.microbadger.com/badges/image/analogj/lodestone:tika.svg)](https://microbadger.com/images/analogj/lodestone:tika "Get your own image badge on microbadger.com")           |
 
 # Future Development
+
 Here's some of the feature's that we have targeted for future development. Check the [Lodestone Project](https://github.com/AnalogJ/lodestone/projects/1) for in-progress development status.
 
-- **(In-Progress)** Thumbnail Generation
 - Additional file types
 - Optional tag synchronization to cloud storage providers (Dropbox, Google Drive, etc)
 - Metadata Backup/Export system
-- Email Collector (send emails to a customizable email address, and automatically parse into lodestone).
-- Full API platform
+- **(In-Progress)** Email Collector (send emails to a customizable email address, and automatically parse into lodestone).
 - User management system
 
-
-
 # Logo
+
 - [rock by Dobs from the Noun Project](https://thenounproject.com/term/rock/481051)
