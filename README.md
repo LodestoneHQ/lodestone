@@ -45,6 +45,22 @@ Place your documents in the `/data/storage/documents` directory, and the Filesys
 If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
 repository.
 
+# Configuration
+
+Lodestone follows a [Convention over Configuration]([https://en.wikipedia.org/wiki/Convention_over_configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) design, which means that it works out of the box with sane defaults, but you can customize them to match your needs.
+
+Most of the configuration files are stored in the `webapp`image, and requested by various components when they start up. 
+
+- [filetypes.json](web/backend/data/filetypes.json) contains lists of `includes` and `excludes` that are used by the `processor` container to decide which files to process and load into the database. 
+
+- [tags.json](web/backend/data/tags.json) contains a nested structure of labels that can be used to group tags and seach for your documents in the Lodestone web UI. 
+
+- [mapping.json](web/backend/data/mappings.json) is used to ensure that the `elasticsearch` container has a consistent data storage structue. 
+
+To overide these files, just setup a Docker volume binding to the specified file in the `/lodestone/data/` directory in the `webapp` container. 
+
+
+
 # Considerations
 
 Lodestone is a very opinionated solution for personal document management. As such, there's a couple things you should know before even considering it.
@@ -54,9 +70,13 @@ Lodestone is a very opinionated solution for personal document management. As su
 - Limited support for file types
   
   - `doc`,`docx`,`xls`,`xlsx`, `ppt`, `pptx` - Microsoft Office Documents
+  
   - `pages`, `numbers`, `key` - Apple iWork Documents
+  
   - `pdf`
+  
   - `rtf`
+  
   - `jpg`, `jpeg`, `png`, `tiff`, `tif`
     
     If you think there are additional document types that may be useful to support, please open an issue.
