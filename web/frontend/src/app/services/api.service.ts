@@ -42,6 +42,11 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  processDocument(storageBucket, storageKey): Observable<any> {
+    return this.http.post<any>((environment.apiBase ? environment.apiBase: '') + `/api/v1/sync/file/${storageBucket}/${storageKey}`, {})
+      .pipe(catchError(this.handleError));
+  }
+
   fetchStatus(): Observable<StatusResult> {
     return this.http.get<StatusResult>((environment.apiBase ? environment.apiBase: '') + '/api/v1/status')
       .pipe(catchError(this.handleError));

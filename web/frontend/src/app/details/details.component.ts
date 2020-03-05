@@ -67,6 +67,14 @@ export class DetailsComponent implements OnInit {
       )
   }
 
+  processDocument(){
+    this.apiService.processDocument(this.documentData._source.storage.bucket, this.documentData._source.storage.path)
+      .subscribe(
+        data => console.log(data),
+        error => console.error(error),
+        () => console.log("FINSIHED processing document")
+      )
+  }
 
   bookmarkDocument(currentState){
     this.es.bookmarkDocument(this.documentData._id, !currentState)

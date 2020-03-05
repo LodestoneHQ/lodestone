@@ -55,9 +55,14 @@
             <app-doc-preview *ngIf="documentData" [extension]="documentData._source.file.extension" [path]="storageEndpoint(documentData._source.storage.bucket, documentData._source.storage.path)"></app-doc-preview>
           </tab>
           <tab heading="Extracted Text">
-            <div style="max-height: 800px; overflow: scroll; outline: auto;">
+            <div *ngIf="documentData._source.content.trim().length; else emptyContent" style="max-height: 800px; overflow: scroll; outline: auto;">
               {{documentData._source.content}}
             </div>
+            <ng-template #emptyContent>
+              <div class="notification warning">
+                <p>No extracted text found for this document. <span style="font-weight: bold;" class="cursor_pointer" (click)="processDocument()">click here</span> to queue document for re-processing.</p>
+              </div>
+            </ng-template>
           </tab>
         </tabset>
       </div>
