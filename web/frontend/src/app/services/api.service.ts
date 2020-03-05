@@ -6,6 +6,7 @@ import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {StatusResult} from "../models/status-result";
 import {Tag} from "../models/tag";
+import {SyncResult} from "../models/sync-result";
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +38,8 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
-  scanStorage(): Observable<any> {
-    return this.http.post<any>((environment.apiBase ? environment.apiBase: '') + '/api/v1/sync/bucket', {})
+  syncStorage(): Observable<SyncResult[]> {
+    return this.http.post<SyncResult[]>((environment.apiBase ? environment.apiBase: '') + '/api/v1/sync/bucket', {})
       .pipe(catchError(this.handleError));
   }
 

@@ -3,6 +3,7 @@ import {Component, OnInit, TemplateRef} from '@angular/core';
 import {ApiService} from "../services/api.service";
 import {StatusResult} from "../models/status-result";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
+import {SyncResult} from "../models/sync-result";
 
 @Component({
   selector: 'app-status',
@@ -15,7 +16,7 @@ export class StatusComponent implements OnInit {
   statusDate: Date = new Date()
   modalRef: BsModalRef;
 
-  scannedFiles: [];
+  syncedDocuments: SyncResult[] = [];
   processingErrors: [];
 
   loading = {
@@ -51,21 +52,28 @@ export class StatusComponent implements OnInit {
     );
   }
 
+  scanMissingConfirm(scanMissingTemplate: TemplateRef<any>){
+    this.modalRef = this.modalService.show(scanMissingTemplate, {
+      class: 'modal-dialog-centered modal-lg'
+    });
+  }
 
-  scanMissing(template: TemplateRef<any>){
+
+  scanMissing(scanTemplate: TemplateRef<any>){
+
     if(this.loading.scan){
       return
     }
 
     //scan for missing documents
     this.loading.scan = true;
-    this.apiService.scanStorage().subscribe(result => {
+    this.apiService.syncStorage().subscribe(result => {
         console.log("Successful scan");
         console.log(result);
 
-        this.scannedFiles = result;
+        this.syncedDocuments = result;
 
-        this.modalRef = this.modalService.show(template, {
+        this.modalRef = this.modalService.show(scanTemplate, {
             class: 'modal-dialog-centered modal-dialog-scrollable modal-lg',
             ignoreBackdropClick: true
         });

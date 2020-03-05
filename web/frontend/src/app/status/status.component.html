@@ -1,31 +1,57 @@
 <app-header></app-header>
 
+<ng-template #syncConfirmTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Are you sure?</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>This action will ensure that documents in storage are in sync with the database. It will perform the following steps:</p>
+    <ul>
+      <li>list all documents in storage, and ensure they all exist in ElasticSearch</li>
+      <li>delete entries in ElasticSearch if the file no longer exists in storage</li>
+      <li>re-trigger processing on any ElasticSearch entries that do not have any extracted text</li>
+    </ul>
+
+    <p>The sync process is time consuming and resource intensive. Are you sure you want to continue?</p>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="button dark ripple-effect" (click)="modalRef.hide()">Cancel</button>
+    <button type="button" class="button ripple-effect" (click)="modalRef.hide(); scanMissing(scanTemplate)">Sync</button>
+  </div>
+</ng-template>
+
 
 <ng-template #scanTemplate>
       <div class="modal-header">
-        <h4 class="modal-title pull-left">Document Scan Results</h4>
+        <h4 class="modal-title pull-left">Document Sync Results</h4>
         <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div *ngIf="scannedFiles.length == 0" class="notification warning">
+      <div class="modal-body modal-body-scroll">
+        <div *ngIf="syncedDocuments.length == 0" class="notification warning">
           <p>No new documents detected.</p>
         </div>
-        <table *ngIf="scannedFiles.length >0" class="table table-striped">
+        <table *ngIf="syncedDocuments.length >0" class="table table-striped">
           <thead class="thead-primary">
           <tr>
             <th>Storage Bucket</th>
             <th>Queued Document</th>
             <th>Size</th>
+            <th>Reason</th>
           </tr>
           </thead>
           <tbody>
 
-          <tr *ngFor="let doc of scannedFiles">
+          <tr *ngFor="let doc of syncedDocuments">
             <td>{{doc.bucket}}</td>
             <td>{{doc.key}}</td>
             <td>{{doc.size | filesize}}</td>
+            <td>{{doc.syncStatus}}</td>
           </tr>
           </tbody></table>
       </div>
@@ -129,7 +155,7 @@
                   <!-- Buttons -->
                   <div class="buttons-to-right always-visible">
                     <button [disabled]="this.loading.status" (click)="getStatus($event)" class="button dark ripple-effect"><i class="icon-material-outline-autorenew"></i> Check</button>
-                    <button [disabled]="this.loading.scan" (click)="scanMissing(scanTemplate)" class="button ripple-effect"><i class="icon-material-outline-folder"></i> Scan</button>
+                    <button [disabled]="this.loading.scan" (click)="scanMissingConfirm(syncConfirmTemplate)" class="button ripple-effect"><i class="icon-material-outline-folder"></i> Sync</button>
 
                   </div>
                 </li>

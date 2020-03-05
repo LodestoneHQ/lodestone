@@ -9,10 +9,10 @@ class Document {
 
         //elasticsearch meta
         this.content = content;
-        this.elasticSearchId = elasticSearchId
+        this.elasticSearchId = elasticSearchId;
 
         // syncStatus must be one of the following states = ['MISSING_ELASTICSEARCH', 'MISSING_STORAGE', 'MISSING_EXTRACTED_TEXT', null]
-        this.syncStatus = null
+        this.syncStatus = syncStatus;
     }
 }
 
