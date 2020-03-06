@@ -35,8 +35,9 @@ FROM dependencies as runtime
 RUN apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 ENV TIKA_VERSION=$TIKA_VERSION
 COPY --from=fetch_tika /tika-server-${TIKA_VERSION}.jar /tika-server-${TIKA_VERSION}.jar
+COPY tika-config.xml /tika-config.xml
 
 EXPOSE 9998
-ENTRYPOINT java -jar /tika-server-${TIKA_VERSION}.jar -h 0.0.0.0
+ENTRYPOINT java -jar /tika-server-${TIKA_VERSION}.jar -h 0.0.0.0 --config /tika-config.xml
 
 HEALTHCHECK --interval=5s --timeout=5s --retries=5 CMD curl --silent --fail localhost:9998/tika || exit 1
