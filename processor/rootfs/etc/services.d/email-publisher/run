@@ -1,0 +1,25 @@
+#!/usr/bin/with-contenv bash
+
+# if IMAP email configuration is not set, we need to unload/disable this service.
+
+
+
+if [ -z "$IMAP_HOSTNAME" ] || [ -z "$IMAP_USERNAME" ] || [ -z "$IMAP_PASSWORD" ] || [ -z "$IMAP_ATTM_BUCKET" ]; then
+  echo 'one or more environmental variables required for email publisher are undefined'
+  s6-svc -x /var/run/s6/services/email-publisher
+  rm -rf /var/run/s6/services/email-publisher
+  s6-svscanctl -a /var/run/s6/services
+  exit 0
+fi
+
+ls -alt /usr/bin/lodestone-email-publisher
+/usr/bin/lodestone-email-publisher start \
+--imap-hostname="${IMAP_HOSTNAME}" \
+--imap-port="${IMAP_PORT:+993}" \
+--imap-username="${IMAP_USERNAME}" \
+--imap-password="${IMAP_PASSWORD}" \
+--imap-interval="${IMAP_INTERVAL:+600}" \
+--api-endpoint="http://${LS_API_HOST}:${LS_API_PORT}" \
+--bucket="${IMAP_ATTM_BUCKET}" \
+--amqp-url="amqp://${RABBITMQ_USER}:${RABBITMQ_PASS}@${LS_RABBITMQ_HOST}:${LS_RABBITMQ_PORT}" \
+${DEBUG:+--debug}

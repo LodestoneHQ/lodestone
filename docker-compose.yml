@@ -46,7 +46,11 @@ services:
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
-
+#      - IMAP_HOSTNAME=
+#      - IMAP_PORT=
+#      - IMAP_USERNAME=
+#      - IMAP_PASSWORD=
+#      - IMAP_ATTM_BUCKET=
   webapp:
     image: analogj/lodestone:web
 #    build: web
