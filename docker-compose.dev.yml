@@ -40,6 +40,7 @@ services:
     volumes:
       - ~/repos/gopath/src/github.com/analogj/lodestone-processor/lodestone-document-processor-linux-amd64:/usr/bin/lodestone-document-processor
       - ~/repos/gopath/src/github.com/analogj/lodestone-processor/lodestone-thumbnail-processor-linux-amd64:/usr/bin/lodestone-thumbnail-processor
+#      - ~/repos/gopath/src/github.com/analogj/lodestone-publisher/lodestone-email-publisher-linux-amd64:/usr/bin/lodestone-email-publisher
     environment:
       - LS_ELASTICSEARCH_HOST=${LS_ELASTICSEARCH_HOST:-elasticsearch}
       - LS_ELASTICSEARCH_PORT=${LS_ELASTICSEARCH_PORT:-9200}
@@ -53,7 +54,11 @@ services:
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
-
+#      - 'IMAP_HOSTNAME=imap.gmail.com'
+#      - IMAP_PORT=993
+#      - 'IMAP_USERNAME=lodestone@example.com'
+#      - 'IMAP_PASSWORD=your-password-here'
+#      - IMAP_ATTM_BUCKET=documents
 
   webapp:
     build:
