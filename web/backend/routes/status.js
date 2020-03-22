@@ -15,7 +15,7 @@ router.get('/errors', async function(req, res, next) {
         let exchangeName = 'errors';
 
         //https://stackoverflow.com/questions/47303096/how-to-get-all-messages-using-method-consume-in-lib-amqp-node
-        let conn = await amqp.connect(`amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASS}@${process.env.LS_RABBITMQ_HOST}:${process.env.LS_RABBITMQ_PORT}`)
+        let conn = await amqp.connect(`amqp://${process.env.RABBITMQ_USER}:${encodeURIComponent(process.env.RABBITMQ_PASS)}@${process.env.LS_RABBITMQ_HOST}:${process.env.LS_RABBITMQ_PORT}`)
         let chan = await conn.createChannel();
         await chan.assertExchange(exchangeName, 'fanout')
         let response = await chan.assertQueue(queueName)
