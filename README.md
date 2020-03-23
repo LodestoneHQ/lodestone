@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/AnalogJ/lodestone">
-  <img width="300" alt="lodestone_view" src="https://github.com/AnalogJ/lodestone/raw/master/web/frontend/src/assets/images/logo-square.png">
+  <img width="500" alt="lodestone_view" src="https://github.com/AnalogJ/lodestone/raw/master/web/frontend/src/assets/images/logo.png">
   </a>
 </p>
 
