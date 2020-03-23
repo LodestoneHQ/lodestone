@@ -54,6 +54,8 @@ services:
       - MINIO_SECRET_KEY=minio123
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
+# WARNING: do not enable imap/email watcher yet. It's still a work-in-progress, and deletes documents after processing.
+# Will be released with Beta 3.
 #      - 'IMAP_HOSTNAME=imap.gmail.com'
 #      - IMAP_PORT=993
 #      - 'IMAP_USERNAME=lodestone@example.com'
