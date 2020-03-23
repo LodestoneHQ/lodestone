@@ -1,3 +1,10 @@
+<p align="center">
+  <a href="https://github.com/AnalogJ/lodestone">
+  <img width="300" alt="lodestone_view" src="https://github.com/AnalogJ/lodestone/raw/master/web/frontend/src/assets/images/logo-square.png">
+  </a>
+</p>
+
+
 # Lodestone - Personal Document Search & Archive
 
 [![GitHub license](https://img.shields.io/github/license/AnalogJ/lodestone.svg?style=flat-square)](https://github.com/AnalogJ/lodestone/blob/master/LICENSE)
