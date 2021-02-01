@@ -1,9 +1,6 @@
 # Design Document
 
 > NOTE: Lodestone is a Work-in-Progress and is not production ready.
->
-> If you want to be a tester/developer, please fill out this Google Form with your contact information: https://forms.gle/u1RXnbocbFWqfxGb9
-
 ## Components
 
 Lodestone is made up of a handful of components, each isolated to its own Docker container.

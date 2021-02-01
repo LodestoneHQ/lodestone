@@ -14,7 +14,6 @@
 
 > NOTE: Lodestone is a Work-in-Progress and is not production ready.
 > 
-> If you want to be a tester/developer, please fill out this Google Form with your contact information: https://forms.gle/u1RXnbocbFWqfxGb9
 
 Lodestone is designed to be the modern and digital equivalent of a home filing cabinet.
 If you've gone searching for something similar in the past, you might be familiar with terms like Electronic Document
