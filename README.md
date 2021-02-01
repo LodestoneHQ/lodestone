@@ -13,8 +13,6 @@
 [![Get Notified](https://img.shields.io/badge/notify%20me-sign%20up-critical?style=flat-square)](https://forms.gle/u1RXnbocbFWqfxGb9)
 
 > NOTE: Lodestone is a Work-in-Progress and is not production ready.
-> 
-> If you want to be a tester/developer, please fill out this Google Form with your contact information: https://forms.gle/u1RXnbocbFWqfxGb9
 
 Lodestone is designed to be the modern and digital equivalent of a home filing cabinet.
 If you've gone searching for something similar in the past, you might be familiar with terms like Electronic Document
@@ -99,12 +97,6 @@ Here's some of my research, but you should take a look at them yourselves.
 | --------------------------------------------------------------- |:------------------:|:------------------:|:------------------------:|:------------------:|:---------------:|:------------------:|:------------------:|:------------------:|
 | [MayanEDMS](https://www.mayan-edms.com/)                        | :white_check_mark: | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Paperless](https://github.com/the-paperless-project/paperless) | :white_check_mark: | :white_check_mark: | :heavy_exclamation_mark: | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
-
-# Contributing
-
-If you're interested in contributing, please fill out the following Google Form:
-
-https://forms.gle/u1RXnbocbFWqfxGb9
 
 ```bash
 # run the following command in 1 terminal
