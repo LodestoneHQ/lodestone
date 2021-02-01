@@ -100,12 +100,6 @@ Here's some of my research, but you should take a look at them yourselves.
 | [MayanEDMS](https://www.mayan-edms.com/)                        | :white_check_mark: | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Paperless](https://github.com/the-paperless-project/paperless) | :white_check_mark: | :white_check_mark: | :heavy_exclamation_mark: | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-# Contributing
-
-If you're interested in contributing, please fill out the following Google Form:
-
-https://forms.gle/u1RXnbocbFWqfxGb9
-
 ```bash
 # run the following command in 1 terminal
 docker-compose -f docker-compose.dev.yml up --force-recreate --build
