@@ -28,7 +28,7 @@
     "lodash": "^4.17.15",
     "mammoth": "^1.4.8",
     "moment": "^2.24.0",
-    "ng2-pdfjs-viewer": "^5.0.5",
+    "ng2-pdfjs-viewer": "^5.0.7",
     "ng5-slider": "^1.2.4",
     "ngx-bootstrap": "^4.2.0",
     "ngx-filesize": "^1.1.4",
