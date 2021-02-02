@@ -37,7 +37,7 @@ export class DocPreviewComponent implements AfterViewInit {
     }
   };
 
-  @ViewChild(PdfJsViewerComponent, {static: false}) public pdfViewerAutoLoad: PdfJsViewerComponent;
+  @ViewChild(PdfJsViewerComponent) public pdfViewerAutoLoad: PdfJsViewerComponent;
 
   constructor(private api: ApiService) { }
 
