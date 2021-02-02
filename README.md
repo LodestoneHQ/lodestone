@@ -1,16 +1,15 @@
 <p align="center">
-  <a href="https://github.com/AnalogJ/lodestone">
-  <img width="500" alt="lodestone_view" src="https://github.com/AnalogJ/lodestone/raw/master/web/frontend/src/assets/images/logo.png">
+  <a href="https://github.com/LodestoneHQ/lodestone">
+  <img width="500" alt="lodestone_view" src="https://github.com/LodestoneHQ/lodestone/raw/master/web/frontend/src/assets/images/logo.png">
   </a>
 </p>
 
 
 # Lodestone - Personal Document Search & Archive
 
-[![GitHub license](https://img.shields.io/github/license/AnalogJ/lodestone.svg?style=flat-square)](https://github.com/AnalogJ/lodestone/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/LodestoneHQ/lodestone.svg?style=flat-square)](https://github.com/LodestoneHQ/lodestone/blob/master/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/analogj/lodestone.svg?style=flat-square)](https://hub.docker.com/r/analogj/lodestone)
 [![Gitter chat](https://img.shields.io/badge/chat-on%20gitter-brightgreen?style=flat-square)](https://gitter.im/lodestone-chat/devs)
-[![Get Notified](https://img.shields.io/badge/notify%20me-sign%20up-critical?style=flat-square)](https://forms.gle/u1RXnbocbFWqfxGb9)
 
 > NOTE: Lodestone is a Work-in-Progress and is not production ready.
 
@@ -47,7 +46,7 @@ http://localhost/web
 
 Place your documents in the `/data/storage/documents` directory, and the Filesystem Collector should automatically start processing them.
 
-If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
+If you would like some test documents to play with safely, you can take a look at the [LodestoneHQ/lodestone-test-docs](https://github.com/LodestoneHQ/lodestone-test-docs)
 repository.
 
 # Configuration
@@ -103,12 +102,13 @@ Here's some of my research, but you should take a look at them yourselves.
 docker-compose -f docker-compose.dev.yml up --force-recreate --build
 
 # and the following in a different terminal
-cd web/frontend && ng serve --configuration=dev
+cd web/frontend 
+ng run serve
 ```
 
 Place your documents in the `/data/storage/documents` directory, and the Filesystem Collector should automatically start processing them.
 
-If you would like some test documents to play with safely, you can take a look at the [AnalogJ/lodestone-test-docs](https://github.com/AnalogJ/lodestone-test-docs)
+If you would like some test documents to play with safely, you can take a look at the [LodesoneHQ/lodestone-test-docs](https://github.com/LodestoneHQ/lodestone-test-docs)
 repository.
 
 `find . -exec touch {} \;`
@@ -125,9 +125,22 @@ repository.
 | Queue                        | RabbitMQ                       | [![](https://images.microbadger.com/badges/image/analogj/lodestone:rabbitmq.svg)](https://microbadger.com/images/analogj/lodestone:rabbitmq "Get your own image badge on microbadger.com")   |
 | OCR                          | Tika                           | [![](https://images.microbadger.com/badges/image/analogj/lodestone:tika.svg)](https://microbadger.com/images/analogj/lodestone:tika "Get your own image badge on microbadger.com")           |
 
-# Future Development
+# Contributing
+It is recommended that you clone all the repositories into the same parent folder (list of repositories [here](https://github.com/LodestoneHQ]))
 
-Here's some of the feature's that we have targeted for future development. Check the [Lodestone Project](https://github.com/AnalogJ/lodestone/projects/1) for in-progress development status.
+Use the commands below to configure a local development environment for the Lodestone UI:
+
+```bash
+# run the following command in 1 terminal
+docker-compose -f docker-compose.dev.yml up --force-recreate --build
+
+# and the following in a different terminal
+cd web/frontend 
+npm run serve
+```
+
+
+# Future Development
 
 - Additional file types
 - Optional tag synchronization to cloud storage providers (Dropbox, Google Drive, etc)
