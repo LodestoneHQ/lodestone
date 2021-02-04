@@ -1,5 +1,0 @@
-#!/usr/bin/with-contenv bash
-
-chown -R elasticsearch:root /usr/share/elasticsearch/config/elasticsearch.yml
-chown -R elasticsearch:root /usr/share/elasticsearch/data
-chmod +x /usr/local/bin/docker-entrypoint.sh

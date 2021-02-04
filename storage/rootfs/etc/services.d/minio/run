@@ -1,3 +1,0 @@
-#!/usr/bin/with-contenv bash
-
-/usr/bin/docker-entrypoint.sh gateway nas /data
