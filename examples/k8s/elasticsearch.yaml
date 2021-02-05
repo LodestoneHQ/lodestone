@@ -1,0 +1,68 @@
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: elasticsearch
+  namespace: lodestone
+  labels:
+    k8s-app: elasticsearch
+spec:
+  replicas: 1
+  serviceName: elasticsearch
+  selector:
+    matchLabels:
+      k8s-app: elasticsearch
+  volumeClaimTemplates:
+  - metadata:
+      name: elasticsearch
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 5Gi
+  template:
+    metadata:
+      labels:
+        k8s-app: elasticsearch
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      terminationGracePeriodSeconds: 30
+      containers:
+      - image: analogj/lodestone:elasticsearch
+        imagePullPolicy: Always
+        name: elasticsearch
+        env:
+        - name: ES_JAVA_OPTS
+          value: "-Xms512m -Xmx512m"
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: elasticsearch
+        ports:
+        - containerPort: 9200
+        - containerPort: 9300
+        securityContext:
+          allowPrivilegeEscalation: false
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: elasticsearch
+  namespace: lodestone
+  labels:
+    k8s-app: elasticsearch
+spec:
+  selector:
+    k8s-app: elasticsearch
+  ports:
+    - protocol: TCP
+      port: 9200
+      targetPort: 9200
+      name: rest
+    - protocol: TCP
+      port: 9300
+      targetPort: 9300
+      name: node

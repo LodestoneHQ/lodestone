@@ -1,0 +1,33 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "haproxy"
+    ingress.kubernetes.io/ssl-redirect: "true"
+    ingress.kubernetes.io/config-backend: |
+      acl is_storage path_beg /storage
+      http-request set-path %[path,regsub(^/storage/?,/)] if is_storage
+  name: ingress-lodestone
+  namespace: lodestone
+spec:
+  rules:
+  - host: lodestone.<your domain>
+    http:
+      paths:
+      - backend:
+          serviceName: webapp
+          servicePort: webapp
+        path: /web
+      - backend:
+          serviceName: webapp
+          servicePort: webapp
+        path: /api
+      - backend:
+          serviceName: storage
+          servicePort: storage
+        path: /storage
+  tls:
+  - hosts:
+    - lodestone.<your domain>
+    secretName: lodestone-cert
