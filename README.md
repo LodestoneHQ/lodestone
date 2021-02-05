@@ -41,7 +41,7 @@ docker-compose up
 
 # then open the following url in your browser
 
-http://localhost/web
+http://localhost/
 ```
 
 Place your documents in the `/data/storage/documents` directory, and the Filesystem Collector should automatically start processing them.
@@ -51,15 +51,15 @@ repository.
 
 # Configuration
 
-Lodestone follows a [Convention over Configuration]([https://en.wikipedia.org/wiki/Convention_over_configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) design, which means that it works out of the box with sane defaults, but you can customize them to match your needs.
+Lodestone follows a [Convention over Configuration](https://en.wikipedia.org/wiki/Convention_over_configuration) design, which means that it works out of the box with sane defaults, but you can customize them to match your needs.
 
-Most of the configuration files are stored in the `webapp`image, and requested by various components when they start up. 
+Most of the configuration files are stored in the `webapp` image (source code [here](https://github.com/LodestoneHQ/lodestone-ui)), and requested by various components when they start up. 
 
-- [filetypes.json](web/backend/data/filetypes.json) contains lists of `includes` and `excludes` that are used by the `processor` container to decide which files to process and load into the database. 
+- **filetypes.json** (backend/data/filetypes.json) contains lists of `includes` and `excludes` that are used by the `processor` container to decide which files to process and load into the database. 
 
-- [tags.json](web/backend/data/tags.json) contains a nested structure of labels that can be used to group tags and seach for your documents in the Lodestone web UI. 
+- **tags.json** (backend/data/tags.json) contains a nested structure of labels that can be used to group tags and seach for your documents in the Lodestone web UI. 
 
-- [mapping.json](web/backend/data/mappings.json) is used to ensure that the `elasticsearch` container has a consistent data storage structue. 
+- **[mapping.json** (backend/data/mappings.json) is used to ensure that the `elasticsearch` container has a consistent data storage structue. 
 
 To overide these files, just setup a Docker volume binding to the specified file in the `/lodestone/data/` directory in the `webapp` container. 
 
@@ -97,14 +97,6 @@ Here's some of my research, but you should take a look at them yourselves.
 | [MayanEDMS](https://www.mayan-edms.com/)                        | :white_check_mark: | :white_check_mark: | :white_check_mark:       | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | [Paperless](https://github.com/the-paperless-project/paperless) | :white_check_mark: | :white_check_mark: | :heavy_exclamation_mark: | :white_check_mark: | :x:             | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
-```bash
-# run the following command in 1 terminal
-docker-compose -f docker-compose.dev.yml up --force-recreate --build
-
-# and the following in a different terminal
-cd web/frontend 
-ng run serve
-```
 
 Place your documents in the `/data/storage/documents` directory, and the Filesystem Collector should automatically start processing them.
 
@@ -115,38 +107,28 @@ repository.
 
 ## Components
 
-| Name                         | Software Version               | Docker Image                                                                                                                                                                                 |
-| ---------------------------- |:------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| Elasticsearch                | Elasticsearch v7.2.1           |                                                                                                                                                                                              |
-| Filesystem Publisher         | Go                             | [![](https://images.microbadger.com/badges/image/analogj/lodestone:fscrawler.svg)](https://microbadger.com/images/analogj/lodestone:fscrawler "Get your own image badge on microbadger.com") |
-| Document/Thumbnail Processor | Go                             | [![](https://images.microbadger.com/badges/image/analogj/lodestone:processor.svg)](https://microbadger.com/images/analogj/lodestone:processor "Get your own image badge on microbadger.com") |
-| Web / Api                    | Angular v8.x / ExpressJS v4.16 | [![](https://images.microbadger.com/badges/image/analogj/lodestone:web.svg)](https://microbadger.com/images/analogj/lodestone:web "Get your own image badge on microbadger.com")             |
-| Storage                      | minio 2019 (S3 compatible)     | [![](https://images.microbadger.com/badges/image/minio/minio.svg)](https://microbadger.com/images/minio/minio "Get your own image badge on microbadger.com")                                 |
-| Queue                        | RabbitMQ                       | [![](https://images.microbadger.com/badges/image/analogj/lodestone:rabbitmq.svg)](https://microbadger.com/images/analogj/lodestone:rabbitmq "Get your own image badge on microbadger.com")   |
-| OCR                          | Tika                           | [![](https://images.microbadger.com/badges/image/analogj/lodestone:tika.svg)](https://microbadger.com/images/analogj/lodestone:tika "Get your own image badge on microbadger.com")           |
-
-# Contributing
-It is recommended that you clone all the repositories into the same parent folder (list of repositories [here](https://github.com/LodestoneHQ]))
-
-Use the commands below to configure a local development environment for the Lodestone UI:
-
-```bash
-# run the following command in 1 terminal
-docker-compose -f docker-compose.dev.yml up --force-recreate --build
-
-# and the following in a different terminal
-cd web/frontend 
-npm run serve
-```
-
+| Name                         | Software Version               | Docker Image                                                                                                     |
+| ---------------------------- |:-------------------------------:|:---------------------------------------------------------------------------------------------------------------:|
+| Elasticsearch                | Elasticsearch v7.2.1            | [lodestonehq/lodestone-elasticsearch](https://hub.docker.com/r/lodestonehq/lodestone-elasticsearch)             |
+| Filesystem Publisher         | Go                              | [analogj/lodestone:fscrawler](https://hub.docker.com/r/analogj/lodestone:fscrawler)                             |
+| Document Processor           | Go                              | [lodestonehq/lodestone-document-processor](https://hub.docker.com/r/lodestonehq/lodestone-document-processor)   |
+| Thumbnail Processor          | Go                              | [lodestonehq/lodestone-thumbnail-processor](https://hub.docker.com/r/lodestonehq/lodestone-thumbnail-processor) |
+| Web / Api                    | Angular v11.x / ExpressJS v4.16 | [lodestonehq/lodestone-ui](https://hub.docker.com/r/lodestonehq/lodestone-ui)                                   |
+| Storage                      | minio 2019 (S3 compatible)      | [analogj/lodestone:storage](https://hub.docker.com/r/analogj/analogj/lodestone:storage)                         |
+| Queue                        | RabbitMQ                        | [lodestonehq/lodestone-rabbitmq](https://hub.docker.com/r/lodestonehq/lodestone-rabbitmq)                       |
+| OCR                          | Tika                            | [lodestonehq/lodestone-tika](https://hub.docker.com/r/lodestonehq/lodestone-tika)                               |
 
 # Future Development
 
-- Additional file types
-- Optional tag synchronization to cloud storage providers (Dropbox, Google Drive, etc)
-- Metadata Backup/Export system
-- **(In-Progress)** Email Collector (send emails to a customizable email address, and automatically parse into lodestone).
-- User management system
+Please see our Issues system for a list of items that have been reported. All issues for the project are contained in this repo. Issues are labeled by area affected, status, and
+other labels as appropriate. Below are some example of filtering issues by label:
+
+- [Issues in Progress](https://github.com/LodestoneHQ/lodestone/issues?q=is%3Aopen+is%3Aissue+label%3Astatus%2Fin-progress)
+- [UI Issues](https://github.com/LodestoneHQ/lodestone/issues?q=is%3Aopen+is%3Aissue+label%3Aarea%2Fui)
+- [Processor Issues](https://github.com/LodestoneHQ/lodestone/issues?q=is%3Aopen+is%3Aissue+label%3Aarea%2Fprocessor)
+- [Documentation Needs](https://github.com/LodestoneHQ/lodestone/issues?q=is%3Aopen+is%3Aissue+label%3Atype%2Fdocumentation)
+
+Please feel free to create an issue if you have an idea for a new feature, find a bug, or have a question.
 
 # Logo
 
