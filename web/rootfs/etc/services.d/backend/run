@@ -1,7 +1,0 @@
-#!/usr/bin/with-contenv bash
-echo "Starting Backend"
-
-cd /lodestone/backend
-rm -rf node_modules
-npm install
-nodemon

@@ -55,7 +55,7 @@ services:
     - --api-endpoint=http://webapp:3000
   
   webapp:
-    image: lodestonehq/lodestone:latest
+    image: lodestonehq/lodestone-ui:latest
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -105,7 +105,7 @@ services:
   #    - RABBITMQ_PASS=lodestone
 
   storage:
-    # Use the following once publisher has been updated to a stand-along build and the storage
+    # Use the following image once publisher has been updated to a stand-along build and the storage
     # Dockerfile has been updated to not import a pre-built binary
     #image: lodestonehq/lodestone-storage:latest
     image: analogj/lodestone:storage
