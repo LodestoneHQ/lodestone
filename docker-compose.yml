@@ -78,6 +78,32 @@ services:
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
 
+  # Enable the following 2 services when the work has been completed to separate the publisher builds
+
+  #fs_publisher:
+  #  image: lodestonehq/lodestone-fs-publisher:latest
+  #  depends_on:
+  #    rabbitmq:
+  #      condition: service_healthy
+  #  volumes:
+  #    - ./data/storage:/data
+  #  environment:
+  #    - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
+  #    - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
+  #    - RABBITMQ_USER=lodestone
+  #    - RABBITMQ_PASS=lodestone
+
+  #email_publisher:
+  #  image: lodestonehq/lodestone-email-publisher:latest
+  #  depends_on:
+  #    rabbitmq:
+  #      condition: service_healthy
+  #  environment:
+  #    - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
+  #    - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
+  #    - RABBITMQ_USER=lodestone
+  #    - RABBITMQ_PASS=lodestone
+
   storage:
     # Use the following once publisher has been updated to a stand-along build and the storage
     # Dockerfile has been updated to not import a pre-built binary
