@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/LodestoneHQ/lodestone">
-  <img width="500" alt="lodestone_view" src="https://github.com/LodestoneHQ/lodestone/raw/master/web/frontend/src/assets/images/logo.png">
+  <img width="500" alt="lodestone_view" src="docs/logo.png">
   </a>
 </p>
 
