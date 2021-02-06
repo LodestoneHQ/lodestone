@@ -79,7 +79,7 @@ services:
       - RABBITMQ_PASS=lodestone
 
   fs_publisher:
-    image: lodestonehq/lodestone-fs-publisher:latest
+    image: lodestonehq/lodestone-fs-publisher:v0.1.0
     depends_on:
       rabbitmq:
         condition: service_healthy
