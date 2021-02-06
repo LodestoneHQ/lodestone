@@ -9,7 +9,7 @@
 version: '2.2'
 services:
   elasticsearch:
-    image: lodestonehq/lodestone-elasticsearch:latest
+    image: lodestonehq/lodestone-elasticsearch:v0.1.0
     environment:
       #- bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -21,7 +21,7 @@ services:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
 
   document_processor:
-    image: lodestonehq/lodestone-document-processor:latest
+    image: lodestonehq/lodestone-document-processor:v0.1.0
     volumes:
       - ./data/storage/tmp:/tmp
     depends_on:
@@ -42,7 +42,7 @@ services:
     - --elasticsearch-endpoint=http://elasticsearch:9200
     
   thumbnail_processor:
-    image: lodestonehq/lodestone-thumbnail-processor:latest
+    image: lodestonehq/lodestone-thumbnail-processor:v0.1.0
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -55,7 +55,7 @@ services:
     - --api-endpoint=http://webapp:3000
   
   webapp:
-    image: lodestonehq/lodestone-ui:latest
+    image: lodestonehq/lodestone-ui:v0.1.0
     depends_on:
       elasticsearch:
         condition: service_healthy
@@ -129,11 +129,11 @@ services:
     #      - MINIO_PGID=15000
 
   rabbitmq:
-    image: lodestonehq/lodestone-rabbitmq:latest
+    image: lodestonehq/lodestone-rabbitmq:v0.1.0
     environment:
       - RABBITMQ_DEFAULT_USER=lodestone
       - RABBITMQ_DEFAULT_PASS=lodestone
 
   tika:
-    image: lodestonehq/lodestone-tika:latest
+    image: lodestonehq/lodestone-tika:v0.1.0
 
