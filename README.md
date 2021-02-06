@@ -59,7 +59,7 @@ Most of the configuration files are stored in the `webapp` image (source code [h
 
 - **tags.json** (backend/data/tags.json) contains a nested structure of labels that can be used to group tags and seach for your documents in the Lodestone web UI. 
 
-- **[mapping.json** (backend/data/mappings.json) is used to ensure that the `elasticsearch` container has a consistent data storage structue. 
+- **mapping.json** (backend/data/mappings.json) is used to ensure that the `elasticsearch` container has a consistent data storage structue. 
 
 To overide these files, just setup a Docker volume binding to the specified file in the `/lodestone/data/` directory in the `webapp` container. 
 
@@ -103,6 +103,8 @@ Place your documents in the `/data/storage/documents` directory, and the Filesys
 If you would like some test documents to play with safely, you can take a look at the [LodesoneHQ/lodestone-test-docs](https://github.com/LodestoneHQ/lodestone-test-docs)
 repository.
 
+If the processor doesn't pick up your files, you may have to fake an update to them to change the timestamp. This is temporary and will be resolved in a future release. You can use the command below to update the timestamp and trigger the processor:
+
 `find . -exec touch {} \;`
 
 ## Components
@@ -110,7 +112,6 @@ repository.
 | Name                         | Software Version               | Docker Image                                                                                                     |
 | ---------------------------- |:-------------------------------:|:---------------------------------------------------------------------------------------------------------------:|
 | Elasticsearch                | Elasticsearch v7.2.1            | [lodestonehq/lodestone-elasticsearch](https://hub.docker.com/r/lodestonehq/lodestone-elasticsearch)             |
-| Filesystem Publisher         | Go                              | [analogj/lodestone:fscrawler](https://hub.docker.com/r/analogj/lodestone:fscrawler)                             |
 | Document Processor           | Go                              | [lodestonehq/lodestone-document-processor](https://hub.docker.com/r/lodestonehq/lodestone-document-processor)   |
 | Thumbnail Processor          | Go                              | [lodestonehq/lodestone-thumbnail-processor](https://hub.docker.com/r/lodestonehq/lodestone-thumbnail-processor) |
 | Web / Api                    | Angular v11.x / ExpressJS v4.16 | [lodestonehq/lodestone-ui](https://hub.docker.com/r/lodestonehq/lodestone-ui)                                   |
