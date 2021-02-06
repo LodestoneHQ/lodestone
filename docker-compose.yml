@@ -78,55 +78,67 @@ services:
       - RABBITMQ_USER=lodestone
       - RABBITMQ_PASS=lodestone
 
-  # Enable the following 2 services when the work has been completed to separate the publisher builds
+  fs_publisher:
+    image: lodestonehq/lodestone-fs-publisher:latest
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command:
+    - /lodestone-fs-publisher
+    - start
+    - --amqp-url=amqp://lodestone:lodestone@rabbitmq:5672
+    - --dir=/data
+    - --bucket=documents
+    volumes:
+    - ./data/storage/documents:/data
 
-  #fs_publisher:
-  #  image: lodestonehq/lodestone-fs-publisher:latest
-  #  depends_on:
-  #    rabbitmq:
-  #      condition: service_healthy
-  #  volumes:
-  #    - ./data/storage:/data
-  #  environment:
-  #    - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
-  #    - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
-  #    - RABBITMQ_USER=lodestone
-  #    - RABBITMQ_PASS=lodestone
-
-  #email_publisher:
-  #  image: lodestonehq/lodestone-email-publisher:latest
-  #  depends_on:
-  #    rabbitmq:
-  #      condition: service_healthy
-  #  environment:
-  #    - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
-  #    - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
-  #    - RABBITMQ_USER=lodestone
-  #    - RABBITMQ_PASS=lodestone
+  # E-mail publisher is currently WIP.
+  # email_publisher:
+    # image: lodestonehq/lodestone-email-publisher:latest
+    # depends_on:
+    #   rabbitmq:
+    #     condition: service_healthy
+    #   webapp:
+    #     condition: service_healthy
+    # command:
+    # - /lodestone-email-publisher
+    # - start
+    # - --amqp-url=amqp://lodestone:lodestone@rabbitmq:5672
+    # - --api-endpoint=http://webapp:3000
+    # - --bucket=documents
+    # - --imap-hostname=imap.gmail.com
+    # - --imap-username=xxxx@gmail.com
+    # - --imap-password=xxxxxxxxxxxxxx
 
   storage:
-    # Use the following image once publisher has been updated to a stand-along build and the storage
-    # Dockerfile has been updated to not import a pre-built binary
-    #image: lodestonehq/lodestone-storage:latest
-    image: analogj/lodestone:storage
+    image: minio/minio:latest
     depends_on:
       rabbitmq:
         condition: service_healthy
     volumes:
-      - ./data/storage:/data
+    - ./data/storage:/data
+    command:
+    - minio
+    - server
+    - /data
     environment:
-      - LS_RABBITMQ_HOST=${LS_RABBITMQ_HOST:-rabbitmq}
-      - LS_RABBITMQ_PORT=${LS_RABBITMQ_PORT:-5672}
-      - RABBITMQ_USER=lodestone
-      - RABBITMQ_PASS=lodestone
-      - MINIO_BROWSER=off
-      - MINIO_ACCESS_KEY=minio
-      - MINIO_SECRET_KEY=minio123
-    #      - MINIO_WORM=on
-    #      - MINIO_USERNAME=minio
-    #      - MINIO_GROUPNAME=minio
-    #      - MINIO_PUID=15000
-    #      - MINIO_PGID=15000
+    # - MINIO_BROWSER=off
+    - MINIO_ACCESS_KEY=minio
+    - MINIO_SECRET_KEY=minio123
+    - MINIO_NOTIFY_AMQP_ENABLE=on
+    - MINIO_NOTIFY_AMQP_URL=amqp://lodestone:lodestone@rabbitmq:5672
+    - MINIO_NOTIFY_AMQP_EXCHANGE=lodestone
+    - MINIO_NOTIFY_AMQP_EXCHANGE_TYPE=fanout
+    - MINIO_NOTIFY_AMQP_ROUTING_KEY=storagelogs
+    - MINIO_NOTIFY_AMQP_MANDATORY=off
+    - MINIO_NOTIFY_AMQP_AUTO_DELETED=off
+    - MINIO_NOTIFY_AMQP_DELIVERY_MODE=0
+    healthcheck:
+      test: ["CMD", "curl", "--silent", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 5s
+      timeout: 25s
+      retries: 5
+      start_period: 2s
 
   rabbitmq:
     image: lodestonehq/lodestone-rabbitmq:v0.1.0
